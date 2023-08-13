@@ -1,0 +1,128 @@
+# backend/app/api/models/model.py
+from pydantic import BaseModel
+from typing import Optional
+from datetime import datetime
+from typing import List
+
+# User model
+class UserBase(BaseModel):
+    username: str
+    email: str
+
+class UserCreate(UserBase):
+    password: str
+
+class UserModel(BaseModel):
+    user_id: int
+    username: str
+    email: str
+    password: str
+    registration_date: Optional[datetime] = None
+    last_login: Optional[datetime] = None
+    profile_image: Optional[str] = None
+    user_metadata: Optional[dict] = None
+
+    class Config:
+        orm_mode = True
+
+
+# Session model
+class SessionBase(BaseModel):
+    user_id: int
+
+class SessionCreate(SessionBase):
+    pass
+
+class SessionModel(SessionBase):
+    session_id: int
+    start_time: Optional[datetime] = None
+    end_time: Optional[datetime] = None
+    session_metadata: Optional[dict] = None
+
+    class Config:
+        orm_mode = True
+
+# ChatLog model
+class ChatLogBase(BaseModel):
+    session_id: int
+    direction: str
+    content: str
+
+class ChatLogCreate(ChatLogBase):
+    pass
+
+class ChatLogModel(ChatLogBase):
+    log_id: int
+    timestamp: Optional[datetime] = None
+    sentiment: Optional[str] = None
+    topic: Optional[str] = None
+    is_suicidal: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+# AIInteraction model
+class AIInteractionBase(BaseModel):
+    log_id: int
+    model_used: str
+
+class AIInteractionCreate(AIInteractionBase):
+    pass
+
+class AIInteractionModel(AIInteractionBase):
+    interaction_id: int
+    prediction: Optional[str] = None
+    response_time: Optional[str] = None  # Represented as a string in the format "HH:MM:SS"
+    confidence_score: Optional[float] = None
+
+    class Config:
+        orm_mode = True
+
+# Feedback model
+class FeedbackBase(BaseModel):
+    user_id: int
+    session_id: int
+    content: str
+    rating: int
+
+class FeedbackCreate(FeedbackBase):
+    pass
+
+class FeedbackModel(FeedbackBase):
+    feedback_id: int
+    timestamp: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+
+# EmergencyContact model
+class EmergencyContactBase(BaseModel):
+    user_id: int
+    name: str
+    phone_number: str
+    email: Optional[str] = None
+    relation: Optional[str] = None
+
+class EmergencyContactCreate(EmergencyContactBase):
+    pass
+
+class EmergencyContactModel(EmergencyContactBase):
+    contact_id: int
+
+    class Config:
+        orm_mode = True
+
+# WebSocketSession model
+class WebSocketSessionBase(BaseModel):
+    user_id: int
+
+class WebSocketSessionCreate(WebSocketSessionBase):
+    pass
+
+class WebSocketSessionModel(WebSocketSessionBase):
+    ws_session_id: int
+    start_time: Optional[datetime] = None
+    end_time: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
