@@ -22,6 +22,10 @@ def create_user(user: UserModel, db: Session = Depends(get_db)):
         username=user.username,
         email=user.email,
         password=hashed_password,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        gender=user.gender,
+        age=user.age,
         registration_date=creation_date
     )
     

@@ -3,6 +3,10 @@ CREATE TABLE t_users (
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,
+	first_name VARCHAR(255) NOT NULL,
+	last_name VARCHAR(255) NOT NULL,
+    gender VARCHAR(10) NOT NULL CHECK (gender IN ('Male', 'Female')),
+    age INTEGER NOT NULL CHECK (age >= 0 AND age <= 150),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP,
     profile_image TEXT,
@@ -80,3 +84,11 @@ DROP TABLE t_websocketsessions;
 DROP TABLE t_chatlogs;
 DROP TABLE t_sessions;
 DROP TABLE t_users;
+
+
+
+select * from t_users;
+select * from t_sessions;
+select * from t_chatlogs;
+select * from t_aiinteractions;
+select * from t_websocketsessions;

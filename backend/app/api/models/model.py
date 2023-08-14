@@ -17,6 +17,10 @@ class UserModel(BaseModel):
     username: str
     email: str
     password: str
+    first_name: str
+    last_name: str
+    gender: str
+    age: int
     registration_date: Optional[datetime] = None
     last_login: Optional[datetime] = None
     profile_image: Optional[str] = None
