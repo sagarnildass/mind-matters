@@ -6,8 +6,6 @@ from fastapi_plugins import redis_plugin
 from fastapi_plugins import depends_redis
 import aioredis
 import fastapi_plugins
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
-from deepface import DeepFace
 import numpy as np
 from app.core.database import get_db
 from app.core.models import Session as DBSession, ChatLog, AIInteraction
@@ -80,13 +78,6 @@ app.config = dict(
 
 stop_thread = threading.Event()
 
-def initialize_deepface():
-    dummy_image = np.zeros((224, 224, 3), dtype=np.uint8)  # A black image
-    try:
-        DeepFace.analyze(dummy_image, actions=['emotion'])
-        logger.info("DeepFace initialized successfully!")
-    except Exception as e:
-        logger.error(f"Error initializing DeepFace: {e}")
 
 @app.on_event("startup")
 async def startup_event():
@@ -96,7 +87,7 @@ async def startup_event():
     suicide_predictor.suicide_classifier
     
     # DeepFace Initialization
-    initialize_deepface()
+    # initialize_deepface()
     await fastapi_plugins.redis_plugin.init_app(app, config=config)
     await fastapi_plugins.redis_plugin.init()
 
