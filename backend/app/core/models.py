@@ -104,3 +104,12 @@ class WebSocketSession(Base):
     end_time = Column(DateTime(timezone=True))
 
     user = relationship("User", back_populates="ws_sessions")
+
+class ContentMetadata(Base):
+    __tablename__ = "t_content_metadata"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(Text)
+    description = Column(Text)
+    link = Column(Text)
+    content_type = Column(String(255))

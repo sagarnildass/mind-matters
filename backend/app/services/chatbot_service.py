@@ -1,9 +1,14 @@
+# app/services/chatbot_service.py
+
 import openai
 import os
 from sqlalchemy.orm import Session
+import pinecone
+from sqlalchemy import case
+
 
 from app.core.models import Session as DBSession, ChatLog, User
-
+from app.core.models import ContentMetadata as t_content_metadata
 # Configuration constants
 TEMPERATURE = 0.5
 MAX_TOKENS = 500
@@ -14,11 +19,15 @@ MAX_CONTEXT_QUESTIONS = 10
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 openai.api_key = OPENAI_API_KEY
+pinecone.init(      
+	api_key='b05736e9-8819-4b51-b019-af78e951aecf',      
+	environment='us-west1-gcp'      
+)      
+index = pinecone.Index(index_name='openai')
 
-
-def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data):
+def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data, blip_response=None):
     """Get a response from GPT-3.5-turbo with the chat history for context."""
-    print("emotion data: ", emotion_data)
+    #print("emotion data: ", emotion_data)
     user = db.query(User).filter(User.user_id == user_id).first()
     user_name = f"{user.first_name}"
     user_gender = f"{user.gender}"
@@ -28,21 +37,40 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
     feeling_context = f"The user is currently feeling {user_feeling} deduced from their text."
     emotion_context = f"The user is currently feeling {emotion_data} deduced from their video. Give this higher priority over the text. Tell the user that even though you are writing reflects {user_feeling}, I believe you are feeling {emotion_data}. Then delve deeper into that." if emotion_data else ""
     suicidal_context = "The user has expressed suicidal thoughts." if is_suicidal == "Suicidal" else "The user has not expressed suicidal thoughts."
+    print("blip response: ", blip_response)
+    print('emotion video: ', emotion_context)
+    if blip_response:
+        INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
+        {feeling_context} {emotion_context} {suicidal_context}
+        Your responses should be empathetic, understanding, and based on the best therapeutic practices.\
+        Before you give any suggestions, ask as many questions as you want to get the full picture of the user's mental condition. Only when you think that you have all the informations, \
+        provide at least 3 suggestions or coping strategies in your responses to offer a comprehensive perspective on issues.\
+        Engage the user by asking probing questions, encouraging them to delve deeper into their feelings and concerns. This helps users refine and understand their emotions better each time.\
+        Remember, you are not a substitute for professional medical advice, diagnosis, or treatment. Always urge users to seek the advice of their physician or another qualified health provider with any questions they may have regarding a medical condition.\
+        If a user expresses severe distress or mentions self-harm, direct them to seek immediate help or contact a crisis helpline.\
+        If you notice that the user is feeling something from their video, talk to them about it.\
+        If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
+        {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
+        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. 
+        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health."\
+        The user recently showed an image. Based on the image, it appears that it is a {blip_response}. Acknowledge this information. Use this information along with the user's statements to provide a comprehensive response.
+        """
+    else:
 
-    INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
-    {feeling_context} {emotion_context} {suicidal_context}
-    Your responses should be empathetic, understanding, and based on the best therapeutic practices.\
-    Before you give any suggestions, ask as many questions as you want to get the full picture of the user's mental condition. Only when you think that you have all the informations, \
-    provide at least 3 suggestions or coping strategies in your responses to offer a comprehensive perspective on issues.\
-    Engage the user by asking probing questions, encouraging them to delve deeper into their feelings and concerns. This helps users refine and understand their emotions better each time.\
-    Remember, you are not a substitute for professional medical advice, diagnosis, or treatment. Always urge users to seek the advice of their physician or another qualified health provider with any questions they may have regarding a medical condition.\
-    If a user expresses severe distress or mentions self-harm, direct them to seek immediate help or contact a crisis helpline.\
-    If you notice that the user is feeling something from their video, talk to them about it.\
-    If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
-    {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
-    The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. 
-    If someone asks you any other type of questions unrelated to mental health or therapy, you can respond with "I am sorry, I only answer questions related to mental well-being. Can you rephrase your question?"\
-    """
+        INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
+        {feeling_context} {emotion_context} {suicidal_context}
+        Your responses should be empathetic, understanding, and based on the best therapeutic practices.\
+        Before you give any suggestions, ask as many questions as you want to get the full picture of the user's mental condition. Only when you think that you have all the informations, \
+        provide at least 3 suggestions or coping strategies in your responses to offer a comprehensive perspective on issues.\
+        Engage the user by asking probing questions, encouraging them to delve deeper into their feelings and concerns. This helps users refine and understand their emotions better each time.\
+        Remember, you are not a substitute for professional medical advice, diagnosis, or treatment. Always urge users to seek the advice of their physician or another qualified health provider with any questions they may have regarding a medical condition.\
+        If a user expresses severe distress or mentions self-harm, direct them to seek immediate help or contact a crisis helpline.\
+        If you notice that the user is feeling something from their video, talk to them about it.\
+        If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
+        {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
+        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. 
+        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health."\
+        """
 
     # Fetch recent chat history for the user
     session_data = db.query(DBSession).filter(
@@ -62,7 +90,7 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
     messages.append({"role": "user", "content": new_question})
 
     # Query GPT-3.5-turbo
-    response = openai.ChatCompletion.create(
+    response_content = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
         temperature=TEMPERATURE,
@@ -70,5 +98,41 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
         top_p=1,
         frequency_penalty=FREQUENCY_PENALTY,
         presence_penalty=PRESENCE_PENALTY,
+    ).choices[0].message.content
+
+    # If "recommend" is in user's query, fetch article recommendations
+    if "recommend" in new_question.lower():
+        recommendations = query_article(new_question, db)
+        if recommendations:
+            recommendation_text = "\nBased on your query, here are some recommended articles:\n"
+            for rec in recommendations:
+                recommendation_text += f"- {rec.title}: {rec.description}. [Link]({rec.link})\n"
+            response_content += recommendation_text
+    return response_content
+
+
+def query_article(query, db: Session, top_k=10):
+    print('query: ', query)
+    embedded_query = openai.Embedding.create(
+        input=query,
+        model='text-embedding-ada-002',
+    )["data"][0]['embedding']
+    
+    query_result = index.query(embedded_query, top_k=top_k)
+    if not query_result.matches:
+        return None
+
+    matches = query_result.matches
+    ids = [res.id for res in matches]
+    print('ids: ', ids)
+
+    # Create an ordering for the ids based on their position in the list
+    order_by_case = case(
+        {id_: index for index, id_ in enumerate(ids)},
+        value=t_content_metadata.id
     )
-    return response.choices[0].message.content
+
+    # Fetch content metadata using the retrieved ids and order them based on the ids list
+    fetched_data = db.query(t_content_metadata).filter(t_content_metadata.id.in_(ids)).order_by(order_by_case).all()
+
+    return fetched_data

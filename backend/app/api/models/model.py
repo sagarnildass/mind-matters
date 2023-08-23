@@ -130,3 +130,20 @@ class WebSocketSessionModel(WebSocketSessionBase):
 
     class Config:
         orm_mode = True
+
+
+# ContentMetadata model
+class ContentMetadataBase(BaseModel):
+    title: str
+    description: str
+    link: str
+    content_type: str
+
+class ContentMetadataCreate(ContentMetadataBase):
+    pass
+
+class ContentMetadataModel(ContentMetadataBase):
+    id: int
+
+    class Config:
+        orm_mode = True

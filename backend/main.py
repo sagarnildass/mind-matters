@@ -7,11 +7,23 @@ from fastapi_plugins import depends_redis
 import aioredis
 import fastapi_plugins
 import numpy as np
+import os
+from PIL import Image
+from transformers import BlipProcessor, BlipForQuestionAnswering
+import logging
+from queue import Queue
+import threading
+import json
+import pinecone
+import openai
+import pandas as pd
+from concurrent.futures import ThreadPoolExecutor
+
 from app.core.database import get_db
 from app.core.models import Session as DBSession, ChatLog, AIInteraction
 from app.api.models.model import SessionCreate, ChatLogCreate
 from app.services.chat import initiate_chat
-from app.api.routes import auth
+from app.api.routes import auth, upload_image
 from app.core.database import Base, engine, db_listener
 from app.services.sentiment_analysis import analyze_sentiment
 from app.services.intent_recognition import analyze_intent
@@ -22,11 +34,6 @@ from app.services import sentiment_analysis, intent_recognition, suicide_predict
 
 # from app.api.routes import chat  # Add this import at the top
 
-import logging
-from queue import Queue
-import threading
-import json
-from concurrent.futures import ThreadPoolExecutor
 
 executor = ThreadPoolExecutor(max_workers=5)
 
@@ -85,7 +92,10 @@ async def startup_event():
     sentiment_analysis.sentiment_classifier  # Just referencing it to ensure it's loaded. It's already loaded at module level.
     intent_recognition.intent_classifier  # Just referencing it to ensure it's loaded. It's already loaded at module level.
     suicide_predictor.suicide_classifier
-    
+    pinecone.init(      
+        api_key='b05736e9-8819-4b51-b019-af78e951aecf',      
+        environment='us-west1-gcp'      
+    )      
     # DeepFace Initialization
     # initialize_deepface()
     await fastapi_plugins.redis_plugin.init_app(app, config=config)
@@ -95,11 +105,95 @@ async def startup_event():
 async def on_shutdown() -> None:
     await redis_plugin.terminate()
 
+def statement_to_question(statement):
+    statement = statement.lower()
+    
+    if "holding" in statement or "have" in statement:
+        return "What is the person holding in the picture?"
+    
+    elif "wearing" in statement or "dressed" in statement:
+        return "What is the person wearing in the picture?"
+    
+    elif "color" in statement or "colored" in statement:
+        return "What is the dominant color in the picture?"
+    
+    elif "background" in statement:
+        return "What is in the background of the picture?"
+    
+    elif "emotion" in statement or "feeling" in statement or "look" in statement:
+        return "What emotion is the person displaying in the picture?"
+    
+    elif "around" in statement or "surrounding" in statement:
+        return "What objects are surrounding the person in the picture?"
+    
+    elif "on the desk" in statement or "on the table" in statement:
+        return "What items are on the desk or table in the picture?"
+    
+    elif "computer" in statement or "laptop" in statement:
+        return "Can you see a computer or laptop in the picture?"
+    
+    elif "lighting" in statement:
+        return "How is the lighting in the picture?"
+    
+    elif "room" in statement:
+        return "Can you describe the room in the picture?"
+    
+    elif "wall" in statement:
+        return "What is on the wall in the picture?"
+    
+    elif "window" in statement:
+        return "Is there a window in the picture? If so, what can you see through it?"
+    
+    elif "door" in statement:
+        return "Is there a door in the picture? If so, is it open or closed?"
+    
+    else:
+        return "Can you describe the picture?"
+    
+index = pinecone.Index(index_name='openai')
+def query_article(query, top_k=10):
+    '''Queries an article using its title in the specified
+     namespace and prints results.'''
+    
+    # Create vector embeddings based on the title column
+    embedded_query = openai.Embedding.create(
+                                            input=query,
+                                            model='text-embedding-ada-002',
+                                            )["data"][0]['embedding']
 
+    # Query namespace passed as parameter using title vector
+    query_result = index.query(embedded_query, 
+                                      top_k=top_k)
+
+    # Print query results 
+    print(f'\nMost similar results to {query} :\n')
+    if not query_result.matches:
+        print('no query result')
+    
+    matches = query_result.matches
+    ids = [res.id for res in matches]
+    scores = [res.score for res in matches]
+    df = pd.DataFrame({'id':ids, 
+                       'score':scores,
+                       'title': [titles_mapped[_id] for _id in ids],
+                       'content': [content_mapped[_id] for _id in ids],
+                       'link': [links_mapped[_id] for _id in ids],
+                       })
+    
+    counter = 0
+    for k,v in df.iterrows():
+        counter += 1
+        print(f'{v.title} (score = {v.score}) {v.link}')
+    
+    print('\n')
+
+    return df
+    
 
 @app.websocket("/chat/{user_id}")
 async def start_chat(websocket: WebSocket, user_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db), redis: aioredis.Redis = Depends(depends_redis)):
     await websocket.accept()
+    
     session_data, ws_session_data, chat_log_data = await initiate_chat(user_id, db)
     await websocket.send_text("Chat session started!")
 
@@ -115,11 +209,42 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
     thread.start()
 
     stop_thread.clear()  # Reset the event for a new connection
-
+    blip_response = None
+    blip_timestamp = None
 
     try:
         while True:
             data = await websocket.receive_text()
+            
+            # Check if the message indicates an image is sent
+            if "USER_SENT_IMAGE:" in data:
+                filename = data.split(":")[1]
+                filepath = os.path.join("/home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/uploaded_images", filename)
+                filepath = filepath.strip()
+                print(filepath)
+                print(os.path.exists(filepath))
+
+                if os.path.exists(filepath):
+                    raw_image = Image.open(filepath).convert('RGB')
+
+                    # Convert the user's next message into a question
+                    user_statement = await websocket.receive_text()
+                    question = statement_to_question(user_statement)
+                    processor = BlipProcessor.from_pretrained("Salesforce/blip-vqa-base")
+                    model = BlipForQuestionAnswering.from_pretrained("Salesforce/blip-vqa-base").to("cuda")
+                    # Get BLIP's response
+                    inputs = processor(raw_image, question, return_tensors="pt").to("cuda")
+                    out = model.generate(**inputs)
+                    blip_response = processor.decode(out[0], skip_special_tokens=True)
+                    blip_timestamp = datetime.now() 
+
+                    # Send the response back to the user
+                    await websocket.send_text(f"Chatbot: {blip_response}")
+                    continue  # Skip the rest of the loop for this iteration
+                
+                else:
+                    await websocket.send_text("Chatbot: Error processing the image. Please try sending again.")
+                    continue
             
             start_time_sentiment = datetime.now()
             sentiment_result = await analyze_sentiment(data, redis)
@@ -145,10 +270,16 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
             suicide_label = suicidal_result['label']
             emotion_data = None
             if not emotion_queue.empty():
-                emotion_data = emotion_queue.get()
+                # Flush old emotions
+                while not emotion_queue.empty():
+                    emotion_data = emotion_queue.get()
+
+            if blip_timestamp and (datetime.now() - blip_timestamp).seconds > 60:
+                blip_response = None
 
             # Generate chatbot response
-            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data)
+            # print(blip_response)
+            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data, blip_response=blip_response)
             
             
             # Send the generated response back to the user
@@ -209,13 +340,15 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
         db.commit()
 
 
+
+
 @app.get("/", tags=["Root"])
 async def root():
     return {"message": "Your FastAPI app is working correctly"}
 
 # Include API routes
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
-#app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])  
+app.include_router(upload_image.router, prefix="/api/image", tags=["Image Handling"])  # Add this line where other routers are added
 
 # Create tables in the database
 Base.metadata.create_all(bind=engine)

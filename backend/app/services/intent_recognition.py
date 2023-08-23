@@ -12,6 +12,8 @@ intent_classifier = pipeline("text2text-generation", model="mrm8488/t5-base-fine
 
 async def analyze_intent(text: str, redis: aioredis.Redis = Depends(depends_redis)):
     # Check if the result is already in the cache
+    if "recommend" in text.lower():
+        return {"generated_text": "recommendation_intent"}
     cached_result = await redis.get(f"intent:{text}")
     if cached_result:
         return json.loads(cached_result)

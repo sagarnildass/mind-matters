@@ -1,3 +1,9 @@
+select * from t_users;
+select * from t_sessions;
+select * from t_chatlogs;
+select * from t_aiinteractions;
+select * from t_websocketsessions;
+
 CREATE TABLE t_users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
@@ -72,6 +78,15 @@ CREATE TABLE t_websocketsessions (
     end_time TIMESTAMP
 );
 
+-- Metadata Table(check jupyter notebook 6 and final data)
+CREATE TABLE t_content_metadata (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    description TEXT,
+    link TEXT,
+    content_type VARCHAR(255),
+);
+
 -- Indices for common queries
 CREATE INDEX idx_user_email ON t_users(email);
 CREATE INDEX idx_sessions_userid ON t_sessions(user_id);
@@ -87,8 +102,3 @@ DROP TABLE t_users;
 
 
 
-select * from t_users;
-select * from t_sessions;
-select * from t_chatlogs;
-select * from t_aiinteractions;
-select * from t_websocketsessions;
