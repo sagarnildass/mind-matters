@@ -17,10 +17,11 @@ PRESENCE_PENALTY = 0.6
 MAX_CONTEXT_QUESTIONS = 10
 # You can use environment variables or a config file to store this securely
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
 openai.api_key = OPENAI_API_KEY
 pinecone.init(      
-	api_key='b05736e9-8819-4b51-b019-af78e951aecf',      
+	api_key="b05736e9-8819-4b51-b019-af78e951aecf",      
 	environment='us-west1-gcp'      
 )      
 index = pinecone.Index(index_name='openai')

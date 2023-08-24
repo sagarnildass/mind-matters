@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Display:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Font+Awesome+5+Free:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Display:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    line-height: normal;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+@media screen and (min-width: 480px) {
+    .card:nth-child(7n + 1) {
+        grid-column: auto/span 2;
+        grid-row: auto/span 2;
+    }
+}
+
+.prompt::-webkit-scrollbar {
+    width: 5px;
+}
+
+.prompt::-webkit-scrollbar-thumb {
+    background-color: #666e75;
+    border-radius: 5px;
+}
+
+
+/* CSS file or style block */
+.transition-transform {
+    transition: transform 0.3s ease;
+    /* Adjust the duration and timing function as desired */
+}
+
+.zoom-in {
+    transform: scale(1);
+}
+
+.zoom-in:hover {
+    transform: scale(1.05);
+    /* Increase the scale value to control the zoom amount */
+}
+
+/* in your CSS file */
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+  }
+  
+  .spinner {
+    margin: 50px auto;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
+  }
+  
+  .spinner > div {
+    background-color: #2270d6;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    
+    animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+  
+  .spinner div:nth-child(1) {
+    animation-delay: -0.036s;
+  }
+  
+  .spinner div:nth-child(2) {
+    animation-delay: -0.072s;
+  }
+  
+  .spinner div:nth-child(3) {
+    animation-delay: -0.108s;
+  }
+  
+  .spinner div:nth-child(4) {
+    animation-delay: -0.144s;
+  }
+  
+  .spinner div:nth-child(5) {
+    animation-delay: -0.18s;
+  }
+
+  .notification-card {
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  

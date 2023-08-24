@@ -92,10 +92,7 @@ async def startup_event():
     sentiment_analysis.sentiment_classifier  # Just referencing it to ensure it's loaded. It's already loaded at module level.
     intent_recognition.intent_classifier  # Just referencing it to ensure it's loaded. It's already loaded at module level.
     suicide_predictor.suicide_classifier
-    pinecone.init(      
-        api_key='b05736e9-8819-4b51-b019-af78e951aecf',      
-        environment='us-west1-gcp'      
-    )      
+    
     # DeepFace Initialization
     # initialize_deepface()
     await fastapi_plugins.redis_plugin.init_app(app, config=config)
@@ -149,45 +146,6 @@ def statement_to_question(statement):
     
     else:
         return "Can you describe the picture?"
-    
-index = pinecone.Index(index_name='openai')
-def query_article(query, top_k=10):
-    '''Queries an article using its title in the specified
-     namespace and prints results.'''
-    
-    # Create vector embeddings based on the title column
-    embedded_query = openai.Embedding.create(
-                                            input=query,
-                                            model='text-embedding-ada-002',
-                                            )["data"][0]['embedding']
-
-    # Query namespace passed as parameter using title vector
-    query_result = index.query(embedded_query, 
-                                      top_k=top_k)
-
-    # Print query results 
-    print(f'\nMost similar results to {query} :\n')
-    if not query_result.matches:
-        print('no query result')
-    
-    matches = query_result.matches
-    ids = [res.id for res in matches]
-    scores = [res.score for res in matches]
-    df = pd.DataFrame({'id':ids, 
-                       'score':scores,
-                       'title': [titles_mapped[_id] for _id in ids],
-                       'content': [content_mapped[_id] for _id in ids],
-                       'link': [links_mapped[_id] for _id in ids],
-                       })
-    
-    counter = 0
-    for k,v in df.iterrows():
-        counter += 1
-        print(f'{v.title} (score = {v.score}) {v.link}')
-    
-    print('\n')
-
-    return df
     
 
 @app.websocket("/chat/{user_id}")
