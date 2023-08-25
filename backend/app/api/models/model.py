@@ -1,8 +1,8 @@
 # backend/app/api/models/model.py
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime
-from typing import List
+from datetime import datetime, date
+from typing import List, Dict
 
 # User model
 class UserBase(BaseModel):
@@ -58,8 +58,8 @@ class ChatLogCreate(ChatLogBase):
 class ChatLogModel(ChatLogBase):
     log_id: int
     timestamp: Optional[datetime] = None
-    sentiment: Optional[str] = None
-    topic: Optional[str] = None
+    sentiment: Optional[List[Dict[str, float]]] = None
+    topic: Optional[Dict] = None
     is_suicidal: Optional[str] = None
 
     class Config:
@@ -147,3 +147,85 @@ class ContentMetadataModel(ContentMetadataBase):
 
     class Config:
         orm_mode = True
+
+# v_avg_sentiment_scores model
+class AvgSentimentScoresModel(BaseModel):
+    user_id: int
+    session_id: int
+    log_id: int
+    sentiment_label: str
+    sentiment_score: float
+    timestamp: datetime
+
+# v_dominant_sentiment model
+class DominantSentimentModel(BaseModel):
+    user_id: int
+    session_id: int
+    log_id: int
+    sentiment_label: str
+    max_score: float
+
+# v_avg_ai_response_time model
+class AvgAIResponseTimeModel(BaseModel):
+    avg_response_time: float
+    model_used: str
+    
+
+# v_avg_confidence_score model
+class AvgConfidenceScoreModel(BaseModel):
+    model_used: str
+    avg_confidence: float
+
+# v_daily_mental_health model
+class DailyMentalHealthModel(BaseModel):
+    interaction_date: date
+    user_id: int
+    session_id: int
+    dominant_sentiment: str
+    total_interactions: int
+    avg_confidence: Optional[float]
+    avg_response_time: Optional[float]
+
+# v_recent_chat_summary model
+class RecentChatSummaryModel(BaseModel):
+    user_id: int
+    session_id: int
+    start_time: datetime
+    end_time: Optional[datetime] = None
+    content: str
+    sentiment: Optional[List] = None
+
+# v_feedback_reminder model
+class FeedbackReminderModel(BaseModel):
+    user_id: int
+    session_id: int
+    feedback_content: Optional[str]
+
+# v_user_activity_summary_7d model
+class UserActivitySummary7DModel(BaseModel):
+    user_id: int
+    total_sessions: int
+    total_chat_logs: int
+    total_ai_interactions: int
+
+# v_user_profile model
+class UserProfileModel(BaseModel):
+    user_id: int
+    username: str
+    email: str
+    first_name: str
+    last_name: str
+    gender: str
+    age: int
+    profile_image: Optional[str]
+    emergency_contact_name: Optional[str]
+    emergency_contact_relation: Optional[str]
+    emergency_contact_phone: Optional[str]
+    emergency_contact_email: Optional[str]
+
+# v_recommended_articles model
+class RecommendedArticlesModel(BaseModel):
+    title: str
+    description: str
+    link: str
+    content_type: str

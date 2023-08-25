@@ -23,7 +23,7 @@ from app.core.database import get_db
 from app.core.models import Session as DBSession, ChatLog, AIInteraction
 from app.api.models.model import SessionCreate, ChatLogCreate
 from app.services.chat import initiate_chat
-from app.api.routes import auth, upload_image
+from app.api.routes import auth, upload_image, views
 from app.core.database import Base, engine, db_listener
 from app.services.sentiment_analysis import analyze_sentiment
 from app.services.intent_recognition import analyze_intent
@@ -244,7 +244,7 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
             await websocket.send_text(f"Chatbot: {chatbot_response}")
 
             # Store the sentiment result in the ChatLog model or wherever appropriate
-            chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=str(sentiment_result), topic=str(intent_result), is_suicidal=str(suicide_label))
+            chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=sentiment_result, topic=intent_result, is_suicidal=str(suicide_label))
             db.add(chat_log)
             db.commit()
 
@@ -258,8 +258,8 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
                 log_id=chat_log.log_id,
                 model_used="sentiment_analysis",
                 response_time=(end_time_sentiment - start_time_sentiment).total_seconds(),
-                confidence_score=top_sentiment['score'],
-                prediction=top_sentiment['label']  # Add this line
+                confidence_score=top_sentiment["score"],
+                prediction=top_sentiment["label"]  # Add this line
             )
             db.add(ai_interaction_sentiment)
 
@@ -278,7 +278,7 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
                 log_id=chat_log.log_id,
                 model_used="suicide_detection",
                 response_time=(end_time_suicidal - start_time_suicidal).total_seconds(),
-                confidence_score=suicidal_result['score'],
+                confidence_score=suicidal_result["score"],
                 prediction=suicide_label  # Add this line
             )
             db.add(ai_interaction_suicide)
@@ -307,6 +307,7 @@ async def root():
 # Include API routes
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(upload_image.router, prefix="/api/image", tags=["Image Handling"])  # Add this line where other routers are added
+app.include_router(views.router, prefix="/views", tags=["views"])
 
 # Create tables in the database
 Base.metadata.create_all(bind=engine)

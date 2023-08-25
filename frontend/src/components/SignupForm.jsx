@@ -34,7 +34,7 @@ const SignupForm = () => {
 
         // Check email domain
         const validDomains = ['artelus.ai', 'artelus.in', 'artelus.com'];
-        const emailDomain = email.split('@')[1];
+        const emailDomain = email.includes('@') ? email.split('@')[1] : '';
         if (!validDomains.includes(emailDomain)) {
             setError('Invalid email domain. Only artelus domains are allowed');
             return;
@@ -42,9 +42,14 @@ const SignupForm = () => {
 
         // Create a request body with the form data
         const requestBody = {
+            user_id: 0,
             username: username,
             email: email,
             password: password,
+            first_name: firstName, // Added this line
+            last_name: lastName,   // Added this line
+            gender: gender,       // Added this line
+            age: age,             // Added this line
             creation_date: new Date().toISOString('en-IN', { timeZone: 'Asia/Kolkata' }),
             remember_me: rememberMe, // Include the "Remember me" flag in the request body
         };
@@ -168,14 +173,46 @@ const SignupForm = () => {
                             type="text"
                             className={styles.inputfieldtext}
                             placeholder="Your last name"
-                            value={firstName}
+                            value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                         />
                         <label htmlFor="lastName" className={styles.password1}>
                             Last Name
                         </label>
                     </div>
-                    
+                    <div className={styles.genderAgeContainer}>
+                        <div className={styles.gender}>
+                            <select
+                                className={styles.inputfieldtext}
+                                value={gender}
+                                onChange={(e) => setGender(e.target.value)}
+                            >
+                                <option value="" disabled>Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <label htmlFor="gender" className={styles.password1}>
+                                Gender
+                            </label>
+                        </div>
+
+                        {/* For Age */}
+                        <div className={styles.age}>
+                            <input
+                                type="number"
+                                className={styles.inputfieldtext}
+                                placeholder="Age"
+                                min="0"
+                                max="150" // You can adjust this based on the maximum age you want to accept.
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
+                            />
+                            <label htmlFor="age" className={styles.password1}>
+                                Age
+                            </label>
+                        </div>
+                    </div>
+
 
                     <button type="submit" className={styles.widthStructure}>
                         <div className={styles.buttonbase}>

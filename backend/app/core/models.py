@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Float, Text, CheckConstraint
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import JSONB
 
 Base = declarative_base()
 
@@ -48,8 +49,8 @@ class ChatLog(Base):
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     direction = Column(String(50), CheckConstraint("direction IN ('user', 'ai')"))
     content = Column(Text)
-    sentiment = Column(String(50))
-    topic = Column(String(255))
+    sentiment = Column(JSONB)
+    topic = Column(JSONB)
     is_suicidal = Column(String(50))
 
     session = relationship("Session", back_populates="chatlogs")
@@ -113,3 +114,94 @@ class ContentMetadata(Base):
     description = Column(Text)
     link = Column(Text)
     content_type = Column(String(255))
+
+# v_avg_sentiment_scores model
+class AvgSentimentScores(Base):
+    __tablename__ = "v_avg_sentiment_scores"
+    user_id = Column(Integer, primary_key=True)
+    session_id = Column(Integer, primary_key=True)
+    log_id = Column(Integer, primary_key=True)
+    sentiment_label = Column(String, primary_key=True)
+    sentiment_score = Column(Float)
+    timestamp = Column(DateTime(timezone=True), primary_key=True)
+
+# v_dominant_sentiment model
+class DominantSentiment(Base):
+    __tablename__ = "v_dominant_sentiment"
+    user_id = Column(Integer, primary_key=True)
+    session_id = Column(Integer, primary_key=True)
+    log_id = Column(Integer, primary_key=True)
+    sentiment_label = Column(String)
+    max_score = Column(Float)
+
+# v_avg_ai_response_time model
+class AvgAIResponseTime(Base):
+    __tablename__ = "v_avg_ai_response_time"
+    model_used = Column(String, primary_key=True)
+    avg_response_time = Column(Float)
+
+# v_avg_confidence_score model
+class AvgConfidenceScore(Base):
+    __tablename__ = "v_avg_confidence_score"
+    model_used = Column(String, primary_key=True)
+    avg_confidence = Column(Float)
+
+# v_daily_mental_health model
+class DailyMentalHealth(Base):
+    __tablename__ = "v_daily_mental_health"
+    interaction_date = Column(DateTime(timezone=True))
+    user_id = Column(Integer, primary_key=True)
+    session_id = Column(Integer, primary_key=True)
+    dominant_sentiment = Column(String, primary_key=True)
+    total_interactions = Column(Integer)
+    avg_confidence = Column(Float)
+    avg_response_time = Column(Float)
+
+# v_recent_chat_summary model
+class RecentChatSummary(Base):
+    __tablename__ = "v_recent_chat_summary"
+    user_id = Column(Integer, primary_key=True)
+    session_id = Column(Integer, primary_key=True)
+    start_time = Column(DateTime(timezone=True))
+    end_time = Column(DateTime(timezone=True))
+    content = Column(Text, primary_key=True)
+    sentiment = Column(JSONB)
+
+# v_feedback_reminder model
+class FeedbackReminder(Base):
+    __tablename__ = "v_feedback_reminder"
+    user_id = Column(Integer, primary_key=True)
+    session_id = Column(Integer)
+    feedback_content = Column(Text)
+
+# v_user_activity_summary_7d model
+class UserActivitySummary7D(Base):
+    __tablename__ = "v_user_activity_summary_7d"
+    user_id = Column(Integer, primary_key=True)
+    total_sessions = Column(Integer)
+    total_chat_logs = Column(Integer)
+    total_ai_interactions = Column(Integer)
+
+# v_user_profile model
+class UserProfile(Base):
+    __tablename__ = "v_user_profile"
+    user_id = Column(Integer, primary_key=True)
+    username = Column(String)
+    email = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
+    gender = Column(String)
+    age = Column(Integer)
+    profile_image = Column(Text)
+    emergency_contact_name = Column(String)
+    emergency_contact_relation = Column(String)
+    emergency_contact_phone = Column(String)
+    emergency_contact_email = Column(String)
+
+# v_recommended_articles model
+class RecommendedArticles(Base):
+    __tablename__ = "v_recommended_articles"
+    title = Column(Text, primary_key=True)
+    description = Column(Text)
+    link = Column(Text)
+    content_type = Column(String)

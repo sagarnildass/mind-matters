@@ -44,7 +44,7 @@
 
 .alreadyHaveAnContainer {
     position: absolute;
-    top: 648px;
+    top: 658px;
     left: 112px;
     line-height: 140%;
     text-align: center;
@@ -117,7 +117,7 @@
     position: absolute;
     height: 6.31%;
     width: 80.28%;
-    top: 81.49%;
+    top: 84.49%;
     right: 9.75%;
     bottom: 12.2%;
     left: 9.98%;
@@ -173,7 +173,7 @@
 
 .rememberMe {
     position: absolute;
-    top: 526.5px;
+    top: 554px;
     left: 43.5px;
     width: 128px;
     height: 18.5px;
@@ -344,15 +344,72 @@
 }
 
 .genderAgeContainer {
-    position: absolute;
     display: flex;
     justify-content: space-between;
-    width: 80.28%;
+    width: 73%;
+    position: absolute;
     top: 65%;
-    right: 9.75%;
     left: 9.98%;
+    gap: 10%;
 }
 
-.gender, .age {
-    width: 48%; /* Adjusted width so they fit side by side with some space in between */
+.gender,
+.age {
+    width: 45%;
+    /* Adjusted width so they fit side by side with some space in between */
+}
+
+.gender .password1,
+.age .password1 {
+    position: absolute;
+    top: 0px;
+    left: 4.5px;
+    line-height: 140%;
+    font-weight: 500;
+    color: #fff;
+}
+
+.age .password1 {
+    left: calc(55% + 8px);
+}
+
+.gender .inputfieldtext,
+.age .inputfieldtext {
+    width: 95%;
+}
+
+/* Gender dropdown styling */
+.gender .inputfieldtext {
+    appearance: none;
+    /* This removes the default appearance of the select element */
+    -webkit-appearance: none;
+    /* For Safari */
+    -moz-appearance: none;
+    /* For Firefox */
+    background: linear-gradient(123.64deg, rgba(255, 255, 255, 0) 0.01%, rgba(255, 255, 255, 0.04));
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='5'><path fill='white' d='M0 0l5 5 5-5z'/></svg>");
+    /* This is the arrow */
+    background-repeat: no-repeat;
+    background-position-x: calc(100% - 20px);
+    /* Move arrow to the left */
+    background-position-y: center;
+}
+
+.gender .inputfieldtext option {
+    background: linear-gradient(123.64deg, rgba(255, 255, 255, 0) 0.01%, rgba(255, 255, 255, 0.04));
+    color: black;
+    /* Adjust this if needed */
+}
+
+/* Color for dropdown option when it is hovered or selected */
+.gender .inputfieldtext option:checked,
+.gender .inputfieldtext option:hover {
+    background: rgba(10, 14, 35, 0.8);
+    /* Slight shade to indicate selection or hover */
+    color: #fff;
+}
+
+.age {
+    margin-left: -30%;
+    /* Add a negative margin to move it to the left */
 }

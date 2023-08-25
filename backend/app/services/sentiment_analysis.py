@@ -16,10 +16,11 @@ async def analyze_sentiment(text: str, redis: aioredis.Redis = Depends(depends_r
         return json.loads(cached_result)
     
     # If not in cache, compute the sentiment analysis
-    result = sentiment_classifier(text)[0]
-    
+    #result = sentiment_classifier(text)[0]
+    result = json.loads(json.dumps(sentiment_classifier(text)[0]))
+    print('result sentiment:', result)
     # Cache the result for future use (set an expiry time of 1 hour for example)
-    await redis.set(text, json.dumps(result))
+    await redis.set(text, json.dumps(result).replace("'", '"'))
     await redis.expire(text, 3600)  # Set the expiration time here
     
     return result

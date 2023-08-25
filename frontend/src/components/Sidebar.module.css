@@ -1,0 +1,27 @@
+.sidebar {
+    /* ... your existing styles ... */
+    background: linear-gradient(to bottom, #2563EB, #1D4ED8);
+  }
+  
+  .visionUiPro {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    letter-spacing: 0.18em;
+    line-height: 100%;
+    font-weight: 500;
+    background: linear-gradient(97.89deg, #fff, rgba(117, 122, 140, 0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .logo {
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    right: 20px;
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
