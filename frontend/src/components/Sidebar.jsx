@@ -27,7 +27,7 @@ const Sidebar = () => {
                     <Link to="/" className="flex items-center pl-2.5 mb-5">
                         <div className={styles.logo}>
                             <div className={styles.visionUiPro}>
-                                <span className="mx-4">ARTELUS</span>
+                                <span className="mx-4">MIND HEALER</span>
                             </div>
                         </div>
                     </Link>

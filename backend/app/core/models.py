@@ -1,3 +1,5 @@
+# app/api/models/model.py
+
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Float, Text, CheckConstraint
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.sql import func
@@ -205,3 +207,12 @@ class RecommendedArticles(Base):
     description = Column(Text)
     link = Column(Text)
     content_type = Column(String)
+
+class MotivationalQuote(Base):
+    __tablename__ = "t_motivational_quotes"
+
+    quote_id = Column(Integer, primary_key=True, index=True)
+    quote = Column(Text, nullable=False)
+    author = Column(Text, nullable=False)
+    category = Column(Text)
+    date_added = Column(DateTime(timezone=True), server_default=func.now())

@@ -229,3 +229,13 @@ class RecommendedArticlesModel(BaseModel):
     description: str
     link: str
     content_type: str
+
+class MotivationalQuoteModel(BaseModel):
+    quote_id: int
+    quote: str
+    author: str
+    category: Optional[str] = None
+    date_added: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True

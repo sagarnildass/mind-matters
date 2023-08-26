@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.exceptions import ResponseValidationError
 
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import func
+
 from typing import List
 from app.core.database import get_db
 from app.core.authentication import get_current_user
@@ -9,11 +11,11 @@ from app.api.models.model import (AvgSentimentScoresModel, DominantSentimentMode
                                   AvgAIResponseTimeModel, AvgConfidenceScoreModel, 
                                   DailyMentalHealthModel, RecentChatSummaryModel, 
                                   FeedbackReminderModel, UserActivitySummary7DModel, 
-                                  UserProfileModel, RecommendedArticlesModel)
+                                  UserProfileModel, RecommendedArticlesModel, MotivationalQuoteModel)
 from app.core.models import (AvgSentimentScores, DominantSentiment, AvgAIResponseTime, 
                              AvgConfidenceScore, DailyMentalHealth, RecentChatSummary, 
                              FeedbackReminder, UserActivitySummary7D, UserProfile, 
-                             RecommendedArticles)
+                             RecommendedArticles, MotivationalQuote)
 
 router = APIRouter()
 
@@ -95,5 +97,15 @@ def get_recommended_articles(db: Session = Depends(get_db)):
     try:
         results = db.query(RecommendedArticles).all()
         return [RecommendedArticlesModel(**result.__dict__) for result in results]
+    except ResponseValidationError as e:
+        raise HTTPException(status_code=400, detail=str(e.errors()))
+
+@router.get("/random_quote/", response_model=MotivationalQuoteModel)
+def get_random_quote(db: Session = Depends(get_db)):
+    try:
+        result = db.query(MotivationalQuote).order_by(func.random()).first()
+        if not result:
+            raise HTTPException(status_code=404, detail="No quotes available.")
+        return MotivationalQuoteModel(**result.__dict__)
     except ResponseValidationError as e:
         raise HTTPException(status_code=400, detail=str(e.errors()))

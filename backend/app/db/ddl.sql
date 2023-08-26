@@ -91,8 +91,16 @@ CREATE TABLE t_websocketsessions (
     end_time TIMESTAMP
 );
 
+CREATE TABLE t_motivational_quotes (
+    quote_id SERIAL PRIMARY KEY,
+    quote TEXT NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    category TEXT,
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-
+-- Index for faster querying by category
+CREATE INDEX idx_quotes_category ON t_motivational_quotes(category);
 -- Indices for common queries
 CREATE INDEX idx_user_email ON t_users(email);
 CREATE INDEX idx_sessions_userid ON t_sessions(user_id);
