@@ -1,0 +1,63 @@
+Date : 2023-08-28 00:33:39
+Directory : /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend
+Total : 27 files,  1309 codes, 177 comments, 340 blanks, all 1826 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |         26 |      1,068 |        166 |        311 |      1,545 |
+| SQL      |          1 |        241 |         11 |         29 |        281 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                       | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                          |         27 |      1,309 |        177 |        340 |      1,826 |
+| . (Files)                                                                                                  |          2 |        210 |         30 |         74 |        314 |
+| app                                                                                                        |         25 |      1,099 |        147 |        266 |      1,512 |
+| app (Files)                                                                                                |          1 |          0 |          0 |          1 |          1 |
+| app/api                                                                                                    |          9 |        440 |         41 |        111 |        592 |
+| app/api (Files)                                                                                            |          1 |          0 |          0 |          1 |          1 |
+| app/api/models                                                                                             |          2 |        175 |         19 |         48 |        242 |
+| app/api/routes                                                                                             |          4 |        242 |         21 |         58 |        321 |
+| app/api/utils                                                                                              |          2 |         23 |          1 |          4 |         28 |
+| app/core                                                                                                   |          5 |        210 |         22 |         50 |        282 |
+| app/db                                                                                                     |          2 |        241 |         11 |         30 |        282 |
+| app/services                                                                                               |          8 |        208 |         73 |         74 |        355 |
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                   | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/__init__.py                        | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/__init__.py                    | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/__init__.py                | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/models/__init__.py         | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/models/model.py            | Python   |        175 |         19 |         47 |        241 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/__init__.py         | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/auth.py             | Python   |         90 |         10 |         22 |        122 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/upload_image.py     | Python   |         56 |         10 |         19 |         85 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/views.py            | Python   |         96 |          1 |         16 |        113 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/utils/__init__.py          | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/utils/user_utils.py        | Python   |         23 |          1 |          3 |         27 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/__init__.py               | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/authentication.py         | Python   |         20 |          1 |          3 |         24 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/config.py                 | Python   |          3 |          1 |          1 |          5 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/database.py               | Python   |         24 |          2 |          8 |         34 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/models.py                 | Python   |        163 |         18 |         37 |        218 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/db/__init__.py                 | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/db/ddl.sql                     | SQL      |        241 |         11 |         29 |        281 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/__init__.py           | Python   |          0 |          0 |          1 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/chat.py               | Python   |         18 |          4 |          6 |         28 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/chatbot_service.py    | Python   |         80 |         40 |         19 |        139 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/emotion_analysis.py   | Python   |         33 |         11 |         15 |         59 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/intent_recognition.py | Python   |         16 |          4 |          9 |         29 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/sentiment_analysis.py | Python   |         15 |          5 |          7 |         27 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/suicide_predictor.py  | Python   |         19 |          4 |          8 |         31 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/user.py               | Python   |         27 |          5 |          9 |         41 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/main.py                            | Python   |        210 |         30 |         73 |        313 |
+| Total                                                                                                      |          |      1,309 |        177 |        340 |      1,826 |
++------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

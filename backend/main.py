@@ -150,6 +150,7 @@ def statement_to_question(statement):
 
 @app.websocket("/chat/{user_id}")
 async def start_chat(websocket: WebSocket, user_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db), redis: aioredis.Redis = Depends(depends_redis)):
+    camera_start_requested = False
     await websocket.accept()
     
     session_data, ws_session_data, chat_log_data = await initiate_chat(user_id, db)
@@ -159,12 +160,16 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
     emotion_lock = threading.Lock()
     def send_emotions():
         nonlocal emotion_queue
+        if not camera_start_requested:
+            return  # Do not start the camera if not requested
+
         for emotions in capture_emotion(stop_thread):  # Pass the stop_thread event
             with emotion_lock:
                 emotion_queue.put(emotions)
+
     # Start the function in a separate thread
     thread = threading.Thread(target=send_emotions)
-    thread.start()
+    
 
     stop_thread.clear()  # Reset the event for a new connection
     blip_response = None
@@ -173,6 +178,10 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
     try:
         while True:
             data = await websocket.receive_text()
+            if data == 'start-cam':
+                camera_start_requested = True
+                thread.start()
+                continue
             
             # Check if the message indicates an image is sent
             if "USER_SENT_IMAGE:" in data:
@@ -194,6 +203,7 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
                     inputs = processor(raw_image, question, return_tensors="pt").to("cuda")
                     out = model.generate(**inputs)
                     blip_response = processor.decode(out[0], skip_special_tokens=True)
+                    print('BLIP RESPONSE: ', blip_response)
                     blip_timestamp = datetime.now() 
 
                     # Send the response back to the user
@@ -287,9 +297,9 @@ async def start_chat(websocket: WebSocket, user_id: int, background_tasks: Backg
 
 
             # Here you can also send back the sentiment result to the user or use it to guide the conversation.
-            await websocket.send_text(f"Sentiment: {sentiment_result}")
-            await websocket.send_text(f"Intent: {intent_result}")
-            await websocket.send_text(f"Suicide: {suicidal_result}")
+            #await websocket.send_text(f"Sentiment: {sentiment_result}")
+            #await websocket.send_text(f"Intent: {intent_result}")
+            #await websocket.send_text(f"Suicide: {suicidal_result}")
 
     except WebSocketDisconnect:
         stop_thread.set()  # Signal the thread to stop

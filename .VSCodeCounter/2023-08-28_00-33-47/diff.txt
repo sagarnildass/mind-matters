@@ -1,0 +1,121 @@
+Date : 2023-08-28 00:33:47
+Directory : /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend
+Total : 68 files,  6191 codes, -46 comments, 12 blanks, all 6157 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          2 |      4,943 |          0 |          2 |      4,945 |
+| JavaScript |         30 |      1,777 |        113 |        236 |      2,126 |
+| CSS        |          5 |        760 |         18 |        109 |        887 |
+| HTML       |          1 |         13 |          0 |          1 |         14 |
+| Markdown   |          1 |          5 |          0 |          4 |          9 |
+| XML        |          2 |          2 |          0 |          0 |          2 |
+| SQL        |          1 |       -241 |        -11 |        -29 |       -281 |
+| Python     |         26 |     -1,068 |       -166 |       -311 |     -1,545 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                               | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                  |         68 |      6,191 |        -46 |         12 |      6,157 |
+| . (Files)                                                                                                          |          8 |      5,093 |          2 |         14 |      5,109 |
+| ..                                                                                                                 |         27 |     -1,309 |       -177 |       -340 |     -1,826 |
+| ../backend                                                                                                         |         27 |     -1,309 |       -177 |       -340 |     -1,826 |
+| ../backend (Files)                                                                                                 |          2 |       -210 |        -30 |        -74 |       -314 |
+| ../backend/app                                                                                                     |         25 |     -1,099 |       -147 |       -266 |     -1,512 |
+| ../backend/app (Files)                                                                                             |          1 |          0 |          0 |         -1 |         -1 |
+| ../backend/app/api                                                                                                 |          9 |       -440 |        -41 |       -111 |       -592 |
+| ../backend/app/api (Files)                                                                                         |          1 |          0 |          0 |         -1 |         -1 |
+| ../backend/app/api/models                                                                                          |          2 |       -175 |        -19 |        -48 |       -242 |
+| ../backend/app/api/routes                                                                                          |          4 |       -242 |        -21 |        -58 |       -321 |
+| ../backend/app/api/utils                                                                                           |          2 |        -23 |         -1 |         -4 |        -28 |
+| ../backend/app/core                                                                                                |          5 |       -210 |        -22 |        -50 |       -282 |
+| ../backend/app/db                                                                                                  |          2 |       -241 |        -11 |        -30 |       -282 |
+| ../backend/app/services                                                                                            |          8 |       -208 |        -73 |        -74 |       -355 |
+| public                                                                                                             |          1 |          1 |          0 |          0 |          1 |
+| src                                                                                                                |         32 |      2,406 |        129 |        338 |      2,873 |
+| src (Files)                                                                                                        |          4 |        145 |          9 |         35 |        189 |
+| src/assets                                                                                                         |          1 |          1 |          0 |          0 |          1 |
+| src/components                                                                                                     |         13 |      1,413 |         77 |        192 |      1,682 |
+| src/middleware                                                                                                     |          1 |          8 |          5 |          3 |         16 |
+| src/pages                                                                                                          |          5 |        602 |         33 |         67 |        702 |
+| src/utils                                                                                                          |          8 |        237 |          5 |         41 |        283 |
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                           | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/__init__.py                                | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/__init__.py                            | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/__init__.py                        | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/models/__init__.py                 | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/models/model.py                    | Python     |       -175 |        -19 |        -47 |       -241 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/__init__.py                 | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/auth.py                     | Python     |        -90 |        -10 |        -22 |       -122 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/upload_image.py             | Python     |        -56 |        -10 |        -19 |        -85 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/routes/views.py                    | Python     |        -96 |         -1 |        -16 |       -113 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/utils/__init__.py                  | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/api/utils/user_utils.py                | Python     |        -23 |         -1 |         -3 |        -27 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/__init__.py                       | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/authentication.py                 | Python     |        -20 |         -1 |         -3 |        -24 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/config.py                         | Python     |         -3 |         -1 |         -1 |         -5 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/database.py                       | Python     |        -24 |         -2 |         -8 |        -34 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/core/models.py                         | Python     |       -163 |        -18 |        -37 |       -218 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/db/__init__.py                         | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/db/ddl.sql                             | SQL        |       -241 |        -11 |        -29 |       -281 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/__init__.py                   | Python     |          0 |          0 |         -1 |         -1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/chat.py                       | Python     |        -18 |         -4 |         -6 |        -28 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/chatbot_service.py            | Python     |        -80 |        -40 |        -19 |       -139 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/emotion_analysis.py           | Python     |        -33 |        -11 |        -15 |        -59 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/intent_recognition.py         | Python     |        -16 |         -4 |         -9 |        -29 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/sentiment_analysis.py         | Python     |        -15 |         -5 |         -7 |        -27 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/suicide_predictor.py          | Python     |        -19 |         -4 |         -8 |        -31 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/app/services/user.py                       | Python     |        -27 |         -5 |         -9 |        -41 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/main.py                                    | Python     |       -210 |        -30 |        -73 |       -313 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/.eslintrc.cjs                             | JavaScript |         20 |          0 |          1 |         21 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/README.md                                 | Markdown   |          5 |          0 |          4 |          9 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/index.html                                | HTML       |         13 |          0 |          1 |         14 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/package-lock.json                         | JSON       |      4,899 |          0 |          1 |      4,900 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/package.json                              | JSON       |         44 |          0 |          1 |         45 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/postcss.config.js                         | JavaScript |          6 |          0 |          1 |          7 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/public/vite.svg                           | XML        |          1 |          0 |          0 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/App.css                               | CSS        |         37 |          0 |          6 |         43 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/App.jsx                               | JavaScript |          8 |          0 |          3 |         11 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/assets/react.svg                      | XML        |          1 |          0 |          0 |          1 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/Card.jsx                   | JavaScript |         11 |          0 |          3 |         14 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/CardContent.jsx            | JavaScript |         12 |          0 |          2 |         14 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/EmotionTimeSeriesChart.jsx | JavaScript |        130 |          5 |         15 |        150 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/Login.module.css           | CSS        |        261 |          1 |         32 |        294 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/LoginForm.jsx              | JavaScript |        159 |         21 |         32 |        212 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/Navbar.jsx                 | JavaScript |         82 |         20 |         14 |        116 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/QuoteBox.jsx               | JavaScript |         16 |          0 |          3 |         19 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/RecentChatSummary.jsx      | JavaScript |         26 |          1 |          5 |         32 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/Sidebar.jsx                | JavaScript |         88 |          3 |          8 |         99 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/Sidebar.module.css         | CSS        |         24 |          1 |          2 |         27 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/Signup.module.css          | CSS        |        358 |         12 |         45 |        415 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/SignupForm.jsx             | JavaScript |        211 |         12 |         27 |        250 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/components/articleCarousel.jsx        | JavaScript |         35 |          1 |          4 |         40 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/index.css                             | CSS        |         80 |          4 |         24 |        108 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/main.jsx                              | JavaScript |         20 |          5 |          2 |         27 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/middleware/tokenExpiryMiddleware.js   | JavaScript |          8 |          5 |          3 |         16 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/pages/ChatPage.jsx                    | JavaScript |        114 |         29 |         18 |        161 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/pages/HomePage.jsx                    | JavaScript |        157 |          3 |         19 |        179 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/pages/Login.jsx                       | JavaScript |        101 |          0 |          4 |        105 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/pages/Profile.jsx                     | JavaScript |        129 |          1 |         22 |        152 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/pages/Signup.jsx                      | JavaScript |        101 |          0 |          4 |        105 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/articleSlice.js                 | JavaScript |         31 |          1 |          6 |         38 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/dailyMentalHealthSlice.js       | JavaScript |         32 |          1 |          6 |         39 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/emotionSlice.js                 | JavaScript |         32 |          1 |          6 |         39 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/quoteSlice.js                   | JavaScript |         30 |          1 |          6 |         37 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/recentChatSlice.js              | JavaScript |         25 |          1 |          5 |         31 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/store.js                        | JavaScript |         21 |          0 |          2 |         23 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/userSlice.js                    | JavaScript |         34 |          0 |          5 |         39 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/src/utils/weeklySummarySlice.js           | JavaScript |         32 |          0 |          5 |         37 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/tailwind.config.js                        | JavaScript |        101 |          1 |          3 |        105 |
+| /home/sagarnildass/python_notebooks/artelus/Codes/mental_health/frontend/vite.config.js                            | JavaScript |          5 |          1 |          2 |          8 |
+| Total                                                                                                              |            |      6,191 |        -46 |         12 |      6,157 |
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
