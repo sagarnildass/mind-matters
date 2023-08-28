@@ -60,7 +60,7 @@ const HomePage = () => {
         "disappointment": "😞",
         "anger": "😡",
         "admiration": "🥰",
-        "love": "❤️",
+        "love": "❤",
         "approval": "👍",
         "surprise": "😲",
         "remorse": "😔",
@@ -134,13 +134,13 @@ const HomePage = () => {
                     <div className="absolute right-60 top-28 text-white w-full flex justify-center space-x-20">  {/* Wrap the two sections in a flex container */}
                         <div> {/* Emotion cards section */}
                             <h1 className="text-4xl font-bold">Welcome, {userName}</h1>
-                            <h2 className="text-2xl mt-4">Your Top Emotions Today:</h2>
+                            <h2 className="text-2xl mt-4">Your Recent Top Emotions:</h2>
                             <div className="flex space-x-8 mt-4">
                                 {topEmotions.map((emotion, index) => (
                                     <Card key={index} className="flex-1">
                                         <CardContent
                                             title={emotion[0]}
-                                            number={emotionToEmoji[emotion[0]]}
+                                            number={emotion[0] === "love" ? <span style={{ color: "red" }}>{emotionToEmoji[emotion[0]]}</span> : emotionToEmoji[emotion[0]]}
                                         />
                                     </Card>
                                 ))}

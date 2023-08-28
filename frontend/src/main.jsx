@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import ChatPage from "./pages/ChatPage";
+import NewChat from "./pages/NewChat";
+
 import { Provider } from 'react-redux';
 import { store } from './utils/store';
 
@@ -19,6 +21,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="signup" element={<Signup />} />
         <Route path="profile/:userId" element={<Profile />} />
         <Route path="chat" element={<ChatPage />} />
+        <Route path="new-chat/:user_id" element={<NewChat />} />
+        <Route path="new-chat/:user_id/:session_id" element={<NewChat />} />
         <Route path="/*" element={<App />} />
       </Routes>
     </BrowserRouter>

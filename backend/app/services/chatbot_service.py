@@ -5,7 +5,7 @@ import os
 from sqlalchemy.orm import Session
 import pinecone
 from sqlalchemy import case
-
+from dotenv import load_dotenv
 
 from app.core.models import Session as DBSession, ChatLog, User
 from app.core.models import ContentMetadata as t_content_metadata
@@ -15,9 +15,12 @@ MAX_TOKENS = 500
 FREQUENCY_PENALTY = 0
 PRESENCE_PENALTY = 0.6
 MAX_CONTEXT_QUESTIONS = 10
+load_dotenv()
 # You can use environment variables or a config file to store this securely
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = "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"
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+
+POST_PROMPT_GUIDANCE = "Don’t justify your answers. Don’t give information not mentioned in the CONTEXT INFORMATION."
 
 openai.api_key = OPENAI_API_KEY
 pinecone.init(      
@@ -26,7 +29,7 @@ pinecone.init(
 )      
 index = pinecone.Index(index_name='openai')
 
-def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data, blip_response=None):
+def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data, session_id, blip_response=None):
     """Get a response from GPT-3.5-turbo with the chat history for context."""
     #print("emotion data: ", emotion_data)
     user = db.query(User).filter(User.user_id == user_id).first()
@@ -53,7 +56,7 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
         If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
         {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
         The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. 
-        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health."\
+        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
         The user recently showed an image. Based on the image, it appears that it is a {blip_response}. Acknowledge this information. Use this information along with the user's statements to provide a comprehensive response.
         """
     else:
@@ -70,17 +73,20 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
         If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
         {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
         The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. 
-        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health."\
+        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
         """
 
-    # Fetch recent chat history for the user
-    session_data = db.query(DBSession).filter(
-        DBSession.user_id == user_id).order_by(DBSession.start_time.desc()).first()
-    if not session_data:
-        # Handle case where no session exists
-        return "Sorry, there seems to be an error with the session."
+    if not session_id:
+        # Fetch recent chat history for the user
+        session_data = db.query(DBSession).filter(
+            DBSession.user_id == user_id).order_by(DBSession.start_time.desc()).first()
+        session_id = session_data.session_id if session_data else None
+        
+        if not session_data:
+            # Handle case where no session exists
+            return "Sorry, there seems to be an error with the session."
 
-    chat_history = db.query(ChatLog).filter(ChatLog.session_id == session_data.session_id).order_by(
+    chat_history = db.query(ChatLog).filter(ChatLog.session_id == session_id).order_by(
         ChatLog.timestamp.desc()).limit(MAX_CONTEXT_QUESTIONS).all()
 
     # Construct messages for GPT-3.5-turbo

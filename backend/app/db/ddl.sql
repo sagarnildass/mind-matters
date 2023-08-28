@@ -193,13 +193,30 @@ SELECT
     t_sessions.session_id,
     t_sessions.start_time,
     t_sessions.end_time,
-    t_chatlogs.content,
-    t_chatlogs.sentiment
+    sub_log.content,
+    sub_log.sentiment,
+    sub_log.log_id
 FROM
     t_sessions
-JOIN t_chatlogs ON t_sessions.session_id = t_chatlogs.session_id
-WHERE
-    t_sessions.start_time = (SELECT MAX(start_time) FROM t_sessions WHERE user_id = t_sessions.user_id);
+JOIN (
+    SELECT
+        session_id,
+        content,
+        sentiment,
+        log_id
+    FROM
+        (SELECT
+            session_id,
+            content,
+            sentiment,
+            log_id,
+            ROW_NUMBER() OVER(PARTITION BY session_id ORDER BY log_id DESC) as rn
+        FROM t_chatlogs
+        WHERE direction = 'user') AS temp
+    WHERE rn = 1
+) AS sub_log
+ON t_sessions.session_id = sub_log.session_id;
+
 	
 CREATE VIEW v_feedback_reminder AS
 SELECT

@@ -14,8 +14,8 @@ const ProfilePage = () => {
     const dispatch = useDispatch();  // Use the useDispatch hook from 'react-redux'
     const firstName = useSelector(state => state.user.first_name);  // Use selectors to get user data from the Redux store
     const lastName = useSelector(state => state.user.last_name);
-    console.log('First name:', firstName);
-    console.log('Last name:', lastName);
+    // console.log('First name:', firstName);
+    // console.log('Last name:', lastName);
 
     const [profileImageUrl, setProfileImageUrl] = useState(null);
     const [showUploadCard, setShowUploadCard] = useState(false);
