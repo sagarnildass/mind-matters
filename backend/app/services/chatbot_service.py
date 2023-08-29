@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from app.core.models import Session as DBSession, ChatLog, User
 from app.core.models import ContentMetadata as t_content_metadata
 # Configuration constants
-TEMPERATURE = 0.5
+TEMPERATURE = 0.7
 MAX_TOKENS = 500
 FREQUENCY_PENALTY = 0
 PRESENCE_PENALTY = 0.6
