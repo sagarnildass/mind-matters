@@ -20,7 +20,7 @@ load_dotenv()
 OPENAI_API_KEY = "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"
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
-POST_PROMPT_GUIDANCE = "Don’t justify your answers. Don’t give information not mentioned in the CONTEXT INFORMATION."
+# POST_PROMPT_GUIDANCE = "Don't justify your answers. Don't give information not mentioned in the CONTEXT INFORMATION."
 
 openai.api_key = OPENAI_API_KEY
 pinecone.init(      

@@ -216,3 +216,13 @@ class MotivationalQuote(Base):
     author = Column(Text, nullable=False)
     category = Column(Text)
     date_added = Column(DateTime(timezone=True), server_default=func.now())
+
+class DailyChallenge(Base):
+    __tablename__ = 't_daily_challenges'
+
+    challenge_id = Column(Integer, primary_key=True, index=True)
+    challenge_name = Column(Text, nullable=False)
+    challenge_description = Column(Text)
+    image_url = Column(Text)
+    category = Column(String)
+    date_added = Column(DateTime)

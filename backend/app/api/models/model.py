@@ -239,3 +239,12 @@ class MotivationalQuoteModel(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class DailyChallengeModel(BaseModel):
+    challenge_id: int
+    challenge_name: str
+    challenge_description: str
+    image_url: Optional[str] = None
+    category: str
+    date_added: datetime

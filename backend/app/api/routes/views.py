@@ -19,6 +19,10 @@ from app.core.models import (AvgSentimentScores, DominantSentiment, AvgAIRespons
                              FeedbackReminder, UserActivitySummary7D, UserProfile, 
                              RecommendedArticles, MotivationalQuote)
 
+from app.api.models.model import DailyChallengeModel  # import your Pydantic model for DailyChallenge
+from app.core.models import DailyChallenge  # import your SQLAlchemy model for DailyChallenge
+
+
 router = APIRouter()
 
 
@@ -109,5 +113,15 @@ def get_random_quote(db: Session = Depends(get_db)):
         if not result:
             raise HTTPException(status_code=404, detail="No quotes available.")
         return MotivationalQuoteModel(**result.__dict__)
+    except ResponseValidationError as e:
+        raise HTTPException(status_code=400, detail=str(e.errors()))
+    
+@router.get("/daily_challenge/")
+def get_daily_challenge(db: Session = Depends(get_db)):
+    try:
+        result = db.query(DailyChallenge).order_by(func.random()).first()
+        if not result:
+            raise HTTPException(status_code=404, detail="No challenges available.")
+        return DailyChallengeModel(**result.__dict__)
     except ResponseValidationError as e:
         raise HTTPException(status_code=400, detail=str(e.errors()))
