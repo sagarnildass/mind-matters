@@ -14,6 +14,7 @@ SELECT * FROM v_feedback_reminder;
 SELECT * FROM v_user_activity_summary_7d;
 SELECT * FROM v_user_profile;
 SELECT * FROM v_recommended_articles;
+select * from t_daily_challenges
 
 -----------------------
 

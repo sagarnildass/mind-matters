@@ -70,3 +70,5 @@ INSERT INTO t_daily_challenges (challenge_name, challenge_description, image_url
 ('Go Digital', 'Read a digital book instead of a paper one.', NULL, 'Environmental Awareness');
 
 -- Add more as needed
+
+-- Update pictures

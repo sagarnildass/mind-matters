@@ -5,6 +5,7 @@ from fastapi.exceptions import ResponseValidationError
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
+from datetime import datetime, timedelta
 
 from typing import List
 from app.core.database import get_db
@@ -24,6 +25,11 @@ from app.core.models import DailyChallenge  # import your SQLAlchemy model for D
 
 
 router = APIRouter()
+
+# In-memory cache
+cache = {}
+cache_expiry = {}
+
 
 
 @router.get("/avg_sentiment_scores/", response_model=List[AvgSentimentScoresModel])
@@ -105,23 +111,30 @@ def get_recommended_articles(db: Session = Depends(get_db)):
         return [RecommendedArticlesModel(**result.__dict__) for result in results]
     except ResponseValidationError as e:
         raise HTTPException(status_code=400, detail=str(e.errors()))
+    
+
+def get_cached_or_new_data(key, db_query_func, db: Session, cache_duration=timedelta(hours=24)):
+    now = datetime.now()
+    if key in cache and key in cache_expiry and cache_expiry[key] > now:
+        return cache[key]
+    else:
+        result = db_query_func(db)
+        if not result:
+            raise HTTPException(status_code=404, detail="No data available.")
+        
+        # Serialize the result object to a dictionary
+        serialized_result = result.__dict__
+
+        cache[key] = serialized_result
+        cache_expiry[key] = now + cache_duration
+        return serialized_result
+    
 
 @router.get("/random_quote/", response_model=MotivationalQuoteModel)
 def get_random_quote(db: Session = Depends(get_db)):
-    try:
-        result = db.query(MotivationalQuote).order_by(func.random()).first()
-        if not result:
-            raise HTTPException(status_code=404, detail="No quotes available.")
-        return MotivationalQuoteModel(**result.__dict__)
-    except ResponseValidationError as e:
-        raise HTTPException(status_code=400, detail=str(e.errors()))
+    return get_cached_or_new_data("random_quote", lambda db: db.query(MotivationalQuote).order_by(func.random()).first(), db)
+
     
-@router.get("/daily_challenge/", response_model=DailyChallengeModel)
+@router.get("/daily_challenge/")
 def get_daily_challenge(db: Session = Depends(get_db)):
-    try:
-        result = db.query(DailyChallenge).order_by(func.random()).first()
-        if not result:
-            raise HTTPException(status_code=404, detail="No challenges available.")
-        return DailyChallengeModel(**result.__dict__)
-    except ResponseValidationError as e:
-        raise HTTPException(status_code=400, detail=str(e.errors()))
+    return get_cached_or_new_data("daily_challenge", lambda db: db.query(DailyChallenge).order_by(func.random()).first(), db)

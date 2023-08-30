@@ -10,6 +10,8 @@ import { fetchDailyMentalHealth, selectDailyMentalHealth } from '../utils/dailyM
 import { fetchWeeklySummary, selectWeeklySummary } from '../utils/weeklySummarySlice';
 import { fetchRecentChat, selectRecentChat } from '../utils/recentChatSlice';
 import { fetchRandomQuote, selectRandomQuote } from '../utils/quoteSlice';
+import { fetchDailyChallenge, selectDailyChallenge } from '../utils/dailyChallengeSlice';
+
 
 import Card from '../components/Card';
 import CardContent from '../components/CardContent';
@@ -29,6 +31,9 @@ const HomePage = () => {
     const weeklySummary = useSelector(selectWeeklySummary);
     const recentChat = useSelector(selectRecentChat);
     const randomQuote = useSelector(selectRandomQuote);
+    const dailyChallenge = useSelector(selectDailyChallenge);
+
+
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -39,6 +44,7 @@ const HomePage = () => {
         dispatch(fetchWeeklySummary(token));
         dispatch(fetchRecentChat(token));
         dispatch(fetchRandomQuote());
+        dispatch(fetchDailyChallenge());
     }, [dispatch]);
 
 
@@ -117,6 +123,8 @@ const HomePage = () => {
         // TODO: Save the mood to the backend or trigger other actions.
     };
 
+
+
     return (
         <div className="flex min-h-screen overflow-x-hidden">
             <Sidebar />
@@ -170,6 +178,24 @@ const HomePage = () => {
                     <div className="absolute left-80 bottom-0 w-6/12 mb-8">
                         <EmotionTimeSeriesChart data={emotionData} />
                     </div>
+                    {dailyChallenge && dailyChallenge.challenge_id && (
+                        <div className="absolute right-0 bottom-[2%] w-4/12 mb-8 mr-8 h-[61vh]"> {/* Set fixed or minimum height here */}
+                            <Card className="h-full"> {/* Make sure the Card takes the full height */}
+                                <div className="p-3 flex flex-col h-full">
+                                    <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
+                                    <img
+                                        src={dailyChallenge.image_url}
+                                        alt={dailyChallenge.challenge_name}
+                                        className="flex-grow object-cover rounded"
+                                    />
+                                    <div className="mt-10 flex flex-col justify-end flex-grow mb-10">
+                                        <h3 className="text-white text-2xl text-center font-bold mb-2 mt-2">{dailyChallenge.challenge_name}</h3>
+                                        <p className="text-m text-gray-400 text-center mt-1">{dailyChallenge.challenge_description}</p>
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
