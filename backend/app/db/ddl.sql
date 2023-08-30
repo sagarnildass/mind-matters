@@ -99,6 +99,19 @@ CREATE TABLE t_motivational_quotes (
     date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- DailyChallenges Table
+CREATE TABLE t_daily_challenges (
+    challenge_id SERIAL PRIMARY KEY,
+    challenge_name TEXT NOT NULL,
+    challenge_description TEXT,
+    image_url TEXT,
+    category VARCHAR(255),
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index for faster querying by category
+CREATE INDEX idx_challenge_category ON t_daily_challenges(category);
+
 -- Index for faster querying by category
 CREATE INDEX idx_quotes_category ON t_motivational_quotes(category);
 -- Indices for common queries

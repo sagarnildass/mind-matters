@@ -116,7 +116,7 @@ def get_random_quote(db: Session = Depends(get_db)):
     except ResponseValidationError as e:
         raise HTTPException(status_code=400, detail=str(e.errors()))
     
-@router.get("/daily_challenge/")
+@router.get("/daily_challenge/", response_model=DailyChallengeModel)
 def get_daily_challenge(db: Session = Depends(get_db)):
     try:
         result = db.query(DailyChallenge).order_by(func.random()).first()
