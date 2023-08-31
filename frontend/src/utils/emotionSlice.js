@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchEmotionData = createAsyncThunk('emotion/fetchEmotionData', async (token) => {
-  const response = await axios.get('http://127.0.0.1:8000/views/avg_sentiment_scores/', {
+  const response = await axios.get('http://127.0.0.1:8000/views/sentiment_scores/', {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${token}`

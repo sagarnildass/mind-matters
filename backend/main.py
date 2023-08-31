@@ -23,7 +23,7 @@ from app.core.database import get_db
 from app.core.models import Session as DBSession, ChatLog, AIInteraction
 from app.api.models.model import SessionCreate, ChatLogCreate
 from app.services.chat import initiate_chat
-from app.api.routes import auth, upload_image, views
+from app.api.routes import auth, upload_image, views, recommendation_articles, recommendation_users
 from app.core.database import Base, engine, db_listener
 from app.services.sentiment_analysis import analyze_sentiment
 from app.services.intent_recognition import analyze_intent
@@ -492,6 +492,9 @@ async def root():
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(upload_image.router, prefix="/api/image", tags=["Image Handling"])  # Add this line where other routers are added
 app.include_router(views.router, prefix="/views", tags=["views"])
+app.include_router(recommendation_articles.router, prefix="/recommendation_articles", tags=["recommendation_articles"])
+app.include_router(recommendation_users.router, prefix="/recommendation_users", tags=["recommendation_users"])
+
 
 # Create tables in the database
 Base.metadata.create_all(bind=engine)

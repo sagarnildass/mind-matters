@@ -39,7 +39,7 @@ const HomePage = () => {
         const token = localStorage.getItem('access_token');
         dispatch(fetchUserData(token));
         dispatch(fetchEmotionData(token));
-        dispatch(fetchRecommendedArticles());
+        dispatch(fetchRecommendedArticles(token));
         dispatch(fetchDailyMentalHealth(token));
         dispatch(fetchWeeklySummary(token));
         dispatch(fetchRecentChat(token));

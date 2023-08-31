@@ -14,7 +14,7 @@ SELECT * FROM v_feedback_reminder;
 SELECT * FROM v_user_activity_summary_7d;
 SELECT * FROM v_user_profile;
 SELECT * FROM v_recommended_articles;
-select * from t_daily_challenges
+select * from t_daily_challenges;
 
 -----------------------
 
@@ -122,7 +122,7 @@ CREATE INDEX idx_chatlogs_sessionid ON t_chatlogs(session_id);
 
 -----------------------
 
-CREATE VIEW v_avg_sentiment_scores AS
+CREATE VIEW v_sentiment_scores AS
 SELECT
     s.user_id,
     c.session_id,
@@ -137,6 +137,33 @@ JOIN
 WHERE c.direction = 'user' AND c.content != 'Chat Initiated';
 
 
+CREATE OR REPLACE VIEW v_avg_sentiment_scores AS
+WITH expanded AS (
+    SELECT
+        s.user_id,
+        c.session_id,
+        c.log_id,
+        (jsonb_array_elements(c.sentiment::jsonb) -> 'label')::text AS sentiment_label,
+        CAST((jsonb_array_elements(c.sentiment::jsonb) -> 'score')::text AS FLOAT) AS sentiment_score
+    FROM
+        t_chatlogs c
+    JOIN 
+        t_sessions s ON c.session_id = s.session_id
+    WHERE c.direction = 'user' AND c.content != 'Chat Initiated'
+)
+SELECT
+    user_id,
+    session_id,
+    sentiment_label,
+    AVG(sentiment_score) AS avg_sentiment_score
+FROM 
+    expanded
+GROUP BY
+    user_id, session_id, sentiment_label
+ORDER BY user_id, session_id;
+
+
+
 	
 CREATE VIEW v_dominant_sentiment AS
 SELECT
@@ -146,7 +173,7 @@ SELECT
     vs.sentiment_label,
     vs.sentiment_score AS max_score
 FROM
-    v_avg_sentiment_scores vs
+    v_sentiment_scores vs
 JOIN (
     SELECT
 	    user_id,
@@ -154,7 +181,7 @@ JOIN (
         log_id,
         MAX(sentiment_score) AS max_sentiment_score
     FROM
-        v_avg_sentiment_scores
+        v_sentiment_scores
     GROUP BY
         user_id, session_id, log_id
 ) subq ON vs.user_id = subq.user_id AND vs.log_id = subq.log_id AND vs.session_id = subq.session_id AND vs.sentiment_score = subq.max_sentiment_score;
@@ -190,7 +217,7 @@ SELECT
     AVG(ai.confidence_score) AS avg_confidence,
     AVG(ai.response_time) AS avg_response_time
 FROM
-    v_avg_sentiment_scores vs
+    v_sentiment_scores vs
 JOIN
     v_dominant_sentiment ds ON vs.log_id = ds.log_id
 LEFT JOIN
@@ -287,6 +314,7 @@ FROM
 ORDER BY
     RANDOM()
 LIMIT 5;
+
 
 
 

@@ -3,10 +3,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchRecommendedArticles = createAsyncThunk('articles/fetchRecommendedArticles', async () => {
-  const response = await axios.get('http://127.0.0.1:8000/views/recommended_articles/', {
+export const fetchRecommendedArticles = createAsyncThunk('articles/fetchRecommendedArticles', async (token) => {
+  const response = await axios.get('http://127.0.0.1:8000/recommendation_articles/get_recommendations', {
     headers: {
-      'accept': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   });
   return response.data;

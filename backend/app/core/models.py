@@ -1,4 +1,4 @@
-# app/api/models/model.py
+# app/core/models.py
 
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Float, Text, CheckConstraint
 from sqlalchemy.orm import relationship, declarative_base
@@ -117,15 +117,24 @@ class ContentMetadata(Base):
     link = Column(Text)
     content_type = Column(String(255))
 
-# v_avg_sentiment_scores model
-class AvgSentimentScores(Base):
-    __tablename__ = "v_avg_sentiment_scores"
+class SentimentScores(Base):
+    __tablename__ = "v_sentiment_scores"
+
     user_id = Column(Integer, primary_key=True)
     session_id = Column(Integer, primary_key=True)
     log_id = Column(Integer, primary_key=True)
     sentiment_label = Column(String, primary_key=True)
     sentiment_score = Column(Float)
     timestamp = Column(DateTime(timezone=True), primary_key=True)
+
+# v_avg_sentiment_scores model
+class AvgSentimentScores(Base):
+    __tablename__ = "v_avg_sentiment_scores"
+    
+    user_id = Column(Integer, primary_key=True)
+    session_id = Column(Integer, primary_key=True)
+    sentiment_label = Column(String, primary_key=True)
+    avg_sentiment_score = Column(Float)
 
 # v_dominant_sentiment model
 class DominantSentiment(Base):
@@ -141,6 +150,7 @@ class AvgAIResponseTime(Base):
     __tablename__ = "v_avg_ai_response_time"
     model_used = Column(String, primary_key=True)
     avg_response_time = Column(Float)
+
 
 # v_avg_confidence_score model
 class AvgConfidenceScore(Base):

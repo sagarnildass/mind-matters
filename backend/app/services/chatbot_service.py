@@ -9,6 +9,13 @@ from dotenv import load_dotenv
 
 from app.core.models import Session as DBSession, ChatLog, User
 from app.core.models import ContentMetadata as t_content_metadata
+
+def get_env_data_as_dict(path: str) -> dict:
+    with open(path, 'r') as f:
+       return dict(tuple(line.replace('\n', '').split('=')) for line
+                in f.readlines() if not line.startswith('#'))
+    
+    
 # Configuration constants
 TEMPERATURE = 0.7
 MAX_TOKENS = 500

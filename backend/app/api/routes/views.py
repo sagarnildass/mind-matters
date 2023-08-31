@@ -14,11 +14,11 @@ from app.api.models.model import (AvgSentimentScoresModel, DominantSentimentMode
                                   AvgAIResponseTimeModel, AvgConfidenceScoreModel, 
                                   DailyMentalHealthModel, RecentChatSummaryModel, 
                                   FeedbackReminderModel, UserActivitySummary7DModel, 
-                                  UserProfileModel, RecommendedArticlesModel, MotivationalQuoteModel)
+                                  UserProfileModel, RecommendedArticlesModel, MotivationalQuoteModel, SentimentScoresModel)
 from app.core.models import (AvgSentimentScores, DominantSentiment, AvgAIResponseTime, 
                              AvgConfidenceScore, DailyMentalHealth, RecentChatSummary, 
                              FeedbackReminder, UserActivitySummary7D, UserProfile, 
-                             RecommendedArticles, MotivationalQuote)
+                             RecommendedArticles, MotivationalQuote, SentimentScores)
 
 from app.api.models.model import DailyChallengeModel  # import your Pydantic model for DailyChallenge
 from app.core.models import DailyChallenge  # import your SQLAlchemy model for DailyChallenge
@@ -37,6 +37,14 @@ def get_avg_sentiment_scores(user=Depends(get_current_user), db: Session = Depen
     try:
         results = db.query(AvgSentimentScores).filter(AvgSentimentScores.user_id == user.user_id).all()
         return [AvgSentimentScoresModel(**result.__dict__) for result in results]
+    except ResponseValidationError as e:
+        raise HTTPException(status_code=400, detail=str(e.errors()))
+    
+@router.get("/sentiment_scores/", response_model=List[SentimentScoresModel])
+def get_sentiment_scores(user=Depends(get_current_user), db: Session = Depends(get_db)):
+    try:
+        results = db.query(SentimentScores).filter(SentimentScores.user_id == user.user_id).all()
+        return [SentimentScoresModel(**result.__dict__) for result in results]
     except ResponseValidationError as e:
         raise HTTPException(status_code=400, detail=str(e.errors()))
 

@@ -148,14 +148,21 @@ class ContentMetadataModel(ContentMetadataBase):
     class Config:
         orm_mode = True
 
-# v_avg_sentiment_scores model
-class AvgSentimentScoresModel(BaseModel):
+# SentimentScores model
+class SentimentScoresModel(BaseModel):
     user_id: int
     session_id: int
     log_id: int
     sentiment_label: str
     sentiment_score: float
     timestamp: datetime
+
+# v_avg_sentiment_scores model
+class AvgSentimentScoresModel(BaseModel):
+    user_id: int
+    session_id: int
+    sentiment_label: str
+    avg_sentiment_score: float
 
 # v_dominant_sentiment model
 class DominantSentimentModel(BaseModel):
