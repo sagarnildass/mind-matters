@@ -19,8 +19,8 @@ from app.core.models import (AvgSentimentScores, DominantSentiment, AvgAIRespons
                              AvgConfidenceScore, DailyMentalHealth, RecentChatSummary, 
                              FeedbackReminder, UserActivitySummary7D, UserProfile, 
                              RecommendedArticles, MotivationalQuote, SentimentScores)
-
-from app.api.models.model import DailyChallengeModel  # import your Pydantic model for DailyChallenge
+from app.api.models.model import EmergencyContactBase, EmergencyContactModel  # import your Pydantic models
+from app.core.models import EmergencyContact  # import your SQLAlchemy model
 from app.core.models import DailyChallenge  # import your SQLAlchemy model for DailyChallenge
 
 
@@ -146,3 +146,27 @@ def get_random_quote(db: Session = Depends(get_db)):
 @router.get("/daily_challenge/")
 def get_daily_challenge(db: Session = Depends(get_db)):
     return get_cached_or_new_data("daily_challenge", lambda db: db.query(DailyChallenge).order_by(func.random()).first(), db)
+
+@router.post("/create_emergency_contact/", response_model=EmergencyContactModel)
+def create_emergency_contact(contact: EmergencyContactBase, db: Session = Depends(get_db)):
+    try:
+        # Create a new emergency contact
+        db_contact = EmergencyContact(**contact.dict())
+        db.add(db_contact)
+        db.commit()
+        db.refresh(db_contact)
+        return db_contact
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/get_emergency_contacts/", response_model=List[EmergencyContactModel])
+def get_emergency_contacts(user=Depends(get_current_user), db: Session = Depends(get_db)):
+    try:
+        # Fetch emergency contacts for the current user
+        contacts = db.query(EmergencyContact).filter(EmergencyContact.user_id == user.user_id).all()
+        if contacts:
+            return contacts
+        else:
+            raise HTTPException(status_code=404, detail="No emergency contacts found.")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

@@ -242,6 +242,7 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
 
             start_time_suicidal = datetime.now()
             suicidal_result = await analyze_suicide_sentiment(data, redis)
+            print('suicidal result: ', suicidal_result)
             logger.info('Suicidal result')
             logger.info(suicidal_result)
             end_time_suicidal = datetime.now()
@@ -265,7 +266,7 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
             await websocket.send_text(f"Chatbot: {chatbot_response}")
 
             # Store the sentiment result in the ChatLog model or wherever appropriate
-            chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=sentiment_result, topic=intent_result, is_suicidal=str(suicide_label))
+            chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=sentiment_result, topic=intent_result, is_suicidal=suicidal_result)
             db.add(chat_log)
             db.commit()
 
@@ -428,7 +429,7 @@ async def start_chat_without_session(websocket: WebSocket, user_id: int, backgro
             await websocket.send_text(f"Chatbot: {chatbot_response}")
 
             # Store the sentiment result in the ChatLog model or wherever appropriate
-            chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=sentiment_result, topic=intent_result, is_suicidal=str(suicide_label))
+            chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=sentiment_result, topic=intent_result, is_suicidal=suicidal_result)
             db.add(chat_log)
             db.commit()
 

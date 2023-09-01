@@ -51,7 +51,7 @@ CREATE TABLE t_chatlogs (
     content TEXT,
     sentiment JSONB,
     topic JSONB,
-    is_suicidal VARCHAR(50)
+    is_suicidal JSONB
 );
 
 -- AIInteractions Table
@@ -322,6 +322,7 @@ LIMIT 5;
 
 DROP VIEW IF EXISTS v_daily_mental_health;
 DROP VIEW IF EXISTS v_dominant_sentiment;
+DROP VIEW IF EXISTS v_sentiment_scores;
 DROP VIEW IF EXISTS v_avg_sentiment_scores;
 DROP VIEW IF EXISTS v_avg_ai_response_time;
 DROP VIEW IF EXISTS v_avg_confidence_score;

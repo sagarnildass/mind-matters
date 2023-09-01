@@ -18,13 +18,13 @@ async def analyze_suicide_sentiment(text: str, redis: aioredis.Redis = Depends(d
     # If not in cache, compute the sentiment analysis
     result = suicide_classifier.predict(text)[0]
     print(result)
-    if result['label'] == "LABEL_1":
-        result['label'] = "Not Suicidal"
+    if result["label"] == "LABEL_1":
+        result["label"] = "Not Suicidal"
     else:
-        result['label'] = "Suicidal"
+        result["label"] = "Suicidal"
         
     # Cache the result for future use (set an expiry time of 1 hour for example)
     await redis.set(f"suicide:{text}", json.dumps(result).replace("'", '"'))
-    await redis.expire(text, 3600)  # Set the expiration time here
+    await redis.expire(f"suicide:{text}", 3600)  # Set the expiration time here
     
     return result

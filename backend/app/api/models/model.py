@@ -60,7 +60,7 @@ class ChatLogModel(ChatLogBase):
     timestamp: Optional[datetime] = None
     sentiment: Optional[List[Dict[str, float]]] = None
     topic: Optional[Dict] = None
-    is_suicidal: Optional[str] = None
+    is_suicidal: Optional[Dict] = None
 
     class Config:
         orm_mode = True

@@ -53,7 +53,7 @@ class ChatLog(Base):
     content = Column(Text)
     sentiment = Column(JSONB)
     topic = Column(JSONB)
-    is_suicidal = Column(String(50))
+    is_suicidal = Column(JSONB)
 
     session = relationship("Session", back_populates="chatlogs")
     ai_interaction = relationship("AIInteraction", uselist=False, back_populates="chatlog")

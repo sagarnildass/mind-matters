@@ -1,11 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, RobustScaler
 from sklearn.metrics.pairwise import cosine_similarity
+from scipy.spatial.distance import euclidean
 import numpy as np
+from collections import defaultdict
+from datetime import datetime, timedelta
+import math
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.authentication import get_current_user
-from app.core.models import User, ChatLog, AIInteraction, AvgSentimentScores
+from app.core.models import Session as DBSession, User, ChatLog, AIInteraction, AvgSentimentScores
 
 router = APIRouter()
 
@@ -17,47 +21,92 @@ def extract_features(user_id, db: Session):
     # Extract demographic features
     age = user.age
     gender = 1 if user.gender == 'Male' else 0  # Male: 1, Female: 0
-    print('age', age)
-    print('gender', gender)
-    # Extract features from chat history
-    avg_sentiment = np.mean([s.avg_sentiment_score for s in avg_sentiments]) if avg_sentiments else 0
-    #print(avg_sentiment)
-    # Add more features like topic, suicidal_rate, etc.
 
-    feature_vector = [age, gender, avg_sentiment]  # Extend this list based on your features
-    print('feature_vector', feature_vector)
+    # Initialize feature vector with demographic info
+    feature_vector = [age, gender]
+
+    # Pre-define possible sentiments
+    possible_sentiments = [
+        "admiration", "amusement", "anger", "annoyance", "approval", "caring",
+        "confusion", "curiosity", "desire", "disappointment", "disapproval", 
+        "disgust", "embarrassment", "excitement", "fear", "gratitude", "grief",
+        "joy", "love", "nervousness", "optimism", "pride", "realization",
+        "relief", "remorse", "sadness", "surprise", "neutral"
+    ]
+
+    # Initialize a dictionary to store average scores for each sentiment
+    avg_scores = {sentiment: 0 for sentiment in possible_sentiments}
+
+    # Grouping by sentiment labels within a 7-day window
+    sentiment_groups = defaultdict(list)
+    current_time = datetime.now()
+    seven_days_ago = current_time - timedelta(days=7)
+
+    for s in avg_sentiments:
+        session = db.query(DBSession).filter(DBSession.session_id == s.session_id).first()
+        if session is not None:
+            session_time = session.start_time
+            # Check if the session is within the last 7 days
+            if session_time >= seven_days_ago:
+                sentiment_groups[s.sentiment_label].append(s.avg_sentiment_score)
+
+    # Calculate average scores for each sentiment label
+    for label, scores in sentiment_groups.items():
+        avg_scores[label] = np.mean(scores)
+
+    # Append the average scores to the feature vector in a fixed order
+    feature_vector.extend([avg_scores[sentiment] for sentiment in possible_sentiments])
+
+    if not avg_sentiments:
+        return None
+
     return np.array(feature_vector).reshape(1, -1)
 
+
+
+
 # Step 2: User Profiling
-def create_user_profiles(user_ids, db: Session):
+def create_user_profiles(user_ids, db: Session, min_sessions=1):
     user_profiles = {}
     for user_id in user_ids:
-        user_profiles[user_id] = extract_features(user_id, db)
+        features = extract_features(user_id, db)
+        if features is not None and np.sum(features) > min_sessions:
+            user_profiles[user_id] = features
 
-    # Step 2.1: Normalize features
-    all_features = np.vstack([features for features in user_profiles.values()])
-    scaler = MinMaxScaler()
-    all_features_scaled = scaler.fit_transform(all_features)
+    if user_profiles:
+        all_features = np.vstack([features for features in user_profiles.values()])
+        scaler = RobustScaler()
+        all_features_scaled = scaler.fit_transform(all_features)
 
-    # Update user profiles with normalized features
-    for i, user_id in enumerate(user_ids):
-        user_profiles[user_id] = all_features_scaled[i].reshape(1, -1)
+        # Add a small constant to avoid zero vectors
+        all_features_scaled += 1e-6
 
-    return user_profiles
+        for i, user_id in enumerate(user_profiles.keys()):
+            user_profiles[user_id] = all_features_scaled[i].reshape(1, -1)
+
+        return user_profiles
+    else:
+        return None
+    
 
 # Step 3: Model Building
-def find_similar_users(user_id, user_profiles):
+def find_similar_users(user_id, user_profiles, measure='euclidean'):
     similarities = {}
-    target_profile = user_profiles[user_id]
-
+    target_profile = user_profiles[user_id].reshape(-1)  # Reshape to 1D array
+    
     for id_, profile in user_profiles.items():
+        profile = profile.reshape(-1)  # Reshape to 1D array
         if id_ != user_id:
-            sim = cosine_similarity(target_profile, profile)
-            similarities[id_] = sim[0][0]
+            if measure == 'cosine':
+                sim = cosine_similarity([target_profile], [profile])  # Keep as 2D array for cosine_similarity
+            elif measure == 'euclidean':
+                sim = euclidean(target_profile, profile)  # Now both are 1D arrays
+                sim = 1 / (1 + sim)  # Convert distance to similarity
+            similarities[id_] = sim[0][0] if measure == 'cosine' else sim
 
-    # Sort by similarity score
     sorted_similar_users = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
     return sorted_similar_users
+
 
 def get_all_user_ids(db: Session):
     user_ids = db.query(User.user_id).all()
@@ -72,12 +121,10 @@ def get_similar_users(user=Depends(get_current_user), db: Session = Depends(get_
 
     # Create user profiles
     user_profiles = create_user_profiles(user_ids, db)
-    print(user_profiles)
+    #print(user_profiles)
     
-    # Find similar users to the given user
-    similar_users = find_similar_users(user.user_id, user_profiles)
-
-    if similar_users:
+    if user_profiles:
+        similar_users = find_similar_users(user.user_id, user_profiles)
         return {"similar_users": similar_users}
     else:
         raise HTTPException(status_code=404, detail="No similar users found")
