@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import ChatPage from "./pages/ChatPage";
 import NewChat from "./pages/NewChat";
+import EmergencyContactPage from "./pages/EmergencyContactPage";
 
 import { Provider } from 'react-redux';
 import { store } from './utils/store';
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="chat" element={<ChatPage />} />
         <Route path="new-chat/:user_id" element={<NewChat />} />
         <Route path="new-chat/:user_id/:session_id" element={<NewChat />} />
+        <Route path="emergency-contacts" element={<EmergencyContactPage />} />
         <Route path="/*" element={<App />} />
       </Routes>
     </BrowserRouter>

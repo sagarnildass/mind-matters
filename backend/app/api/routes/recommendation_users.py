@@ -117,14 +117,28 @@ def get_all_user_ids(db: Session):
 def get_similar_users(user=Depends(get_current_user), db: Session = Depends(get_db)):
     # Get all user IDs, including the current user
     user_ids = get_all_user_ids(db)
-    #print(user_ids)
 
     # Create user profiles
     user_profiles = create_user_profiles(user_ids, db)
-    #print(user_profiles)
     
     if user_profiles:
         similar_users = find_similar_users(user.user_id, user_profiles)
-        return {"similar_users": similar_users}
+        
+        # Fetch additional details for similar users
+        detailed_similar_users = []
+        for user_id, similarity in similar_users:
+            user_details = db.query(User).filter(User.user_id == user_id).first()
+            if user_details:
+                detailed_similar_users.append({
+                    "user_id": user_id,
+                    "similarity": similarity,
+                    "first_name": user_details.first_name,
+                    "last_name": user_details.last_name,
+                    "gender": user_details.gender,
+                    "age": user_details.age,
+                    "profile_image": user_details.profile_image
+                })
+        
+        return {"similar_users": detailed_similar_users}
     else:
         raise HTTPException(status_code=404, detail="No similar users found")
