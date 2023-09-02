@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import 'regenerator-runtime'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faPlus, faRobot } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faPlus, faRobot, faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
 
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -18,6 +21,8 @@ const NewChat = () => {
 
     // console.log('User id:', user_id);
     const [messages, setMessages] = useState([]);
+    const textToSpeechEnabledRef = useRef(true);
+    const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(true);
     const [currentMessage, setCurrentMessage] = useState("");
     const [profileImageUrl, setProfileImageUrl] = useState("");
     const [showModal, setShowModal] = useState(false);
@@ -25,7 +30,6 @@ const NewChat = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const websocketRef = useRef(null); // Reference to manage WebSocket
     const chatContainerRef = useRef(null);
-
 
     const handleImageUpload = async () => {
         const token = localStorage.getItem('access_token');
@@ -87,12 +91,36 @@ const NewChat = () => {
         dispatch(fetchUserData(token)); // Assuming you have access to the token
     }, [dispatch]);
 
+    const speak = (text) => {
+        // console.log(textToSpeechEnabled)
+        console.log('SPEAK invoked:', text);
+        if (!textToSpeechEnabled) {
+            return; // Exit early if TTS is disabled
+        }
+
+        window.speechSynthesis.cancel();
+        const chunkLength = 200;
+        let pos = 0;
+
+        while (pos < text.length) {
+            const chunk = text.slice(pos, pos + chunkLength);
+            const msg = new SpeechSynthesisUtterance(chunk);
+            window.speechSynthesis.speak(msg);
+            pos += chunkLength;
+        }
+    };
+
+    useEffect(() => {
+        textToSpeechEnabledRef.current = textToSpeechEnabled;
+    }, [textToSpeechEnabled]);
+
+
     useEffect(() => {
         if (!user_id) return; // Exit early if user_id is not available
         // Initialize the WebSocket connection when the component mounts
         const wsUrl = session_id
-        ? `ws://0.0.0.0:8000/chat/${user_id}/${session_id}`
-        : `ws://0.0.0.0:8000/chat/${user_id}`;
+            ? `ws://0.0.0.0:8000/chat/${user_id}/${session_id}`
+            : `ws://0.0.0.0:8000/chat/${user_id}`;
 
         console.log('wsUrl:', wsUrl);
 
@@ -106,23 +134,29 @@ const NewChat = () => {
         websocketRef.current.onmessage = (event) => {
             let direction;
             let content;
-        
+
             if (event.data.startsWith("User:")) {
                 direction = "user";
                 content = event.data.replace("User:", "").trim();
             } else if (event.data.startsWith("Ai:")) {
                 direction = "ai";
                 content = event.data.replace("Ai:", "").trim();
+                if (textToSpeechEnabledRef.current) { // Use the useRef here
+                    speak(content);
+                }
             } else {
                 direction = event.data.startsWith("Chatbot:") ? "ai" : "user";
-                content = event.data;
+                content = event.data.replace("Chatbot:", "").trim();  // <--- This line removes 'Chatbot'
+                if (direction === "ai" && textToSpeechEnabledRef.current) { // Check if text-to-speech is enabled
+                    speak(content);
+                }
             }
-        
+
             const receivedMessage = {
                 direction: direction,
                 content: content
             };
-        
+
             setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         };
 
@@ -156,16 +190,47 @@ const NewChat = () => {
         fetchProfileImage();
     }, []);
 
+
+    // const handleSendMessage = () => {
+    //     if (websocketRef.current) {
+    //         websocketRef.current.send(currentMessage);
+
+    //         // Manually add the user's message to the state
+    //         setMessages((prevMessages) => [...prevMessages, { direction: 'user', content: currentMessage }]);
+
+    //         setCurrentMessage("");
+    //     }
+    // };
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+
     const handleSendMessage = () => {
         if (websocketRef.current) {
-            websocketRef.current.send(currentMessage);
+            let messageToSend = currentMessage || transcript; // 'or' condition for typed or spoken message
+
+            websocketRef.current.send(messageToSend);
 
             // Manually add the user's message to the state
-            setMessages((prevMessages) => [...prevMessages, { direction: 'user', content: currentMessage }]);
+            setMessages((prevMessages) => [...prevMessages, { direction: 'user', content: messageToSend }]);
 
             setCurrentMessage("");
+            resetTranscript(); // Reset the transcript once the message is sent
         }
     };
+
+    useEffect(() => {
+        if (!listening && transcript) {
+            setCurrentMessage(transcript);
+        }
+    }, [listening, transcript]);
+
+    useEffect(() => {
+        console.log("textToSpeechEnabled changed:", textToSpeechEnabled);
+    }, [textToSpeechEnabled]);
 
     // Utility function to convert URLs in text to clickable hyperlinks
     function linkify(inputText) {
@@ -209,9 +274,26 @@ const NewChat = () => {
 
                         </div>
                         <div className="flex mt-2 p-10">
-                            <button className="p-2 bg-blue-700 text-white rounded-l-md" onClick={() => setShowModal(true)}>
+                            <button
+                                style={{ width: "60px", height: "60px" }}
+                                className="p-2 bg-blue-700 text-white rounded-l-md"
+                                onClick={() => setShowModal(true)}
+                            >
                                 <FontAwesomeIcon icon={faPlus} />
                             </button>
+                            {browserSupportsSpeechRecognition && (
+                                <div>
+                                    <button
+                                        style={{ width: "60px", height: "60px" }}
+                                        onClick={() => {
+                                            listening ? SpeechRecognition.stopListening() : SpeechRecognition.startListening();
+                                        }}
+                                        className="p-2 bg-red-700 text-white rounded-l-md"
+                                    >
+                                        <FontAwesomeIcon icon={listening ? faMicrophoneSlash : faMicrophone} />
+                                    </button>
+                                </div>
+                            )}
                             <input
                                 type="text"
                                 value={currentMessage}
@@ -225,8 +307,19 @@ const NewChat = () => {
                                 className="flex-1 p-4 border-t border-b rounded-none border-gray-600 bg-gray-700 text-white"
                                 placeholder="Type a message..."
                             />
-                            <button onClick={handleSendMessage} className="p-2 bg-gray-700 text-white rounded-r-md">
+                            <button style={{ width: "60px", height: "60px" }} onClick={handleSendMessage} className="p-2 bg-gray-700 text-white rounded-r-md">
                                 <FontAwesomeIcon icon={faPaperPlane} />
+                            </button>
+                            <button
+                                onClick={() => {
+                                    const newValue = !textToSpeechEnabled;
+                                    console.log("Before click:", textToSpeechEnabled);
+                                    console.log("Intending to set to:", newValue);
+                                    setTextToSpeechEnabled(newValue);
+                                }}
+                                className="p-2 bg-green-700 text-white rounded-l-md"
+                            >
+                                {textToSpeechEnabled ? "Disable TTS" : "Enable TTS"}
                             </button>
                         </div>
                     </div>
