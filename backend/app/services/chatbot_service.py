@@ -24,7 +24,8 @@ PRESENCE_PENALTY = 0.6
 MAX_CONTEXT_QUESTIONS = 10
 load_dotenv()
 # You can use environment variables or a config file to store this securely
-OPENAI_API_KEY = "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"
+# OPENAI_API_KEY = "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" (artelus)
+OPENAI_API_KEY = "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" #(cyberdeck)
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
 # POST_PROMPT_GUIDANCE = "Don't justify your answers. Don't give information not mentioned in the CONTEXT INFORMATION."
@@ -62,7 +63,7 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
         If you notice that the user is feeling something from their video, talk to them about it.\
         If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
         {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
-        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. 
+        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. Try to use their name frequently to develop a personal connection.\
         If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
         The user recently showed an image. Based on the image, it appears that it is a {blip_response}. Acknowledge this information. Use this information along with the user's statements to provide a comprehensive response.
         """
@@ -79,7 +80,7 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
         If you notice that the user is feeling something from their video, talk to them about it.\
         If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
         {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
-        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. 
+        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. Try to use their name frequently to develop a personal connection. \
         If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
         """
 
@@ -105,7 +106,7 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
 
     # Query GPT-3.5-turbo
     response_content = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="ft:gpt-3.5-turbo-0613:cyberdeck::7uyb8avw",
         messages=messages,
         temperature=TEMPERATURE,
         max_tokens=MAX_TOKENS,
