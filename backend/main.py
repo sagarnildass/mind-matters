@@ -23,7 +23,7 @@ from app.core.database import get_db
 from app.core.models import Session as DBSession, ChatLog, AIInteraction
 from app.api.models.model import SessionCreate, ChatLogCreate
 from app.services.chat import initiate_chat
-from app.api.routes import auth, upload_image, views, recommendation_articles, recommendation_users
+from app.api.routes import auth, upload_image, views, recommendation_articles, recommendation_users, maps
 from app.core.database import Base, engine, db_listener
 from app.services.sentiment_analysis import analyze_sentiment
 from app.services.intent_recognition import analyze_intent
@@ -259,11 +259,14 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
 
             # Generate chatbot response
             # print(blip_response)
-            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data, session_id, blip_response=blip_response)
+            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data, session_id, suicide_score=suicidal_result['score'], blip_response=blip_response)
             
             
             # Send the generated response back to the user
             await websocket.send_text(f"Chatbot: {chatbot_response}")
+
+            if suicidal_result['score'] > 0.7 and suicide_label == "Suicidal":
+                await websocket.send_text(f"ALERT: SUICIDAL TENDENCY")
 
             # Store the sentiment result in the ChatLog model or wherever appropriate
             chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=sentiment_result, topic=intent_result, is_suicidal=suicidal_result)
@@ -422,11 +425,14 @@ async def start_chat_without_session(websocket: WebSocket, user_id: int, backgro
 
             # Generate chatbot response
             # print(blip_response)
-            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data, None, blip_response=blip_response)
+            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data, None, suicide_score=suicidal_result['score'], blip_response=blip_response)
             
             
             # Send the generated response back to the user
             await websocket.send_text(f"Chatbot: {chatbot_response}")
+
+            if suicidal_result['score'] > 0.7 and suicide_label == "Suicidal":
+                await websocket.send_text(f"ALERT: SUICIDAL TENDENCY")
 
             # Store the sentiment result in the ChatLog model or wherever appropriate
             chat_log = ChatLog(session_id=session_data.session_id, direction="user", content=data, sentiment=sentiment_result, topic=intent_result, is_suicidal=suicidal_result)
@@ -495,6 +501,8 @@ app.include_router(upload_image.router, prefix="/api/image", tags=["Image Handli
 app.include_router(views.router, prefix="/views", tags=["views"])
 app.include_router(recommendation_articles.router, prefix="/recommendation_articles", tags=["recommendation_articles"])
 app.include_router(recommendation_users.router, prefix="/recommendation_users", tags=["recommendation_users"])
+app.include_router(maps.router, prefix="/maps", tags=["therapists"])
+
 
 
 # Create tables in the database

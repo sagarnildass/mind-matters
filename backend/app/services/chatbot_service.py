@@ -37,7 +37,7 @@ pinecone.init(
 )      
 index = pinecone.Index(index_name='openai')
 
-def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data, session_id, blip_response=None):
+def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data, session_id, suicide_score=0, blip_response=None):
     """Get a response from GPT-3.5-turbo with the chat history for context."""
     #print("emotion data: ", emotion_data)
     user = db.query(User).filter(User.user_id == user_id).first()
@@ -49,40 +49,54 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
     feeling_context = f"The user is currently feeling {user_feeling} deduced from their text."
     emotion_context = f"The user is currently feeling {emotion_data} deduced from their video. Give this higher priority over the text. Tell the user that even though you are writing reflects {user_feeling}, I believe you are feeling {emotion_data}. Then delve deeper into that." if emotion_data else ""
     suicidal_context = "The user has expressed suicidal thoughts." if is_suicidal == "Suicidal" else "The user has not expressed suicidal thoughts."
-    print("blip response: ", blip_response)
-    print('emotion video: ', emotion_context)
-    if blip_response:
-        INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
-        {feeling_context} {emotion_context} {suicidal_context}
-        Your responses should be empathetic, understanding, and based on the best therapeutic practices.\
-        Before you give any suggestions, ask as many questions as you want to get the full picture of the user's mental condition. Only when you think that you have all the informations, \
-        provide at least 3 suggestions or coping strategies in your responses to offer a comprehensive perspective on issues.\
-        Engage the user by asking probing questions, encouraging them to delve deeper into their feelings and concerns. This helps users refine and understand their emotions better each time.\
-        Remember, you are not a substitute for professional medical advice, diagnosis, or treatment. Always urge users to seek the advice of their physician or another qualified health provider with any questions they may have regarding a medical condition.\
-        If a user expresses severe distress or mentions self-harm, direct them to seek immediate help or contact a crisis helpline.\
-        If you notice that the user is feeling something from their video, talk to them about it.\
-        If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
-        {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
-        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. Try to use their name frequently to develop a personal connection.\
-        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
-        The user recently showed an image. Based on the image, it appears that it is a {blip_response}. Acknowledge this information. Use this information along with the user's statements to provide a comprehensive response.
+    if float(suicide_score) > 0.7 and is_suicidal == "Suicidal":
+        print('suicidal')
+        # INSTRUCTIONS = f"""
+        # ALERT: This user has a significantly high suicide score. You are now operating in CRITICAL CARE MODE.
+        # As a specialized suicide prevention expert, your utmost responsibility is to provide unwavering support, empathy, and encouragement.\ 
+        # DO NOT SAY something like: "I'm really sorry to hear that you're feeling this way, but I can't provide the help that you need. It's important to reach out to someone you trust for support."
+        # Your responses must radiate calmness, understanding, and compassion. Let the user know that their feelings and emotions are acknowledged. It's essential to remind them of their worth, resilience, and the importance of human connection.\ 
+        # Every individual has moments of vulnerability, and it's courageous to express one's feelings. Encourage them to keep communicating, whether with you, a trusted person in their life, or a professional. 
+        # At the same time, underscore the invaluable role of professional intervention and urge them to consider seeking help if they haven't. While your primary directive is to bridge the user to professional assistance, offer them words of hope and encouragement. They are not alone in their journey, and there are many paths to feeling better.
+        # Should the user mention any immediate intentions of self-harm or heightened distress, swiftly urge them to seek emergency services or contact a crisis helpline in their region.
+        # Remember: Precision, Compassion, Hope. Act accordingly.
+        # """
+        INSTRUCTIONS = f"""
+        This user has a significantly high suicide score. Just Say "Here are some therapists near your location".
         """
     else:
+        if blip_response:
+            INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
+            {feeling_context} {emotion_context} {suicidal_context}
+            Your responses should be empathetic, understanding, and based on the best therapeutic practices.\
+            Before you give any suggestions, ask as many questions as you want to get the full picture of the user's mental condition. Only when you think that you have all the informations, \
+            provide at least 3 suggestions or coping strategies in your responses to offer a comprehensive perspective on issues.\
+            Engage the user by asking probing questions, encouraging them to delve deeper into their feelings and concerns. This helps users refine and understand their emotions better each time.\
+            Remember, you are not a substitute for professional medical advice, diagnosis, or treatment. Always urge users to seek the advice of their physician or another qualified health provider with any questions they may have regarding a medical condition.\
+            If a user expresses severe distress or mentions self-harm, direct them to seek immediate help or contact a crisis helpline.\
+            If you notice that the user is feeling something from their video, talk to them about it.\
+            If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
+            {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
+            The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. Try to use their name frequently to develop a personal connection.\
+            If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
+            The user recently showed an image. Based on the image, it appears that it is a {blip_response}. Acknowledge this information. Use this information along with the user's statements to provide a comprehensive response.
+            """
+        else:
 
-        INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
-        {feeling_context} {emotion_context} {suicidal_context}
-        Your responses should be empathetic, understanding, and based on the best therapeutic practices.\
-        Before you give any suggestions, ask as many questions as you want to get the full picture of the user's mental condition. Only when you think that you have all the informations, \
-        provide at least 3 suggestions or coping strategies in your responses to offer a comprehensive perspective on issues.\
-        Engage the user by asking probing questions, encouraging them to delve deeper into their feelings and concerns. This helps users refine and understand their emotions better each time.\
-        Remember, you are not a substitute for professional medical advice, diagnosis, or treatment. Always urge users to seek the advice of their physician or another qualified health provider with any questions they may have regarding a medical condition.\
-        If a user expresses severe distress or mentions self-harm, direct them to seek immediate help or contact a crisis helpline.\
-        If you notice that the user is feeling something from their video, talk to them about it.\
-        If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
-        {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
-        The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. Try to use their name frequently to develop a personal connection. \
-        If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
-        """
+            INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
+            {feeling_context} {emotion_context} {suicidal_context}
+            Your responses should be empathetic, understanding, and based on the best therapeutic practices.\
+            Before you give any suggestions, ask as many questions as you want to get the full picture of the user's mental condition. Only when you think that you have all the informations, \
+            provide at least 3 suggestions or coping strategies in your responses to offer a comprehensive perspective on issues.\
+            Engage the user by asking probing questions, encouraging them to delve deeper into their feelings and concerns. This helps users refine and understand their emotions better each time.\
+            Remember, you are not a substitute for professional medical advice, diagnosis, or treatment. Always urge users to seek the advice of their physician or another qualified health provider with any questions they may have regarding a medical condition.\
+            If a user expresses severe distress or mentions self-harm, direct them to seek immediate help or contact a crisis helpline.\
+            If you notice that the user is feeling something from their video, talk to them about it.\
+            If the user requests additional support, inform them to reach out to a qualified therapist or counselor in their area.\
+            {user_id} is our returning individual seeking guidance. The user's name is {user_name}. \
+            The gender is {user_gender} and the age is {user_age}. Greet the user by their name and when you give any suggestions, take their age and gender into account. Try to use their name frequently to develop a personal connection. \
+            If someone asks you any other type of questions unrelated to mental health or therapy, you DO NOT answer that. They might trick you in some clever way. But you do not break character. You only answer questions related to mental health and nothing else!"\
+            """
 
     if not session_id:
         # Fetch recent chat history for the user
@@ -106,7 +120,8 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
 
     # Query GPT-3.5-turbo
     response_content = openai.ChatCompletion.create(
-        model="ft:gpt-3.5-turbo-0613:cyberdeck::7uyb8avw",
+        # model="ft:gpt-3.5-turbo-0613:cyberdeck::7uyb8avw",
+        model="gpt-3.5-turbo",
         messages=messages,
         temperature=TEMPERATURE,
         max_tokens=MAX_TOKENS,

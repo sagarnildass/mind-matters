@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import 'regenerator-runtime'
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faPlus, faRobot, faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-
-
 import Navbar from '../components/Navbar';
+import TherapistCard from '../components/TherapistCard';
 import Sidebar from '../components/Sidebar';
 import signupBg from '../assets/signup-bg.png';
 import { fetchUserData, selectUsername } from '../utils/userSlice';
+import GoogleMapReact from 'google-map-react';
 
 const NewChat = () => {
     const dispatch = useDispatch();
@@ -21,6 +22,10 @@ const NewChat = () => {
 
     // console.log('User id:', user_id);
     const [messages, setMessages] = useState([]);
+    const [address, setAddress] = useState("");
+    const [userLocation, setUserLocation] = useState(null);
+    const [therapistLocations, setTherapistLocations] = useState([]);
+    const [showTherapistMap, setShowTherapistMap] = useState(false);
     const textToSpeechEnabledRef = useRef(true);
     const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(true);
     const [currentMessage, setCurrentMessage] = useState("");
@@ -30,6 +35,78 @@ const NewChat = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const websocketRef = useRef(null); // Reference to manage WebSocket
     const chatContainerRef = useRef(null);
+
+    const UserMarker = () => (
+        <div style={{
+            width: '25px',
+            height: '25px',
+            backgroundColor: 'blue',
+            borderRadius: '50%',
+            border: '2px solid white', // give it a border to make it more distinguishable
+            cursor: 'pointer'
+        }} title="Your Location" />
+    );
+
+    const handleSelectAddress = address => {
+        geocodeByAddress(address)
+            .then(results => getLatLng(results[0]))
+            .then(latLng => {
+                // Now that you have the latitude and longitude based on the user's selection
+                // You can search for therapists nearby
+                searchTherapistsNearby(latLng.lat, latLng.lng);
+            })
+            .catch(error => console.error("Error", error));
+    };
+
+    const requestUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    });
+                    // Once we get the location, search for therapists
+                    searchTherapistsNearby(position.coords.latitude, position.coords.longitude);
+                },
+                (error) => {
+                    console.error("Error obtaining location:", error);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,  // maximum length of time (milliseconds) that is allowed to pass
+                    maximumAge: 0    // indicates the maximum age in milliseconds of a possible cached position that the application will accept
+                }
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
+
+    const searchTherapistsNearby = (lat, lng) => {
+        // URL to your FastAPI route
+        const FASTAPI_URL = `http://127.0.0.1:8000/maps/therapists?lat=${lat}&lng=${lng}`;
+
+        axios.get(FASTAPI_URL)
+            .then(response => {
+                const therapists = response.data;  // Get the entire therapists data
+                setTherapistLocations(therapists.map(therapist => therapist.location)); // If you use this elsewhere, keep this line
+                const newMessage = {
+                    direction: "ai",
+                    type: "map",
+                    location: {
+                        lat: lat,
+                        lng: lng
+                    },
+                    therapists: therapists  // Store the entire therapists data in the message
+                };
+                // console.log("New message:", newMessage);
+                setMessages(prevMessages => [...prevMessages, newMessage]);
+            })
+            .catch(error => {
+                console.error("Error searching for therapists:", error);
+            });
+    }
 
     const handleImageUpload = async () => {
         const token = localStorage.getItem('access_token');
@@ -152,6 +229,11 @@ const NewChat = () => {
                 }
             }
 
+            if (event.data.startsWith("ALERT: SUICIDAL TENDENCY")) {
+                requestUserLocation();
+                return;
+            }
+
             const receivedMessage = {
                 direction: direction,
                 content: content
@@ -190,17 +272,6 @@ const NewChat = () => {
         fetchProfileImage();
     }, []);
 
-
-    // const handleSendMessage = () => {
-    //     if (websocketRef.current) {
-    //         websocketRef.current.send(currentMessage);
-
-    //         // Manually add the user's message to the state
-    //         setMessages((prevMessages) => [...prevMessages, { direction: 'user', content: currentMessage }]);
-
-    //         setCurrentMessage("");
-    //     }
-    // };
     const {
         transcript,
         listening,
@@ -229,6 +300,10 @@ const NewChat = () => {
     }, [listening, transcript]);
 
     useEffect(() => {
+        window.dispatchEvent(new Event('resize'));
+    }, [messages]);
+
+    useEffect(() => {
         console.log("textToSpeechEnabled changed:", textToSpeechEnabled);
     }, [textToSpeechEnabled]);
 
@@ -243,8 +318,6 @@ const NewChat = () => {
         const splitText = inputText.split(/\d+\./).filter(item => item.trim());
         return splitText.map(item => `<div>${item.trim()}</div><div><br></div>`).join("");
     }
-
-    // ... Inside
 
     return (
         <div className="flex min-h-screen overflow-x-hidden">
@@ -262,15 +335,45 @@ const NewChat = () => {
                     <Navbar />
                     <div className="absolute top-36 right-60 w-3/4 h-5/6 bg-gray-800 p-6 rounded-lg shadow-lg">
                         <div className="h-5/6 overflow-y-scroll mb-4 border-b-2 border-gray-600" ref={chatContainerRef}>
-                            {messages.map((message, idx) => (
-                                <div key={idx} className={`flex mb-2 ${message.direction === 'user' ? 'justify-start' : 'justify-end'}`}>
-                                    {message.direction === 'user' && <img src={profileImageUrl} alt="User" className="w-8 h-8 rounded-full object-cover object-center mr-2" />}
-                                    <div className={`text-left p-2 rounded-md ${message.direction === 'user' ? 'bg-blue-400' : 'bg-gray-400'}`}>
-                                        <span dangerouslySetInnerHTML={{ __html: linkify(formatList(message.content)) }} />
+                            {messages.map((message, idx) => {
+                                {/* console.log(message.therapists);  // Log each message to inspect its structure */ }
+
+                                return (
+                                    <div key={idx} className={`flex mb-2 ${message.direction === 'user' ? 'justify-start' : 'justify-end'}`}>
+                                        {message.direction === 'user' && <img src={profileImageUrl} alt="User" className="w-8 h-8 rounded-full object-cover object-center mr-2" />}
+                                        {message.type === "map" ? (
+                                            <div className="h-96 w-3/4 rounded-lg shadow-lg">
+                                                <GoogleMapReact
+                                                    bootstrapURLKeys={{ key: "AIzaSyBv_mtu61MCcuQeyud2XB62OMqBM8n3fKY" }}
+                                                    defaultCenter={{ lat: message.location?.lat, lng: message.location?.lng }}
+                                                    center={{ lat: message.location?.lat, lng: message.location?.lng }}
+                                                    defaultZoom={14}
+                                                    margin={[50, 50, 50, 50]}
+                                                    options={""}
+                                                >
+                                                    <UserMarker
+                                                        lat={message.location?.lat}
+                                                        lng={message.location?.lng}
+                                                    />
+                                                    {message.therapists?.map((therapist, index) => (
+                                                        <TherapistCard
+                                                            key={index}
+                                                            therapist={therapist}
+                                                            lat={therapist.location?.lat}
+                                                            lng={therapist.location?.lng}
+                                                        />
+                                                    ))}
+                                                </GoogleMapReact>
+                                            </div>
+                                        ) : (
+                                            <div className={`text-left p-2 rounded-md ${message.direction === 'user' ? 'bg-blue-400' : 'bg-gray-400'}`}>
+                                                <span dangerouslySetInnerHTML={{ __html: linkify(formatList(message.content)) }} />
+                                            </div>
+                                        )}
+                                        {message.direction === 'ai' && <FontAwesomeIcon icon={faRobot} className="w-8 h-8 ml-2 text-gray-500" />}
                                     </div>
-                                    {message.direction === 'ai' && <FontAwesomeIcon icon={faRobot} className="w-8 h-8 ml-2 text-gray-500" />}
-                                </div>
-                            ))}
+                                );
+                            })}
 
                         </div>
                         <div className="flex mt-2 p-10">
@@ -304,7 +407,7 @@ const NewChat = () => {
                                         e.preventDefault(); // Prevent default behavior (like a newline in some browsers)
                                     }
                                 }}
-                                className="flex-1 p-4 border-t border-b rounded-none border-gray-600 bg-gray-700 text-white"
+                                className="w-2/3 p-4 border-t border-b rounded-none border-gray-600 bg-gray-700 text-white"
                                 placeholder="Type a message..."
                             />
                             <button style={{ width: "60px", height: "60px" }} onClick={handleSendMessage} className="p-2 bg-gray-700 text-white rounded-r-md">
@@ -321,6 +424,37 @@ const NewChat = () => {
                             >
                                 {textToSpeechEnabled ? "Disable TTS" : "Enable TTS"}
                             </button>
+                            <div className="w-1/3 ml-2 border-t border-gray-600">
+                                <PlacesAutocomplete
+                                    value={address}
+                                    onChange={setAddress}
+                                    onSelect={handleSelectAddress}
+                                >
+                                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                        <div className="relative">
+                                            <input
+                                                {...getInputProps({
+                                                    placeholder: "Search Therapists near you ...",
+                                                    className: "w-full p-4 border rounded-md border-gray-600 bg-gray-700 text-white"
+                                                })}
+                                            />
+                                            <div className="absolute top-full left-0 mt-2 w-full bg-gray-700 border border-gray-600 z-10">
+                                                {loading && <div className="p-2 text-white">Loading...</div>}
+                                                {suggestions.map(suggestion => (
+                                                    <div
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className: "p-2 text-white hover:bg-gray-600 cursor-pointer"
+                                                        })}
+                                                    >
+                                                        {suggestion.description}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </PlacesAutocomplete>
+
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -60,6 +60,12 @@ const Sidebar = () => {
                                 <span className="ml-3">Feedback</span>
                             </Link>
                         </li>
+                        <li>
+                            <Link to="/therapists-nearby" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
+                                <FontAwesomeIcon icon={faPuzzlePiece} className="h-5 w-5 ml-1 text-blue-500" />
+                                <span className="ml-3">Nearby Therapists</span>
+                            </Link>
+                        </li>
                         {/* Emergency Contacts */}
                         <li>
                             <Link to="/emergency-contacts" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
