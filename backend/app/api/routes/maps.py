@@ -9,7 +9,7 @@ router = APIRouter()
 @router.get("/therapists")
 def fetch_therapists_nearby(lat: float, lng: float):
     therapists = get_nearby_therapists(lat, lng)
-    print(therapists)
+    # print(therapists)
     if not therapists:
         raise HTTPException(status_code=404, detail="No therapists found.")
     return therapists

@@ -179,7 +179,7 @@ const HomePage = () => {
                         <EmotionTimeSeriesChart data={emotionData} />
                     </div>
                     {dailyChallenge && dailyChallenge.challenge_id && (
-                        <div className="absolute right-0 bottom-[2%] w-4/12 mb-8 mr-8 h-[61vh]"> {/* Set fixed or minimum height here */}
+                        <div className="absolute right-0 bottom-[2%] w-4/12 mb-4 mr-8 h-[62vh]"> {/* Set fixed or minimum height here */}
                             <Card className="h-full"> {/* Make sure the Card takes the full height */}
                                 <div className="p-3 flex flex-col h-full">
                                     <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>

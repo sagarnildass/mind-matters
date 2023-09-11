@@ -7,7 +7,7 @@ import aioredis
 from transformers import pipeline
 
 
-suicide_classifier = pipeline("text-classification", model="sagarnildass/suicide_detector_roberta_base")
+suicide_classifier = pipeline("text-classification", model="gooohjy/suicidal-electra")
 
 async def analyze_suicide_sentiment(text: str, redis: aioredis.Redis = Depends(depends_redis)):
     # Check if the result is already in the cache
@@ -19,9 +19,9 @@ async def analyze_suicide_sentiment(text: str, redis: aioredis.Redis = Depends(d
     result = suicide_classifier.predict(text)[0]
     print(result)
     if result["label"] == "LABEL_1":
-        result["label"] = "Not Suicidal"
-    else:
         result["label"] = "Suicidal"
+    else:
+        result["label"] = "Not Suicidal"
         
     # Cache the result for future use (set an expiry time of 1 hour for example)
     await redis.set(f"suicide:{text}", json.dumps(result).replace("'", '"'))

@@ -23,7 +23,7 @@ from app.core.database import get_db
 from app.core.models import Session as DBSession, ChatLog, AIInteraction
 from app.api.models.model import SessionCreate, ChatLogCreate
 from app.services.chat import initiate_chat
-from app.api.routes import auth, upload_image, views, recommendation_articles, recommendation_users, maps
+from app.api.routes import auth, upload_image, views, recommendation_articles, recommendation_users, maps, sessions
 from app.core.database import Base, engine, db_listener
 from app.services.sentiment_analysis import analyze_sentiment
 from app.services.intent_recognition import analyze_intent
@@ -502,6 +502,8 @@ app.include_router(views.router, prefix="/views", tags=["views"])
 app.include_router(recommendation_articles.router, prefix="/recommendation_articles", tags=["recommendation_articles"])
 app.include_router(recommendation_users.router, prefix="/recommendation_users", tags=["recommendation_users"])
 app.include_router(maps.router, prefix="/maps", tags=["therapists"])
+app.include_router(sessions.router, prefix="/sessions", tags=["sessions"])
+
 
 
 

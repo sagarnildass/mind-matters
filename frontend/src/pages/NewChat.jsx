@@ -48,6 +48,7 @@ const NewChat = () => {
     );
 
     const handleSelectAddress = address => {
+        setAddress(address); // Add this line
         geocodeByAddress(address)
             .then(results => getLatLng(results[0]))
             .then(latLng => {

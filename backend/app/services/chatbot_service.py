@@ -10,12 +10,13 @@ from dotenv import load_dotenv
 from app.core.models import Session as DBSession, ChatLog, User
 from app.core.models import ContentMetadata as t_content_metadata
 
+
 def get_env_data_as_dict(path: str) -> dict:
     with open(path, 'r') as f:
-       return dict(tuple(line.replace('\n', '').split('=')) for line
-                in f.readlines() if not line.startswith('#'))
-    
-    
+        return dict(tuple(line.replace('\n', '').split('=')) for line
+                    in f.readlines() if not line.startswith('#'))
+
+
 # Configuration constants
 TEMPERATURE = 0.7
 MAX_TOKENS = 500
@@ -25,21 +26,23 @@ MAX_CONTEXT_QUESTIONS = 10
 load_dotenv()
 # You can use environment variables or a config file to store this securely
 # OPENAI_API_KEY = "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" (artelus)
-OPENAI_API_KEY = "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" #(cyberdeck)
+# (cyberdeck)
+OPENAI_API_KEY = "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"
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
 # POST_PROMPT_GUIDANCE = "Don't justify your answers. Don't give information not mentioned in the CONTEXT INFORMATION."
 
 openai.api_key = OPENAI_API_KEY
-pinecone.init(      
-	api_key="b05736e9-8819-4b51-b019-af78e951aecf",      
-	environment='us-west1-gcp'      
-)      
+pinecone.init(
+    api_key="b05736e9-8819-4b51-b019-af78e951aecf",
+    environment='us-west1-gcp'
+)
 index = pinecone.Index(index_name='openai')
+
 
 def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data, session_id, suicide_score=0, blip_response=None):
     """Get a response from GPT-3.5-turbo with the chat history for context."""
-    #print("emotion data: ", emotion_data)
+    # print("emotion data: ", emotion_data)
     user = db.query(User).filter(User.user_id == user_id).first()
     user_name = f"{user.first_name}"
     user_gender = f"{user.gender}"
@@ -53,17 +56,26 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
         print('suicidal')
         # INSTRUCTIONS = f"""
         # ALERT: This user has a significantly high suicide score. You are now operating in CRITICAL CARE MODE.
-        # As a specialized suicide prevention expert, your utmost responsibility is to provide unwavering support, empathy, and encouragement.\ 
+        # As a specialized suicide prevention expert, your utmost responsibility is to provide unwavering support, empathy, and encouragement.\
         # DO NOT SAY something like: "I'm really sorry to hear that you're feeling this way, but I can't provide the help that you need. It's important to reach out to someone you trust for support."
-        # Your responses must radiate calmness, understanding, and compassion. Let the user know that their feelings and emotions are acknowledged. It's essential to remind them of their worth, resilience, and the importance of human connection.\ 
-        # Every individual has moments of vulnerability, and it's courageous to express one's feelings. Encourage them to keep communicating, whether with you, a trusted person in their life, or a professional. 
+        # Your responses must radiate calmness, understanding, and compassion. Let the user know that their feelings and emotions are acknowledged. It's essential to remind them of their worth, resilience, and the importance of human connection.\
+        # Every individual has moments of vulnerability, and it's courageous to express one's feelings. Encourage them to keep communicating, whether with you, a trusted person in their life, or a professional.
         # At the same time, underscore the invaluable role of professional intervention and urge them to consider seeking help if they haven't. While your primary directive is to bridge the user to professional assistance, offer them words of hope and encouragement. They are not alone in their journey, and there are many paths to feeling better.
         # Should the user mention any immediate intentions of self-harm or heightened distress, swiftly urge them to seek emergency services or contact a crisis helpline in their region.
         # Remember: Precision, Compassion, Hope. Act accordingly.
         # """
         INSTRUCTIONS = f"""
-        This user has a significantly high suicide score. Just Say "Here are some therapists near your location".
-        """
+            CRITICAL CARE MODE: This user has a significantly high suicide score.
+
+            You are now operating in an emergency support mode. Your primary goal is to provide unwavering empathy, understanding, and encouragement. Always approach with kindness and compassion. Avoid saying anything that might make them feel dismissed, unimportant, or more isolated.
+
+            Engage with them actively. Let them know their emotions and feelings are acknowledged and understood. Reinforce that they are not alone, and many people want to help and support them. While communicating, emphasize the importance of human connection and let them know it's brave to reach out and share their feelings. Encourage continued communication, whether with you or someone else they trust.
+
+            While you offer words of support, it's vital to stress the essential role of professional help. Subtly guide them towards considering professional intervention if they haven't already. If they express immediate intentions of self-harm or display signs of severe distress, urge them to seek emergency services or a crisis helpline in their area. Always lean towards prioritizing their safety.
+
+            Remember: Your role is to be there for them, offer encouragement, and guide them to professional help. Act with Precision, Compassion, and Hope. Also tell them "Here are the therapists near you." Don't say anything else because I am actually showing them the therapists near them.
+            """
+
     else:
         if blip_response:
             INSTRUCTIONS = f"""You are MindHealer - The world's foremost psychotherapist. Your expertise lies in guiding individuals towards better mental and physical well-being. You have read all the books on psychotherapy and have a deep understanding of human psychology.\ 
@@ -103,7 +115,7 @@ def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_
         session_data = db.query(DBSession).filter(
             DBSession.user_id == user_id).order_by(DBSession.start_time.desc()).first()
         session_id = session_data.session_id if session_data else None
-        
+
         if not session_data:
             # Handle case where no session exists
             return "Sorry, there seems to be an error with the session."
@@ -147,7 +159,7 @@ def query_article(query, db: Session, top_k=10):
         input=query,
         model='text-embedding-ada-002',
     )["data"][0]['embedding']
-    
+
     query_result = index.query(embedded_query, top_k=top_k)
     if not query_result.matches:
         return None
@@ -163,6 +175,7 @@ def query_article(query, db: Session, top_k=10):
     )
 
     # Fetch content metadata using the retrieved ids and order them based on the ids list
-    fetched_data = db.query(t_content_metadata).filter(t_content_metadata.id.in_(ids)).order_by(order_by_case).all()
+    fetched_data = db.query(t_content_metadata).filter(
+        t_content_metadata.id.in_(ids)).order_by(order_by_case).all()
 
     return fetched_data
