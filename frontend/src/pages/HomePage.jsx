@@ -161,7 +161,7 @@ const HomePage = () => {
                                     <CardContent title="Total Sessions" number={weeklySummary.total_sessions} />
                                 </Card>
                                 <Card className="flex-shrink w-2/5">
-                                    <CardContent title="Total AI Interactions" number={weeklySummary.total_ai_interactions} />
+                                    <CardContent title="Total AI Interactions" number={weeklySummary.total_chat_logs} />
                                 </Card>
                             </div>
 
