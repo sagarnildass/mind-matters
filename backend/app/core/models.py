@@ -66,7 +66,7 @@ class AIInteraction(Base):
     log_id = Column(Integer, ForeignKey("t_chatlogs.log_id"))
     model_used = Column(String(255))
     prediction = Column(String(255))
-    response_time = Column(String)  # Represented as a string in the format "HH:MM:SS"
+    response_time = Column(Float)  # Represented as a string in the format "HH:MM:SS"
     confidence_score = Column(Float)
 
     chatlog = relationship("ChatLog", back_populates="ai_interaction")

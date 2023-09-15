@@ -95,7 +95,7 @@ CREATE TABLE t_websocketsessions (
 CREATE TABLE t_motivational_quotes (
     quote_id SERIAL PRIMARY KEY,
     quote TEXT NOT NULL,
-    author VARCHAR(255) NOT NULL,
+    author VARCHAR(300) NOT NULL,
     category TEXT,
     date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -108,6 +108,14 @@ CREATE TABLE t_daily_challenges (
     image_url TEXT,
     category VARCHAR(255),
     date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE t_content_metadata (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    description TEXT,
+    link TEXT,
+    content_type VARCHAR(255)
 );
 
 -- Index for faster querying by category
@@ -273,17 +281,28 @@ WHERE
 CREATE VIEW v_user_activity_summary_7d AS
 SELECT
     user_id,
-    COUNT(DISTINCT t_sessions.session_id) AS total_sessions,
-    COUNT(DISTINCT t_chatlogs.log_id) AS total_chat_logs,
-    COUNT(DISTINCT interaction_id) AS total_ai_interactions
+    (SELECT COUNT(DISTINCT session_id) 
+     FROM t_sessions 
+     WHERE t_sessions.user_id = s.user_id 
+     AND start_time BETWEEN NOW() - INTERVAL '7 days' AND NOW()) AS total_sessions,
+    (SELECT COUNT(DISTINCT log_id) 
+     FROM t_chatlogs c 
+     JOIN t_sessions se ON c.session_id = se.session_id 
+     WHERE se.user_id = s.user_id 
+     AND se.start_time BETWEEN NOW() - INTERVAL '7 days' AND NOW()) AS total_chat_logs,
+    (SELECT COUNT(DISTINCT interaction_id) 
+     FROM t_aiinteractions ai 
+     JOIN t_chatlogs c ON ai.log_id = c.log_id 
+     JOIN t_sessions se ON c.session_id = se.session_id 
+     WHERE se.user_id = s.user_id 
+     AND se.start_time BETWEEN NOW() - INTERVAL '7 days' AND NOW()) AS total_ai_interactions
 FROM
-    t_sessions
-JOIN t_chatlogs ON t_sessions.session_id = t_chatlogs.session_id
-JOIN t_aiinteractions ON t_chatlogs.log_id = t_aiinteractions.log_id
+    t_sessions s
 WHERE
-    t_sessions.start_time BETWEEN NOW() - INTERVAL '7 days' AND NOW()
+    s.start_time BETWEEN NOW() - INTERVAL '7 days' AND NOW()
 GROUP BY
     user_id;
+    
 	
 CREATE VIEW v_user_profile AS
 SELECT

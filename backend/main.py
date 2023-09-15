@@ -80,7 +80,7 @@ app.add_middleware(
 
 # Redis Configuration
 app.config = dict(
-    REDIS_URL="redis://localhost:6379"
+    REDIS_URL="redis://0.0.0.0:6379"
 )
 
 stop_thread = threading.Event()
@@ -197,7 +197,7 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
             # Check if the message indicates an image is sent
             if "USER_SENT_IMAGE:" in data:
                 filename = data.split(":")[1]
-                filepath = os.path.join("/home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/uploaded_images", filename)
+                filepath = os.path.join("./uploaded_images", filename)
                 filepath = filepath.strip()
                 print(filepath)
                 print(os.path.exists(filepath))
@@ -364,7 +364,7 @@ async def start_chat_without_session(websocket: WebSocket, user_id: int, backgro
             # Check if the message indicates an image is sent
             if "USER_SENT_IMAGE:" in data:
                 filename = data.split(":")[1]
-                filepath = os.path.join("/home/sagarnildass/python_notebooks/artelus/Codes/mental_health/backend/uploaded_images", filename)
+                filepath = os.path.join("./uploaded_images", filename)
                 filepath = filepath.strip()
                 print(filepath)
                 print(os.path.exists(filepath))
