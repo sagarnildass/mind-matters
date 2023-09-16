@@ -5,7 +5,7 @@ import os
 from sqlalchemy.orm import Session
 import pinecone
 from sqlalchemy import case
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from app.core.models import Session as DBSession, ChatLog, User
 from app.core.models import ContentMetadata as t_content_metadata
@@ -23,18 +23,24 @@ MAX_TOKENS = 500
 FREQUENCY_PENALTY = 0
 PRESENCE_PENALTY = 0.6
 MAX_CONTEXT_QUESTIONS = 10
-load_dotenv()
+# Get the path to the directory this file is in
+# Connect the path with your '.env' file name
+load_dotenv(find_dotenv())
 # You can use environment variables or a config file to store this securely
 # OPENAI_API_KEY = "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" (artelus)
 # (cyberdeck)
-OPENAI_API_KEY = "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"
+# OPENAI_API_KEY = "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"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+print(OPENAI_API_KEY)
+print(PINECONE_API_KEY)
 
 # POST_PROMPT_GUIDANCE = "Don't justify your answers. Don't give information not mentioned in the CONTEXT INFORMATION."
 
 openai.api_key = OPENAI_API_KEY
 pinecone.init(
-    api_key="b05736e9-8819-4b51-b019-af78e951aecf",
+    # api_key="b05736e9-8819-4b51-b019-af78e951aecf",
+    api_key=PINECONE_API_KEY,
     environment='us-west1-gcp'
 )
 index = pinecone.Index(index_name='openai')

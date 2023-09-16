@@ -10,7 +10,7 @@ from asyncpg import Connection
 from typing import Callable
 
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:arteluser@localhost/mental-health"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:arteluser@mental-health.ces9ae0qravd.ap-south-1.rds.amazonaws.com/mental-health"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

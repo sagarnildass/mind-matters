@@ -1,8 +1,11 @@
 import requests
 from fastapi import APIRouter, HTTPException
 from typing import List, Dict
+import os
+from dotenv import load_dotenv, find_dotenv
 
-GOOGLE_MAPS_API_KEY = "AIzaSyBv_mtu61MCcuQeyud2XB62OMqBM8n3fKY"
+load_dotenv(find_dotenv())
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 router = APIRouter()
 

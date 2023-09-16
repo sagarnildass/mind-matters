@@ -6,17 +6,26 @@ from typing import List
 from app.core.database import get_db
 from app.core.authentication import get_current_user
 from app.core.models import ChatLog, ContentMetadata, RecentChatSummary
+import os
+from dotenv import load_dotenv, find_dotenv
+
 
 def get_env_data_as_dict(path: str) -> dict:
     with open(path, 'r') as f:
        return dict(tuple(line.replace('\n', '').split('=')) for line
                 in f.readlines() if not line.startswith('#'))
 
-OPENAI_API_KEY = "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"
+load_dotenv(find_dotenv())
+
+# OPENAI_API_KEY = "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"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+
 
 openai.api_key = OPENAI_API_KEY
 pinecone.init(      
-	api_key="b05736e9-8819-4b51-b019-af78e951aecf",      
+	# api_key="b05736e9-8819-4b51-b019-af78e951aecf",   
+    api_key=PINECONE_API_KEY,   
 	environment='us-west1-gcp'      
 )      
 index = pinecone.Index(index_name='openai')
