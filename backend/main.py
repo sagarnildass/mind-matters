@@ -16,7 +16,6 @@ import threading
 import json
 import pinecone
 import openai
-import pandas as pd
 from concurrent.futures import ThreadPoolExecutor
 
 from app.core.database import get_db

@@ -27,7 +27,7 @@ const NewChat = () => {
     const [therapistLocations, setTherapistLocations] = useState([]);
     const [showTherapistMap, setShowTherapistMap] = useState(false);
     const textToSpeechEnabledRef = useRef(true);
-    const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(false);
+    const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(true);
     const [currentMessage, setCurrentMessage] = useState("");
     const [profileImageUrl, setProfileImageUrl] = useState("");
     const [showModal, setShowModal] = useState(false);
