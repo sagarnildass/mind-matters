@@ -38,6 +38,9 @@ const NewChat = () => {
     const websocketRef = useRef(null); // Reference to manage WebSocket
     const chatContainerRef = useRef(null);
     const webcamRef = useRef(null);
+    const lastTranscriptRef = useRef("");
+    const transcriptTimeoutRef = useRef(null);
+
 
     const UserMarker = () => (
         <div style={{
@@ -332,11 +335,43 @@ const NewChat = () => {
         }
     };
 
+    // useEffect(() => {
+    //     if (!listening && transcript) {
+    //         setCurrentMessage(transcript);
+    //     }
+    // }, [listening, transcript]);
+
     useEffect(() => {
-        if (!listening && transcript) {
-            setCurrentMessage(transcript);
+        if (listening) {
+            if (transcript !== lastTranscriptRef.current) {
+                // Clear any existing timeout if the transcript changes.
+                if (transcriptTimeoutRef.current) {
+                    clearTimeout(transcriptTimeoutRef.current);
+                }
+    
+                // Set a timeout to check if the transcript remains unchanged.
+                transcriptTimeoutRef.current = setTimeout(() => {
+                    handleSendMessage();
+                    resetTranscript();
+                    lastTranscriptRef.current = ""; // Reset the last transcript reference.
+                }, 5000); // Adjust this duration as per your needs.
+    
+                lastTranscriptRef.current = transcript;
+            }
+        } else if (!listening && transcriptTimeoutRef.current) {
+            // Clear the timeout if listening stops.
+            clearTimeout(transcriptTimeoutRef.current);
         }
     }, [listening, transcript]);
+    
+
+    useEffect(() => {
+        return () => {
+            if (transcriptTimeoutRef.current) {
+                clearTimeout(transcriptTimeoutRef.current);
+            }
+        };
+    }, []);
 
     useEffect(() => {
         window.dispatchEvent(new Event('resize'));
@@ -428,7 +463,7 @@ const NewChat = () => {
                                     <button
                                         style={{ width: "60px", height: "60px" }}
                                         onClick={() => {
-                                            listening ? SpeechRecognition.stopListening() : SpeechRecognition.startListening();
+                                            listening ? SpeechRecognition.stopListening() : SpeechRecognition.startListening({ continuous: true });
                                         }}
                                         className="p-2 bg-red-700 text-white rounded-l-md"
                                     >
