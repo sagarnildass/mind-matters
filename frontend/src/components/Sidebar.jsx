@@ -27,7 +27,7 @@ const Sidebar = () => {
                     <Link to="/" className="flex items-center pl-2.5 mb-5">
                         <div className={styles.logo}>
                             <div className={styles.visionUiPro}>
-                                <span className="mx-4">MIND HEALER</span>
+                                <span className="mx-4">MIND MATTER</span>
                             </div>
                         </div>
                     </Link>
@@ -47,19 +47,19 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         {/* AI Interactions */}
-                        <li>
+                        {/* <li>
                             <Link to="/ai-interactions" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faBrain} className="h-5 w-5 ml-1 text-blue-500" />
                                 <span className="ml-3">AI Interactions</span>
                             </Link>
-                        </li>
+                        </li> */}
                         {/* Feedback */}
-                        <li>
+                        {/* <li>
                             <Link to="/feedback" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faStar} className="h-5 w-5 ml-1 text-blue-500" />
                                 <span className="ml-3">Feedback</span>
                             </Link>
-                        </li>
+                        </li> */}
                         <li>
                             <Link to="/therapists-nearby" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faPuzzlePiece} className="h-5 w-5 ml-1 text-blue-500" />
@@ -74,26 +74,26 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         {/* Article Recommendations */}
-                        <li>
+                        {/* <li>
                             <Link to="/article-recommendations" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faBook} className="h-5 w-5 ml-1 text-blue-500" />
                                 <span className="ml-3">Article Recommendations</span>
                             </Link>
-                        </li>
+                        </li> */}
                         {/* Settings */}
-                        <li>
+                        {/* <li>
                             <Link to="/settings" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faCogs} className="h-5 w-5 ml-1 text-blue-500" />
                                 <span className="ml-3">Settings</span>
                             </Link>
-                        </li>
+                        </li> */}
                         {/* Support & Help */}
-                        <li>
+                        {/* <li>
                             <Link to="/help" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faQuestionCircle} className="h-5 w-5 ml-1 text-blue-500" />
                                 <span className="ml-3">Support & Help</span>
                             </Link>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </aside>
