@@ -235,8 +235,8 @@ const NewChat = () => {
         if (!user_id) return; // Exit early if user_id is not available
         // Initialize the WebSocket connection when the component mounts
         const wsUrl = session_id
-            ? `ws://mentalhealthapi.artelus.in/chat/${user_id}/${session_id}`
-            : `ws://mentalhealthapi.artelus.in/chat/${user_id}`;
+            ? `wss://mentalhealthapi.artelus.in/chat/${user_id}/${session_id}`
+            : `wss://mentalhealthapi.artelus.in/chat/${user_id}`;
 
         // console.log('wsUrl:', wsUrl);
 
