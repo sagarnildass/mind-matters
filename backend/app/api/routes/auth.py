@@ -9,6 +9,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 import jwt
 import boto3
+from botocore.exceptions import ClientError
 from sqlalchemy.orm import Session
 from pytz import timezone
 from app.core.database import get_db
