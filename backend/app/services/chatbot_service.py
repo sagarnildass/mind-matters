@@ -43,7 +43,7 @@ index = pinecone.Index(index_name='openai')
 
 def get_response(user_id: int, new_question: str, db: Session, user_feeling, is_suicidal, emotion_data, session_id, suicide_score=0, blip_response=None):
     """Get a response from GPT-3.5-turbo with the chat history for context."""
-    # print("emotion data: ", emotion_data)
+    print("emotion data: ", emotion_data)
     user = db.query(User).filter(User.user_id == user_id).first()
     user_name = f"{user.first_name}"
     user_gender = f"{user.gender}"

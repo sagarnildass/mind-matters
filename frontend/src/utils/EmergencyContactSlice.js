@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchEmergencyContacts = createAsyncThunk('emergencyContact/fetchEmergencyContacts', async (token) => {
-  const response = await axios.get('http://127.0.0.1:8000/views/get_emergency_contacts/', {
+  const response = await axios.get('https://mentalhealthapi.artelus.in/views/get_emergency_contacts/', {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -13,7 +13,7 @@ export const fetchEmergencyContacts = createAsyncThunk('emergencyContact/fetchEm
 
 export const createEmergencyContact = createAsyncThunk('emergencyContact/createEmergencyContact', async (contact, { getState }) => {
   const { token } = getState().user;
-  const response = await axios.post('http://127.0.0.1:8000/views/create_emergency_contact/', contact, {
+  const response = await axios.post('https://mentalhealthapi.artelus.in/views/create_emergency_contact/', contact, {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${token}`

@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artelus-mental-health
+spec:
+  selector:
+    matchLabels:
+      app: artelus-mental-health
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: artelus-mental-health
+      annotations:
+        iam.amazonaws.com/role: arn:aws:iam::163021050982:role/api-admin-roles
+    spec:
+      containers:
+      - env:
+        image: 163021050982.dkr.ecr.ap-south-1.amazonaws.com/mental-health:v1
+        imagePullPolicy: Always
+        name: back-end
+        ports:
+        - containerPort: 8000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: artelus-mental-health
+spec:
+  selector:
+    app: artelus-mental-health
+  ports:
+  - port: 8000
+    targetPort: 8000
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: artelus-mental-health-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:163021050982:certificate/d13e6967-7448-4a2e-85b0-7569d3b393ef
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=60
+spec:
+  rules:
+  - host: mentalhealthapi.artelus.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: artelus-mental-health
+            port:
+              number: 8000
+
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: artelus-mental-health
+  namespace: default
+spec:
+  maxReplicas: 6
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: artelus-mental-health
+  targetCPUUtilizationPercentage: 90

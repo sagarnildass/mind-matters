@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchWeeklySummary = createAsyncThunk('weeklySummary/fetchWeeklySummary', async (token) => {
-  const response = await axios.get('http://127.0.0.1:8000/views/user_activity_summary_7d/', {
+  const response = await axios.get('https://mentalhealthapi.artelus.in/views/user_activity_summary_7d/', {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${token}`

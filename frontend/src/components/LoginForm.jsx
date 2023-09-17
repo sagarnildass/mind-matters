@@ -34,7 +34,7 @@ const LoginForm = () => {
         // const requestBody = `remember_me=true&grant_type=&username=${username}&password=${password}&scope=&client_id=&client_secret=`;
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/auth/login', requestBody, {
+            const response = await axios.post('https://mentalhealthapi.artelus.in/api/auth/login', requestBody, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -104,7 +104,7 @@ const LoginForm = () => {
         // Function to fetch user information
         const fetchUserInformation = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/auth/me', {
+                const response = await axios.get('https://mentalhealthapi.artelus.in/api/auth/me', {
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${savedAccessToken}`

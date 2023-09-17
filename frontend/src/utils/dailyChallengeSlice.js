@@ -6,7 +6,7 @@ import axios from 'axios';
 export const fetchDailyChallenge = createAsyncThunk(
     'dailyChallenge/fetchDailyChallenge',
     async () => {
-        const response = await axios.get('http://127.0.0.1:8000/views/daily_challenge/');  // Adjust the endpoint if needed
+        const response = await axios.get('https://mentalhealthapi.artelus.in/views/daily_challenge/');  // Adjust the endpoint if needed
         return response.data;
         
     }

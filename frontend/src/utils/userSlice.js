@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchUserData = createAsyncThunk('user/fetchUserData', async (token) => {
-  const response = await axios.get('http://127.0.0.1:8000/api/auth/me', {
+  const response = await axios.get('https://mentalhealthapi.artelus.in/api/auth/me', {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${token}`

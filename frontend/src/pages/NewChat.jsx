@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import 'regenerator-runtime'
+import Webcam from 'react-webcam';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +19,7 @@ const NewChat = () => {
     const dispatch = useDispatch();
     // const user_id = useSelector(state => state.user.user_id);  // Use selectors to get user data from the Redux store
     const { user_id, session_id } = useParams();
-    console.log("URL Params:", { user_id, session_id });
+    // console.log("URL Params:", { user_id, session_id });
 
     // console.log('User id:', user_id);
     const [messages, setMessages] = useState([]);
@@ -33,8 +34,10 @@ const NewChat = () => {
     const [showModal, setShowModal] = useState(false);
     const [imageDescription, setImageDescription] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
+
     const websocketRef = useRef(null); // Reference to manage WebSocket
     const chatContainerRef = useRef(null);
+    const webcamRef = useRef(null);
 
     const UserMarker = () => (
         <div style={{
@@ -86,7 +89,7 @@ const NewChat = () => {
 
     const searchTherapistsNearby = (lat, lng) => {
         // URL to your FastAPI route
-        const FASTAPI_URL = `http://127.0.0.1:8000/maps/therapists?lat=${lat}&lng=${lng}`;
+        const FASTAPI_URL = `https://mentalhealthapi.artelus.in/maps/therapists?lat=${lat}&lng=${lng}`;
 
         axios.get(FASTAPI_URL)
             .then(response => {
@@ -115,7 +118,7 @@ const NewChat = () => {
         formData.append('file', selectedFile);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/image/upload-image/', formData, {
+            const response = await axios.post('https://mentalhealthapi.artelus.in/api/image/upload-image/', formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -150,19 +153,54 @@ const NewChat = () => {
         }
     }
 
+    // useEffect(() => {
+    //     checkCameraPermission().then(hasPermission => {
+    //         if (hasPermission) {
+    //             // If permission granted, tell the server to start the webcam
+    //             if (websocketRef.current) {
+    //                 websocketRef.current.send('start-cam');
+    //             }
+    //         } else {
+    //             // Inform the user about the need for camera permissions
+    //             alert("Camera permission is required for emotion analysis.");
+    //         }
+    //     });
+    // }, []);
+    
     useEffect(() => {
         checkCameraPermission().then(hasPermission => {
             if (hasPermission) {
-                // If permission granted, tell the server to start the webcam
-                if (websocketRef.current) {
-                    websocketRef.current.send('start-cam');
-                }
+                // If permission granted, start capturing frames and sending them to the backend
+                startSendingFrames();
             } else {
                 // Inform the user about the need for camera permissions
                 alert("Camera permission is required for emotion analysis.");
             }
         });
     }, []);
+
+    const startSendingFrames = () => {
+        const intervalId = setInterval(() => {
+            if (webcamRef.current) {
+                const imageSrc = webcamRef.current.getScreenshot();
+                if (!websocketRef.current) {
+                    console.log("WebSocket ref is not initialized.");
+                } else if (websocketRef.current.readyState !== WebSocket.OPEN) {
+                    console.log("WebSocket is not open. Current state:", websocketRef.current.readyState);
+                } else if (!imageSrc) {
+                    console.log("No imageSrc captured from the webcam.");
+                }
+    
+                if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN && imageSrc) {
+                    // Now, send this imageSrc (which is a data URL) to the backend via your websocket
+                    websocketRef.current.send(`FRAME:${imageSrc}`);
+                }
+            }
+        }, 1000);  // Send frame every second. Adjust this value as needed.
+    
+        return () => clearInterval(intervalId);  // Clear the interval when done.
+    }
+
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -171,7 +209,7 @@ const NewChat = () => {
 
     const speak = (text) => {
         // console.log(textToSpeechEnabled)
-        console.log('SPEAK invoked:', text);
+        // console.log('SPEAK invoked:', text);
         if (!textToSpeechEnabled) {
             return; // Exit early if TTS is disabled
         }
@@ -197,10 +235,10 @@ const NewChat = () => {
         if (!user_id) return; // Exit early if user_id is not available
         // Initialize the WebSocket connection when the component mounts
         const wsUrl = session_id
-            ? `ws://0.0.0.0:8000/chat/${user_id}/${session_id}`
-            : `ws://0.0.0.0:8000/chat/${user_id}`;
+            ? `ws://mentalhealthapi.artelus.in/chat/${user_id}/${session_id}`
+            : `ws://mentalhealthapi.artelus.in/chat/${user_id}`;
 
-        console.log('wsUrl:', wsUrl);
+        // console.log('wsUrl:', wsUrl);
 
         websocketRef.current = new WebSocket(wsUrl);
 
@@ -263,7 +301,7 @@ const NewChat = () => {
     useEffect(() => {
         const fetchProfileImage = async () => {
             const token = localStorage.getItem('access_token');
-            const response = await axios.get('http://127.0.0.1:8000/api/image/get-profile-image/', {
+            const response = await axios.get('https://mentalhealthapi.artelus.in/api/image/get-profile-image/', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -484,6 +522,18 @@ const NewChat = () => {
                     </div>
                 </div>
             )}
+            <Webcam 
+                ref={webcamRef} 
+                screenshotFormat="image/jpeg" 
+                videoConstraints={{ width: 320, height: 240 }}  // Adjust for a smaller resolution
+                style={{ 
+                    position: 'fixed', 
+                    bottom: '80px', 
+                    right: '20px', 
+                    width: '200px', 
+                    height: '150px'  // Adjust the width and height to make it much smaller and in bottom right
+                }}
+            />
         </div>
     );
 };

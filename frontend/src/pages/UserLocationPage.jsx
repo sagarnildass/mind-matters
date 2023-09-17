@@ -72,7 +72,7 @@ const UserLocationPage = () => {
 
     const searchTherapistsNearby = (lat, lng) => {
         // URL to your FastAPI route
-        const FASTAPI_URL = `http://127.0.0.1:8000/maps/therapists?lat=${lat}&lng=${lng}`;
+        const FASTAPI_URL = `https://mentalhealthapi.artelus.in/maps/therapists?lat=${lat}&lng=${lng}`;
 
         axios.get(FASTAPI_URL)
             .then(response => {

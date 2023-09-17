@@ -28,7 +28,7 @@ from app.services.sentiment_analysis import analyze_sentiment
 from app.services.intent_recognition import analyze_intent
 from app.services.suicide_predictor import analyze_suicide_sentiment
 from app.services.chatbot_service import get_response
-from app.services.emotion_analysis import capture_emotion
+from app.services.emotion_analysis import capture_emotion, decode_frame, process_frame_for_emotion
 from app.services import sentiment_analysis, intent_recognition, suicide_predictor
 
 # from app.api.routes import chat  # Add this import at the top
@@ -82,7 +82,7 @@ app.config = dict(
     REDIS_URL="redis://0.0.0.0:6379"
 )
 
-stop_thread = threading.Event()
+# stop_thread = threading.Event()
 
 
 @app.on_event("startup")
@@ -166,32 +166,44 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
 
     await websocket.send_text("Chat session started!")
 
-    emotion_queue = Queue()
-    emotion_lock = threading.Lock()
-    def send_emotions():
-        nonlocal emotion_queue
-        if not camera_start_requested:
-            return  # Do not start the camera if not requested
+    # emotion_queue = Queue()
+    # emotion_lock = threading.Lock()
+    # def send_emotions():
+    #     nonlocal emotion_queue
+    #     if not camera_start_requested:
+    #         return  # Do not start the camera if not requested
 
-        for emotions in capture_emotion(stop_thread):  # Pass the stop_thread event
-            with emotion_lock:
-                emotion_queue.put(emotions)
+    #     for emotions in capture_emotion(stop_thread):  # Pass the stop_thread event
+    #         with emotion_lock:
+    #             emotion_queue.put(emotions)
 
-    # Start the function in a separate thread
-    thread = threading.Thread(target=send_emotions)
+    # # Start the function in a separate thread
+    # thread = threading.Thread(target=send_emotions)
     
 
-    stop_thread.clear()  # Reset the event for a new connection
+    # stop_thread.clear()  # Reset the event for a new connection
     blip_response = None
     blip_timestamp = None
 
     try:
+        latest_emotion_data = None
         while True:
             data = await websocket.receive_text()
-            if data == 'start-cam':
-                camera_start_requested = True
-                thread.start()
+            if data.startswith("FRAME:"):
+                # Extract the image data from the frame message
+                frame_data = data.replace("FRAME:", "")
+                # Decode the frame data to an image
+                frame = decode_frame(frame_data)
+                # Process the image for emotion detection
+                emotions = process_frame_for_emotion(frame)
+                # Optional: Send the detected emotion back to the frontend or use it in your logic
+                # await websocket.send_text(f"EMOTION:{emotions}")
+                # logger.info('EMOTION: ', emotions)
+                latest_emotion_data = emotions
                 continue
+            elif data == 'start-cam':
+                # No need to start the thread for capturing webcam feed now
+                pass
             
             # Check if the message indicates an image is sent
             if "USER_SENT_IMAGE:" in data:
@@ -225,6 +237,7 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
                     continue
             
             start_time_sentiment = datetime.now()
+            print('data: ', data)
             sentiment_result = await analyze_sentiment(data, redis)
             #print(sentiment_result)
             end_time_sentiment = datetime.now()
@@ -247,18 +260,18 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
             end_time_suicidal = datetime.now()
 
             suicide_label = suicidal_result['label']
-            emotion_data = None
-            if not emotion_queue.empty():
-                # Flush old emotions
-                while not emotion_queue.empty():
-                    emotion_data = emotion_queue.get()
+            # emotion_data = None
+            # if not emotion_queue.empty():
+            #     # Flush old emotions
+            #     while not emotion_queue.empty():
+            #         emotion_data = emotion_queue.get()
 
             if blip_timestamp and (datetime.now() - blip_timestamp).seconds > 60:
                 blip_response = None
 
             # Generate chatbot response
             # print(blip_response)
-            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data, session_id, suicide_score=suicidal_result['score'], blip_response=blip_response)
+            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, latest_emotion_data, session_id, suicide_score=suicidal_result['score'], blip_response=blip_response)
             
             
             # Send the generated response back to the user
@@ -316,8 +329,8 @@ async def start_chat_with_session(websocket: WebSocket, user_id: int, background
             #await websocket.send_text(f"Suicide: {suicidal_result}")
 
     except WebSocketDisconnect:
-        stop_thread.set()  # Signal the thread to stop
-        thread.join()  # Wait for the thread to finish
+        # stop_thread.set()  # Signal the thread to stop
+        # thread.join()  # Wait for the thread to finish
         ws_session_data.end_time = datetime.now()
         db.commit()
 
@@ -329,36 +342,46 @@ async def start_chat_without_session(websocket: WebSocket, user_id: int, backgro
     
     session_data, ws_session_data, chat_logs = await initiate_chat(user_id, db, None)
 
-    
-
     await websocket.send_text("Chat session started!")
 
-    emotion_queue = Queue()
-    emotion_lock = threading.Lock()
-    def send_emotions():
-        nonlocal emotion_queue
-        if not camera_start_requested:
-            return  # Do not start the camera if not requested
+    # emotion_queue = Queue()
+    # emotion_lock = threading.Lock()
+    # def send_emotions():
+    #     nonlocal emotion_queue
+    #     if not camera_start_requested:
+    #         return  # Do not start the camera if not requested
 
-        for emotions in capture_emotion(stop_thread):  # Pass the stop_thread event
-            with emotion_lock:
-                emotion_queue.put(emotions)
+    #     for emotions in capture_emotion(stop_thread):  # Pass the stop_thread event
+    #         with emotion_lock:
+    #             emotion_queue.put(emotions)
 
-    # Start the function in a separate thread
-    thread = threading.Thread(target=send_emotions)
+    # # Start the function in a separate thread
+    # thread = threading.Thread(target=send_emotions)
     
 
-    stop_thread.clear()  # Reset the event for a new connection
+    # stop_thread.clear()  # Reset the event for a new connection
     blip_response = None
     blip_timestamp = None
 
     try:
+        latest_emotion_data = None
         while True:
             data = await websocket.receive_text()
-            if data == 'start-cam':
-                camera_start_requested = True
-                thread.start()
+            if data.startswith("FRAME:"):
+                # Extract the image data from the frame message
+                frame_data = data.replace("FRAME:", "")
+                # Decode the frame data to an image
+                frame = decode_frame(frame_data)
+                # Process the image for emotion detection
+                emotions = process_frame_for_emotion(frame)
+                # Optional: Send the detected emotion back to the frontend or use it in your logic
+                # await websocket.send_text(f"EMOTION:{emotions}")
+                # logger.info('EMOTION: ', emotions)
+                latest_emotion_data = emotions
                 continue
+            elif data == 'start-cam':
+                # No need to start the thread for capturing webcam feed now
+                pass
             
             # Check if the message indicates an image is sent
             if "USER_SENT_IMAGE:" in data:
@@ -413,18 +436,18 @@ async def start_chat_without_session(websocket: WebSocket, user_id: int, backgro
             end_time_suicidal = datetime.now()
 
             suicide_label = suicidal_result['label']
-            emotion_data = None
-            if not emotion_queue.empty():
-                # Flush old emotions
-                while not emotion_queue.empty():
-                    emotion_data = emotion_queue.get()
+            # emotion_data = None
+            # if not emotion_queue.empty():
+            #     # Flush old emotions
+            #     while not emotion_queue.empty():
+            #         emotion_data = emotion_queue.get()
 
             if blip_timestamp and (datetime.now() - blip_timestamp).seconds > 60:
                 blip_response = None
 
             # Generate chatbot response
             # print(blip_response)
-            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, emotion_data, None, suicide_score=suicidal_result['score'], blip_response=blip_response)
+            chatbot_response = get_response(user_id, data, db, top_sentiment['label'], suicide_label, latest_emotion_data, None, suicide_score=suicidal_result['score'], blip_response=blip_response)
             
             
             # Send the generated response back to the user
@@ -482,8 +505,8 @@ async def start_chat_without_session(websocket: WebSocket, user_id: int, backgro
             #await websocket.send_text(f"Suicide: {suicidal_result}")
 
     except WebSocketDisconnect:
-        stop_thread.set()  # Signal the thread to stop
-        thread.join()  # Wait for the thread to finish
+        # stop_thread.set()  # Signal the thread to stop
+        # thread.join()  # Wait for the thread to finish
         ws_session_data.end_time = datetime.now()
         db.commit()
 

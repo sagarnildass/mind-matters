@@ -55,7 +55,7 @@ const SignupForm = () => {
         };
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/auth/register', requestBody);
+            const response = await axios.post('https://mentalhealthapi.artelus.in/api/auth/register', requestBody);
 
             if (response.status === 200) {
                 // Registration successful

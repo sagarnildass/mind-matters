@@ -26,7 +26,7 @@
 # CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 # FROM python:3.9
-FROM nvidia/cuda:11.6.2-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -35,8 +35,15 @@ RUN apt-get clean && apt-get update && \
     apt-get -y install tzdata && \
     ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
-    apt-get -y install cmake protobuf-compiler libgomp1 python3.9 python3-pip python3.9-venv && \
+    apt-get -y install cmake protobuf-compiler libgomp1 && \
     apt-get -y install libgl1 libglib2.0-0 libsm6 libxrender1 libxext6
+
+# Install python3.9
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y python3.9 python3.9-venv python3.9-dev
 
 # Ensure python3.9 is the default python3
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
@@ -68,5 +75,5 @@ RUN echo "#!/bin/sh\nredis-server &\nuvicorn main:app --host 0.0.0.0 --port 8000
 
 CMD ["./start.sh"]
 
-# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 

@@ -21,7 +21,7 @@ const Navbar = () => {
         const fetchProfileImage = async () => {
             try {
                 const token = localStorage.getItem('access_token');
-                const response = await axios.get('http://127.0.0.1:8000/api/image/get-profile-image/', {
+                const response = await axios.get('https://mentalhealthapi.artelus.in/api/image/get-profile-image/', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

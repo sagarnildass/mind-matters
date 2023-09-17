@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react(),
     "@babel/plugin-transform-runtime"],
+  build: {
+    outDir: 'build',
+  }
 })

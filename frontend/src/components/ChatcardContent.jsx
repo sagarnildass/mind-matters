@@ -6,7 +6,7 @@ import axios from 'axios';
 const ChatcardContent = ({ title, number, userId, sessionId }) => {
 
     const deleteSession = async (sessionId, token) => {
-        const url = `http://127.0.0.1:8000/sessions/delete_session/${sessionId}/`;
+        const url = `https://mentalhealthapi.artelus.in/sessions/delete_session/${sessionId}/`;
         const headers = {
             'Authorization': `Bearer ${token}`,
             'Accept': '*/*'

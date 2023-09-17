@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchRecommendedArticles = createAsyncThunk('articles/fetchRecommendedArticles', async (token) => {
-  const response = await axios.get('http://127.0.0.1:8000/recommendation_articles/get_recommendations', {
+  const response = await axios.get('https://mentalhealthapi.artelus.in/recommendation_articles/get_recommendations', {
     headers: {
       'Authorization': `Bearer ${token}`
     }

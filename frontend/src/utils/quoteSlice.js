@@ -6,7 +6,7 @@ import axios from 'axios';
 export const fetchRandomQuote = createAsyncThunk(
     'quote/fetchRandomQuote',
     async () => {
-        const response = await axios.get('http://127.0.0.1:8000/views/random_quote/');  // Adjust the endpoint if needed
+        const response = await axios.get('https://mentalhealthapi.artelus.in/views/random_quote/');  // Adjust the endpoint if needed
         return response.data;
     }
 );

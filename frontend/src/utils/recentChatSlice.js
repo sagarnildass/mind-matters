@@ -4,7 +4,7 @@ import axios from 'axios';
 export const fetchRecentChat = createAsyncThunk(
     'recentChat/fetchRecentChat',
     async (token) => {
-        const response = await axios.get('http://127.0.0.1:8000/views/recent_chat_summary/', {
+        const response = await axios.get('https://mentalhealthapi.artelus.in/views/recent_chat_summary/', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

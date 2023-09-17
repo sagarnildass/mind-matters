@@ -8,7 +8,7 @@ export const fetchSimilarUsers = createAsyncThunk(
     async (userId, { rejectWithValue }) => {
       const token = localStorage.getItem('access_token');  // Retrieve token from localStorage
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/recommendation_users/similar_users/${userId}`, {
+        const response = await axios.get(`https://mentalhealthapi.artelus.in/recommendation_users/similar_users/${userId}`, {
           headers: {
             'accept': 'application/json',
             'Authorization': `Bearer ${token}`  // Pass the token here
