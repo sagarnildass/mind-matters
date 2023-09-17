@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Header, Form
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 import jwt
+import boto3
 from sqlalchemy.orm import Session
 from pytz import timezone
 from app.core.database import get_db
@@ -106,17 +107,128 @@ def read_users_me(current_user: UserModel = Depends(get_current_user)):
 @router.post("/register", tags=["Authentication"], response_model=UserModel)
 def register_user(user: UserModel, db=Depends(get_db)):
     logger.info("Registering user")
-    # logger.info(user.username, user.email, user.password)
     existing_user = get_user(user.username, db)
-    print(existing_user)
     if existing_user:
         raise HTTPException(status_code=400, detail="User already exists")
 
     created_user = create_user(user, db)
-    # print(created_user)
+
+    # Send welcome email
+    send_email(user.email, user.first_name)
 
     # Convert the created_user object to a dictionary before returning
     created_user_dict = created_user.__dict__
     created_user_dict.pop("_sa_instance_state", None)
-    print(created_user_dict)
     return created_user_dict
+
+
+def send_email(recipient_email, first_name):
+    SENDER = "mindmatters@artelus.in"
+    RECIPIENT = recipient_email
+    AWS_REGION = "ap-south-1" # e.g., "us-west-2"
+    SUBJECT = "Welcome to Mind Matters"
+    
+    # The HTML body of the email
+    BODY_TEMPLATE = """
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome to Mind Matters!</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 40px 0;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 40px;
+                border-radius: 5px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .button {
+                display: inline-block;
+                padding: 12px 24px;
+                margin: 20px 0;
+                color: #ffffff;  /* Updated text color to white */
+                background-color: #405cf5;
+                border: none;
+                border-radius: 25px;
+                text-align: center;
+                text-decoration: none;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+                box-shadow: 0px 4px 15px rgba(64, 92, 245, 0.2);
+            }
+
+            .button:hover {
+                background-color: #3044d8;
+                transform: translateY(-2px);
+                box-shadow: 0px 6px 20px rgba(64, 92, 245, 0.3);
+            }
+
+            .button:active {
+                transform: translateY(0);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Dear [USERNAME],</h2>
+            <p>
+                We're genuinely thrilled you've decided to join our community. Mental health is a journey, and every step you take is crucial. Remember, it's okay to seek help, share your feelings, and most importantly, to prioritize your well-being.
+            </p>
+            <p>
+                By being a part of our platform, you've taken a significant step in understanding and enhancing your mental health. Together, we can create a space filled with empathy, understanding, and support.
+            </p>
+            <a href="https://mindmatters.artelus.in/" class="button" style="color: #ffffff;">Visit App</a>
+            <p>
+                If you have any questions, concerns, or feedback, please don't hesitate to reach out. We're here for you every step of the way.
+            </p>
+            <p>
+                Stay strong, stay hopeful!
+            </p>
+            <p>Warm regards,</p>
+            <p>Your Mind Matters Team</p>
+        </div>
+    </body>
+    </html>
+    """  
+    BODY_HTML = BODY_TEMPLATE.replace("[USERNAME]", first_name)
+    CHARSET = "UTF-8"
+
+    # Create a new SES client
+    client = boto3.client('ses',region_name=AWS_REGION)
+
+    try:
+        response = client.send_email(
+            Destination={
+                'ToAddresses': [
+                    RECIPIENT,
+                ],
+            },
+            Message={
+                'Body': {
+                    'Html': {
+                        'Charset': CHARSET,
+                        'Data': BODY_HTML,
+                    },
+                },
+                'Subject': {
+                    'Charset': CHARSET,
+                    'Data': SUBJECT,
+                },
+            },
+            Source=SENDER,
+        )
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+    else:
+        print("Email sent! Message ID:"),
+        print(response['MessageId'])

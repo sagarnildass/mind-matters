@@ -33,12 +33,12 @@ const SignupForm = () => {
         }
 
         // Check email domain
-        const validDomains = ['artelus.ai', 'artelus.in', 'artelus.com'];
+        // const validDomains = ['artelus.ai', 'artelus.in', 'artelus.com'];
         const emailDomain = email.includes('@') ? email.split('@')[1] : '';
-        if (!validDomains.includes(emailDomain)) {
-            setError('Invalid email domain. Only artelus domains are allowed');
-            return;
-        }
+        // if (!validDomains.includes(emailDomain)) {
+        //     setError('Invalid email domain. Only artelus domains are allowed');
+        //     return;
+        // }
 
         // Create a request body with the form data
         const requestBody = {
