@@ -126,9 +126,9 @@ const HomePage = () => {
 
 
     return (
-        <div className="flex min-h-screen overflow-x-hidden">
+        <div className="lg:flex min-h-screen overflow-x-hidden gap-4">
             <Sidebar />
-            <div className="flex-1 relative">
+            <div className="flex-1 relative overflow-y-auto lg:col-span-2">
                 <div className="relative h-full">
                     <div
                         className="w-full h-full"
@@ -139,22 +139,26 @@ const HomePage = () => {
                         }}
                     />
                     <Navbar />
-                    <div className="absolute right-60 top-28 text-white w-full flex justify-center space-x-20">  {/* Wrap the two sections in a flex container */}
-                        <div> {/* Emotion cards section */}
-                            <h1 className="text-4xl font-bold">Welcome, {userName}</h1>
-                            <h2 className="text-2xl mt-4">Your Recent Top Emotions:</h2>
-                            <div className="flex space-x-8 mt-4">
+                    <div className="flex flex-col lg:flex-row justify-center space-y-4 lg:space-y-0 lg:space-x-20 lg:absolute lg:right-60 lg:top-28 text-white w-full pl-4 lg:pl-0">
+                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0">
+                            <h1 className="text-4xl lg:text-3xl md:text-2xl sm:text-xl font-bold">Welcome, {userName}</h1>
+                            <h2 className="text-2xl lg:text-xl md:text-lg sm:text-base mt-4">Your Recent Top Emotions:</h2>
+                            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8 mt-4">
                                 {topEmotions.map((emotion, index) => (
-                                    <Card key={index} className="flex-1">
+                                    <Card key={index} className="flex-1 md:w-2/3 sm:w-full"> {/* Adjust widths */}
                                         <CardContent
                                             title={emotion[0]}
-                                            number={emotion[0] === "love" ? <span style={{ color: "red" }}>{emotionToEmoji[emotion[0]]}</span> : emotionToEmoji[emotion[0]]}
+                                            number={
+                                                <span style={{ fontSize: window.innerWidth > 640 ? 'inherit' : '16px' }}> {/* Adjust font size based on viewport */}
+                                                    {emotion[0] === "love" ? <span style={{ color: "red" }}>{emotionToEmoji[emotion[0]]}</span> : emotionToEmoji[emotion[0]]}
+                                                </span>
+                                            }
                                         />
                                     </Card>
                                 ))}
                             </div>
                         </div>
-                        <div className="w-1/3 mt-14 mr-12"> {/* Last Week Summary section. Restrict its width */}
+                        <div className="w-full sm:w-1/2 lg:w-1/3 mt-4 lg:mt-0 lg:mr-12 lg:relative lg:top-14">
                             <h2 className="text-2xl text-white">This Week Summary</h2>
                             <div className="flex space-x-8 mt-4">
                                 <Card className="flex-shrink w-2/5">
@@ -165,22 +169,23 @@ const HomePage = () => {
                                 </Card>
                             </div>
 
-                            <div className="absolute right-[-90px] top-14">
+                            <div className="mt-0 lg:absolute lg:right-[-600px] lg:top-0">
                                 <h2 className="text-2xl text-white">Quote of the Day</h2>
                                 <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="absolute left-80 top-[29%] w-6/12">
+
+                    <div className="w-full lg:w-6/12 mt-4 lg:mt-0 lg:absolute lg:left-80 lg:top-[29%]">
                         <RecommendedArticlesCarousel articles={recommendedArticles} />
                     </div>
-                    <div className="absolute left-80 bottom-0 w-6/12 mb-8">
+                    <div className="w-full lg:w-6/12 mt-4 lg:mt-0 lg:absolute lg:left-80 lg:bottom-0 lg:mb-8">
                         <EmotionTimeSeriesChart data={emotionData} />
                     </div>
                     {dailyChallenge && dailyChallenge.challenge_id && (
-                        <div className="absolute right-0 bottom-[2%] w-4/12 mb-4 mr-8 h-[62vh]"> {/* Set fixed or minimum height here */}
-                            <Card className="h-full"> {/* Make sure the Card takes the full height */}
+                        <div className="w-full lg:w-4/12 mt-4 lg:absolute lg:right-0 lg:bottom-[2%] mb-4 lg:mb-0 lg:mr-8 h-[62vh]">
+                            <Card className="h-full">
                                 <div className="p-3 flex flex-col h-full">
                                     <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
                                     <img
