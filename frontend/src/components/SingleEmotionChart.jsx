@@ -83,6 +83,7 @@ const SingleEmotionChart = ({ emotionData, emotionName, chartHeight = "100", col
                     data: emotionData
                 }]}
                 type="area"
+                width="100%"
                 height={chartHeight}// Increase the height to make the chart larger
             />
         </div>
