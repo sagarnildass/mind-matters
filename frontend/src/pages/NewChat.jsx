@@ -447,10 +447,13 @@ const NewChat = () => {
             <div className="flex flex-1">
                 {isSidebarVisible &&   <Sidebar />  }
 
-                <main className=" flex-1 p-4 overflow-hidden">
-                {/*MAIN */}
 
-                  <div className="w-full border-t border-gray-600 mb-4">
+                <main className="  flex-1  p-4  xs:p-2sm:p-4 md:p-6 lg:p-8 xl:p-12 2xl:p-32 3xl:p-32   flex-1  overflow-hidden">
+
+                {/*MAIN  <main className=" flex-1 p-4 overflow-hidden"> */}
+
+                  <div className="w-5/6 border-t border-gray-600 mb-4 justify-center">
+                  <div className="justify-center">
                         <PlacesAutocomplete
                             value={address}
                             onChange={setAddress}
@@ -479,6 +482,7 @@ const NewChat = () => {
                             )}
                         </PlacesAutocomplete>
 
+                    </div>
                     </div>
 
 
