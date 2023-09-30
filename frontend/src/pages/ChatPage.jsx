@@ -27,7 +27,7 @@ const ChatPage = () => {
 
     const userId = useSelector(state => state.user.user_id);
 
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
     const sidebarToggle = async () => {
         setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);

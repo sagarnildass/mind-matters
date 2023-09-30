@@ -26,7 +26,7 @@ const EmergencyContactPage = () => {
         relation: '',
     });
 
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
     const sidebarToggle = async () => {
         setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);

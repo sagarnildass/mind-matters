@@ -35,7 +35,7 @@ const HomePage = () => {
     const recentChat = useSelector(selectRecentChat);
     const randomQuote = useSelector(selectRandomQuote);
     const dailyChallenge = useSelector(selectDailyChallenge);
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
     const sidebarToggle = async () => {
         setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);

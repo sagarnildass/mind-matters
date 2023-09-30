@@ -13,7 +13,7 @@ const UserLocationPage = () => {
     const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
     const [userLocation, setUserLocation] = useState(null);
     const [therapistLocations, setTherapistLocations] = useState([]);
-   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
     const sidebarToggle = async () => {
         setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);
