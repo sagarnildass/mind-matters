@@ -141,6 +141,17 @@ background-image: linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(
 }
 
 
+.fullscreen {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  /* extra fullscreen guarantees - you might not need the rest */
+  top: 0;
+  left: 0;
+}
+
+
 * {
     font-family: 'Inter', sans-serif;
 }

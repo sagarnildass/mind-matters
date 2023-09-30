@@ -101,7 +101,7 @@ const UserLocationPage = () => {
                 <div className="flex flex-1">
                     {isSidebarVisible &&   <Sidebar />  }
 
-                    <main className=" flex-1 p-8 overflow-hidden">
+                    <main className=" flex-1 xs:p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 xxl:p-16 2xl:p-16 3xl:p-16 overflow-hidden  ">
                     {/*MAIN */}
 
                     {/* Search Bar positioned above the map */}
@@ -142,7 +142,7 @@ const UserLocationPage = () => {
 
 
                     {/* Map positioned below the search bar */}
-                    <div className=" top-4 ml-4 mr-4 w-100 h-3/4 z-0">
+                    <div className=" top-4 ml-4 mr-4 w-100 fullscreen z-0">
                         <GoogleMapReact
                             bootstrapURLKeys={{ key: "AIzaSyBv_mtu61MCcuQeyud2XB62OMqBM8n3fKY" }}
                             defaultCenter={{ lat: userLocation?.lat || 0, lng: userLocation?.lng || 0 }}

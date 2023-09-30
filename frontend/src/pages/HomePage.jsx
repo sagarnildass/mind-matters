@@ -148,7 +148,11 @@ const HomePage = () => {
                         <h1>Welcome, {userName}</h1>
                     </div>
 
-                     <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 lg:bottom-2 text-white w-full pl-0 ">
+                     <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 lg:bottom-2 text-white w-full pl-0 "   style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+
+                    }}>
 
 
                         {/* START welcome and emotion */}

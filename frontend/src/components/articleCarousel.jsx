@@ -11,7 +11,7 @@ const RecommendedArticlesCarousel = ({ articles }) => {
         <div className="my-4 w-full"> {/*  h-[800px] Increase the height here */}
             <h2 className="mb-2  mt-2 text-white text-l lg:text-l md:text-lg sm:text-base  ">Your Daily Recommendations</h2>
 
-           <div className="p-6 rounded-lg shadow-md my-card-bg " >
+           <div className="p-6 rounded-lg shadow-md my-card-bg justify-center" >
                 <Swiper
                     spaceBetween={50}
                     slidesPerView={1}
@@ -23,9 +23,9 @@ const RecommendedArticlesCarousel = ({ articles }) => {
 
                         <SwiperSlide  key={index}>
 
-                                <div  className="ml-12 mr-12" >
-                                    <h3 className="text-xl text-center font-normal mb-2 text-white">{article.title}</h3>
-                                    <p className="mb-4 text-white text-center">{article.description}</p>
+                                <div  className="justify-center ml-12 mr-12" >
+                                    <h3 className="text-xl text-center font-normal mb-2 text-white  truncate hover:text-clip text-ellipsis overflow-hidden mb-2">{article.title}</h3>
+                                    <p className="mb-4 text-gray-400 text-center truncate hover:text-clip text-ellipsis overflow-hidden ">{article.description}</p>
                                     <a href={article.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 text-center hover:underline hover:text-blue-400">Read More...</a>
                                 </div>
 
