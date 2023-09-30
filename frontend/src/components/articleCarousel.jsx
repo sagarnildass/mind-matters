@@ -9,9 +9,9 @@ SwiperCore.use([Navigation, Pagination]);
 const RecommendedArticlesCarousel = ({ articles }) => {
     return (
         <div className="my-4 w-full"> {/*  h-[800px] Increase the height here */}
-            <h2 className="mb-2   mt-2 text-white text-l lg:text-l md:text-lg sm:text-base  ">Your Daily Recommendations</h2>
+            <h2 className="mb-2  mt-2 text-white text-l lg:text-l md:text-lg sm:text-base  ">Your Daily Recommendations</h2>
 
-           <div className="p-6 rounded-lg shadow-md "
+           <div className="p-6 rounded-lg shadow-md w-2/4"
                      style={{
                             backgroundImage: 'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)',
                             width:'800px'

@@ -154,9 +154,9 @@ const HomePage = () => {
                         <div className="flex flex-col space-y-4 mt-2 lg:mb-0">
 
                             <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">Your Recent Top Emotions</h2>
-                            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8 mt-4 mr-4">
+                            <div className="container mx-auto   grid grid-cols-3 ">
                                 {topEmotions.map((emotion, index) => (
-                                    <Card key={index} className="flex-1 md:w-2/3 "> {/* Adjust widths */}
+                                    <Card key={index} className="flex-1 md:w-11/12  "> {/* Adjust widths */}
                                         <CardContentNum
                                             title={emotion[0]}
                                             number={
@@ -174,13 +174,13 @@ const HomePage = () => {
 
 
                         {/*START week summary */}
-                        <div className="flex flex-col space-y-4 mt-2 ">
-                            <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">This Week Summary</h2>
-                            <div className="flex space-x-8 mt-4">
-                                <Card className="flex-shrink w-2/5">
+                        <div className="flex flex-col space-y-2 mt-4 ml-4 mr-4">
+                            <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-2 mb-2">This Week Summary</h2>
+                            <div className="flex space-x-2 mt-4 ">
+                                <Card className="flex-shrink w-2/3 ">
                                     <CardContent title="Total Sessions" number={weeklySummary.total_sessions} />
                                 </Card>
-                                <Card className="flex-shrink w-2/5">
+                                <Card className="flex-shrink w-2/3">
                                     <CardContent title="Total AI Interactions" number={weeklySummary.total_chat_logs} />
                                 </Card>
                             </div>
@@ -210,14 +210,12 @@ const HomePage = () => {
                         {/*END ARTICLE */}
 
                         {/*START EMOTION DATA */}
-                        <div className="w-full lg:w-6/12 mt-0 lg:mt-0 ">
+                        <div className="w-full lg:w-12/12 mt-0 lg:mt-0 ">
                             <EmotionTimeSeriesChart data={emotionData} />
                         </div>
                         {/*END EMOTION DATA */}
 
                        </div>
-
-
 
 
 
