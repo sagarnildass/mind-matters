@@ -206,11 +206,11 @@ const HomePage = () => {
                      <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4 " >
 
 
-                     <div className="" >
+                     <div className="2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-11/12" >
 
                         {/*START ARTICLE */}
                        <div className="d-flex flex-row   mt-2  ">
-                            <div className="w-full lg:w-6/12 mt-4    flex    ">
+                            <div className=" mt-4    flex    ">
                                 <RecommendedArticlesCarousel articles={recommendedArticles} />
                             </div>
                         </div>
