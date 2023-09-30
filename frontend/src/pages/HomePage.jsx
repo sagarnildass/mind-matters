@@ -152,7 +152,7 @@ const HomePage = () => {
 
 
                         {/* START welcome and emotion */}
-                        <div className="flex flex-col space-y-4 lg:mb-0 mt-2 mr-8">
+                        <div className="flex flex-col space-y-4 lg:mb-0  justify-center mt-2 mr-8">
 
                             <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-8 md:text-center sm:text-center">Your Recent Top Emotions</h2>
                             <div className="container mx-auto   grid grid-cols-3 ">
@@ -228,7 +228,7 @@ const HomePage = () => {
 
 
 
-                    <div className="  mt-0 mr-8 ">
+                    <div className="2xl:w-5/12 xl:w-5/12 lg:w-5/12 md:w-5/12 sm:w-12/12  mt-0 mr-8 ">
                         {dailyChallenge && dailyChallenge.challenge_id && (
                             <div className="w-full  mt-8 mr-8 ">
                                 <Card className="h-full">
@@ -239,7 +239,7 @@ const HomePage = () => {
                                             alt={dailyChallenge.challenge_name}
                                             className="flex-grow object-cover rounded"
                                         />
-                                        <div className="mt-10 flex flex-col justify-end flex-grow mb-10">
+                                        <div className="mt-10 flex flex-col justify-center flex-grow mb-10">
                                             <h3 className="text-white text-2xl text-center font-bold mb-2 mt-2">{dailyChallenge.challenge_name}</h3>
                                             <p className="text-m text-gray-400 text-center mt-1">{dailyChallenge.challenge_description}</p>
                                         </div>
