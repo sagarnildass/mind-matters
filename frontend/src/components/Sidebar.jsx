@@ -32,7 +32,7 @@ const Sidebar = () => {
                         </div>
                     </Link> */}
 
-                    <ul className="space-y-2 font-medium mt-4 ml-2">
+                    <ul className="space-y-2 font-medium mt-4 ml-4">
                         {/* Dashboard */}
                         <li>
                             <Link to="/" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
