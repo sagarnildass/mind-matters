@@ -142,7 +142,7 @@ const HomePage = () => {
                 <div className="flex flex-1">
                     {isSidebarVisible &&   <Sidebar />  }
 
-                    <main className="  flex-1 xs:p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 xxl:p-16 2xl:p-32 3xl:p-32   flex-1  overflow-hidden">
+                    <main className="  flex-1  p-4  xs:p-2sm:p-4 md:p-6 lg:p-8 xl:p-12 2xl:p-32 3xl:p-32   flex-1  overflow-hidden">
                     {/*MAIN */}
                      <div className="left-0 top-0 text-white text-xl 2xl:text-3xl font-bold ml-0  mr-0  mt-0 mb-4">
                         <h1>Welcome, {userName}</h1>
