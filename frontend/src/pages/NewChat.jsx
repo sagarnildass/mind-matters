@@ -570,9 +570,9 @@ const NewChat = () => {
                 })}
               </div>
 
-              <div className="h-2/6 flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0 ">
-                <div className="flex mt-0 p-0 w-full w-100">
-                  <div className="flex mt-0 p-0 ">
+              <div className="h-2/6 ">
+                <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0  justify-between ">
+                  <div className="flex  mt-2 p-0 ">
                     <button
                       onClick={() => {
                         const newValue = !textToSpeechEnabled;
@@ -612,7 +612,7 @@ const NewChat = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex mt-0 p-0 w-full w-100">
+                  <div className=" w-full mt-2 justify-end ">
                     <input
                       type="text"
                       value={currentMessage}
@@ -623,9 +623,9 @@ const NewChat = () => {
                           e.preventDefault(); // Prevent default behavior (like a newline in some browsers)
                         }
                       }}
-                      className="w-2/3 p-4 border-t border-b rounded-l-md border-gray-600 bg-gray-500  text-white"
+                      className="w-5/6 p-4 border-t border-b rounded-l-md border-gray-600 bg-gray-500  text-white"
                       placeholder="Type a message..."
-                      style={{  height: "60px" }}
+                      style={{  height: "60px", justifyItems:'end', width: '62%', }}
                     />
                     <button
                       style={{ width: "60px", height: "60px" }}
