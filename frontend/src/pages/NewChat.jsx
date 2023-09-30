@@ -440,209 +440,163 @@ const NewChat = () => {
   }
 
   return (
-    <div className="bg-app mx-auto">
-      <div className="min-h-screen flex flex-col">
-        <NavbarHeader sidebarToggle={sidebarToggle} />
-        <div className="flex flex-1">
-          {isSidebarVisible && <Sidebar />}
-          <main className=" flex-1 xs:p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 xxl:p-16 2xl:p-16 3xl:p-16   ">
-            {/*MAIN */}
-            <div className="  ml-0 border-t border-gray-600 w-6/6 mb-4 justify-content-center align-items-center">
-              <PlacesAutocomplete
-                value={address}
-                onChange={setAddress}
-                onSelect={handleSelectAddress}
-              >
-                {({
-                  getInputProps,
-                  suggestions,
-                  getSuggestionItemProps,
-                  loading,
-                }) => (
-                  <div className="relative">
-                    <input
-                      {...getInputProps({
-                        placeholder: "Search Therapists near you ...",
-                        className:
-                          "w-full p-4 border rounded-md border-gray-600 bg-gray-700 text-white",
-                      })}
-                    />
-                    <div className="absolute top-full left-0 mt-2 w-full bg-gray-700 border border-gray-600 z-10">
-                      {loading && (
-                        <div className="p-2 text-white">Loading...</div>
-                      )}
-                      {suggestions.map((suggestion) => (
-                        <div
-                          {...getSuggestionItemProps(suggestion, {
-                            className:
-                              "p-2 text-white hover:bg-gray-600 cursor-pointer",
-                          })}
-                        >
-                          {suggestion.description}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </PlacesAutocomplete>
-            </div>
-            <div
-              className=" top-2 right-2 w-full  bg-gray-800 p-2 rounded-lg shadow-lg   "
-              style={{ /* color: "red", height: "75%"  */}} >
-              <div
-                className=" h-4/6 overflow-y-scroll h-5/6 mb-4 border-b-2 border-gray-600"
-                ref={chatContainerRef} >
-                {messages.map((message, idx) => {
-                  {
-                    /* console.log(message.therapists);  // Log each message to inspect its structure */
-                  }
-                  return (
-                    <div
-                      key={idx}
-                      className={`flex mb-2 ${
-                        message.direction === "user"
-                          ? "justify-start"
-                          : "justify-end"
-                      }`}
-                    >
-                      {message.direction === "user" && (
-                        <img
-                          src={profileImageUrl}
-                          alt="User"
-                          className="w-8 h-8 rounded-full object-cover object-center mr-2"
-                        />
-                      )}
-                      {message.type === "map" ? (
-                        <div className="h-96 w-3/4 rounded-lg shadow-lg">
-                          <GoogleMapReact
-                            bootstrapURLKeys={{
-                              key: "AIzaSyBv_mtu61MCcuQeyud2XB62OMqBM8n3fKY",
-                            }}
-                            defaultCenter={{
-                              lat: message.location?.lat,
-                              lng: message.location?.lng,
-                            }}
-                            center={{
-                              lat: message.location?.lat,
-                              lng: message.location?.lng,
-                            }}
-                            defaultZoom={14}
-                            margin={[50, 50, 50, 50]}
-                            options={""}
-                          >
-                            <UserMarker
-                              lat={message.location?.lat}
-                              lng={message.location?.lng}
-                            />
-                            {message.therapists?.map((therapist, index) => (
-                              <TherapistCard
-                                key={index}
-                                therapist={therapist}
-                                lat={therapist.location?.lat}
-                                lng={therapist.location?.lng}
-                              />
-                            ))}
-                          </GoogleMapReact>
-                        </div>
-                      ) : (
-                        <div
-                          className={`text-left p-2 rounded-md ${
-                            message.direction === "user"
-                              ? "bg-blue-400"
-                              : "bg-gray-400"
-                          }`}
-                        >
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: linkify(formatList(message.content)),
-                            }}
-                          />
-                        </div>
-                      )}
-                      {message.direction === "ai" && (
-                        <FontAwesomeIcon
-                          icon={faRobot}
-                          className="w-8 h-8 ml-2 text-gray-500"
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+    <div className="bg-app mx-auto" >
+        <div className="min-h-screen flex flex-col">
 
-              <div className="h-2/6 ">
-                <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0  justify-between ">
-                  <div className="flex  mt-2 p-0 ">
-                    <button
-                      onClick={() => {
-                        const newValue = !textToSpeechEnabled;
-                        console.log("Before click:", textToSpeechEnabled);
-                        console.log("Intending to set to:", newValue);
-                        setTextToSpeechEnabled(newValue);
-                      }}
-                      className="p-2 bg-green-800 text-white rounded-md mr-2 ml-2"
-                      style={{  height: "60px" }}
-                    >
-                      {textToSpeechEnabled ? "Disable TTS" : "Enable TTS"}
-                    </button>
-                    <button
-                      style={{ width: "60px", height: "60px" }}
-                      className="p-2 bg-blue-700 text-white rounded-md mr-2"
-                      onClick={() => setShowModal(true)}
-                    >
-                      <FontAwesomeIcon icon={faPlus} />
-                    </button>
-                    {browserSupportsSpeechRecognition && (
-                      <div>
-                        <button
-                          style={{ width: "60px", height: "60px" }}
-                          onClick={() => {
-                            listening
-                              ? SpeechRecognition.stopListening()
-                              : SpeechRecognition.startListening({
-                                  continuous: true,
-                                });
-                          }}
-                          className="p-2 bg-red-700 text-white rounded-md mr-2"
-                        >
-                          <FontAwesomeIcon
-                            icon={listening ? faMicrophoneSlash : faMicrophone}
-                          />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  <div className=" w-full mt-2 justify-end ">
-                    <input
-                      type="text"
-                      value={currentMessage}
-                      onChange={(e) => setCurrentMessage(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleSendMessage();
-                          e.preventDefault(); // Prevent default behavior (like a newline in some browsers)
-                        }
-                      }}
-                      className="w-5/6 p-4 border-t border-b rounded-l-md border-gray-600 bg-gray-500  text-white"
-                      placeholder="Type a message..."
-                      style={{  height: "60px", justifyItems:'end', width: '62%', }}
-                    />
-                    <button
-                      style={{ width: "60px", height: "60px" }}
-                      onClick={handleSendMessage}
-                      className="p-2 bg-gray-700 text-white rounded-r-md"
-                    >
-                      <FontAwesomeIcon icon={faPaperPlane} />
-                    </button>
-                  </div>
-                </div>
+            <NavbarHeader  sidebarToggle={sidebarToggle} />
+            <div className="flex flex-1">
+                {isSidebarVisible &&   <Sidebar />  }
 
-              </div>
+                <main className=" flex-1 p-4 overflow-hidden">
+                {/*MAIN */}
+
+                  <div className="w-full border-t border-gray-600 mb-4">
+                        <PlacesAutocomplete
+                            value={address}
+                            onChange={setAddress}
+                            onSelect={handleSelectAddress} >
+                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div className="relative">
+                                    <input
+                                        {...getInputProps({
+                                            placeholder: "Search Therapists near you ...",
+                                            className: "w-full p-4 border rounded-md border-gray-600 bg-gray-700 text-white"
+                                        })}
+                                    />
+                                    <div className="absolute top-full left-0 mt-2 w-full bg-gray-700 border border-gray-600 z-10">
+                                        {loading && <div className="p-2 text-white">Loading...</div>}
+                                        {suggestions.map(suggestion => (
+                                            <div
+                                                {...getSuggestionItemProps(suggestion, {
+                                                    className: "p-2 text-white hover:bg-gray-600 cursor-pointer"
+                                                })}
+                                            >
+                                                {suggestion.description}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </PlacesAutocomplete>
+
+                    </div>
+
+
+           <div className="absolute  items-center w-5/6 h-4/6 bg-gray-800 p-6 rounded-lg shadow-lg mr-4">
+                        <div className="h-4/6 overflow-y-scroll mb-4 border-b-2 border-gray-600" ref={chatContainerRef}>
+                            {messages.map((message, idx) => {
+                                {/* console.log(message.therapists);  // Log each message to inspect its structure */ }
+
+                                return (
+                                    <div key={idx} className={`flex mb-2 ${message.direction === 'user' ? 'justify-start' : 'justify-end'}`}>
+                                        {message.direction === 'user' && <img src={profileImageUrl} alt="User" className="w-8 h-8 rounded-full object-cover object-center mr-2" />}
+                                        {message.type === "map" ? (
+                                            <div className="h-96 w-3/4 rounded-lg shadow-lg">
+                                                <GoogleMapReact
+                                                    bootstrapURLKeys={{ key: "AIzaSyBv_mtu61MCcuQeyud2XB62OMqBM8n3fKY" }}
+                                                    defaultCenter={{ lat: message.location?.lat, lng: message.location?.lng }}
+                                                    center={{ lat: message.location?.lat, lng: message.location?.lng }}
+                                                    defaultZoom={14}
+                                                    margin={[50, 50, 50, 50]}
+                                                    options={""}
+                                                >
+                                                    <UserMarker
+                                                        lat={message.location?.lat}
+                                                        lng={message.location?.lng}
+                                                    />
+                                                    {message.therapists?.map((therapist, index) => (
+                                                        <TherapistCard
+                                                            key={index}
+                                                            therapist={therapist}
+                                                            lat={therapist.location?.lat}
+                                                            lng={therapist.location?.lng}
+                                                        />
+                                                    ))}
+                                                </GoogleMapReact>
+                                            </div>
+                                        ) : (
+                                            <div className={`text-left p-2 rounded-md ${message.direction === 'user' ? 'bg-blue-400' : 'bg-gray-400'}`}>
+                                                <span dangerouslySetInnerHTML={{ __html: linkify(formatList(message.content)) }} />
+                                            </div>
+                                        )}
+                                        {message.direction === 'ai' && <FontAwesomeIcon icon={faRobot} className="w-8 h-8 ml-2 text-gray-500" />}
+                                    </div>
+                                );
+                            })}
+
+                        </div>
+                        <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0 ">
+
+                            <div  className="mt-2 mb-2 ">
+
+                                {browserSupportsSpeechRecognition && (
+
+                                        <button
+                                            style={{ width: "60px", height: "60px" }}
+                                            onClick={() => {
+                                                listening ? SpeechRecognition.stopListening() : SpeechRecognition.startListening({ continuous: true });
+                                            }}
+                                            className="  bg-red-700 text-white rounded-md mr-2"
+                                        >
+                                            <FontAwesomeIcon icon={listening ? faMicrophoneSlash : faMicrophone} />
+                                        </button>
+
+                                )}
+
+
+                            <button
+                                onClick={() => {
+                                    const newValue = !textToSpeechEnabled;
+                                    console.log("Before click:", textToSpeechEnabled);
+                                    console.log("Intending to set to:", newValue);
+                                    setTextToSpeechEnabled(newValue);
+                                }}
+                                style={{  height: "60px" }}
+                                className="p-2 bg-green-700 text-white rounded-md mr-2" >
+                                {textToSpeechEnabled ? "Disable TTS" : "Enable TTS"}
+                            </button>
+
+                            <button
+                                style={{ width: "60px", height: "60px" }}
+                                className="p-2 bg-blue-700 text-white rounded-md mr-2"
+                                onClick={() => setShowModal(true)}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </button>
+
+                            </div>
+
+                            <div  className="mt-2 mb-2">
+                                <input
+                                    type="text"
+                                    value={currentMessage}
+                                    onChange={e => setCurrentMessage(e.target.value)}
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSendMessage();
+                                            e.preventDefault(); // Prevent default behavior (like a newline in some browsers)
+                                        }
+                                    }}
+                                    className="w-2/3 p-4 border-t border-b rounded-l-md  border-gray-600 bg-gray-700 text-white"
+                                    placeholder="Type a message..."
+                                />
+
+                                <button style={{ width: "60px", height: "53px" }} onClick={handleSendMessage} className="p-2 bg-gray-700 text-white rounded-r-md border-t border-b border-gray-600 bg-gray-700 ">
+                                    <FontAwesomeIcon icon={faPaperPlane} />
+                                </button>
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+
+                {/*EOD MAIN*/}
+                </main>
+
             </div>
-            {/*EOD MAIN*/}
-          </main>
         </div>
-      </div>
     </div>
   );
 };
