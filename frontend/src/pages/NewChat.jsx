@@ -408,7 +408,7 @@ const NewChat = () => {
                 <div className="flex flex-1">
                     {isSidebarVisible &&   <Sidebar />  }
 
-                    <main className=" flex-1 p-4 overflow-hidden">
+                    <main className=" flex-1 p-8 overflow-hidden">
                     {/*MAIN */}
 
                      <div className="  ml-2 border-t border-gray-600 w-3/6 mb-4 justify-content-end align-items-end">

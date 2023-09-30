@@ -142,13 +142,13 @@ const HomePage = () => {
                 <div className="flex flex-1">
                     {isSidebarVisible &&   <Sidebar />  }
 
-                    <main className=" flex-1 p-4 overflow-hidden">
+                    <main className=" flex-1 p-8 overflow-hidden">
                     {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-4  mr-4  mt-4 mb-4">
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-4  mr-4  mt-0 mb-0">
                         <h1>Welcome, {userName}</h1>
                     </div>
 
-                     <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 text-white w-full pl-4 ">
+                     <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 lg:bottom-2 text-white w-full pl-0 ">
 
 
                         {/* START welcome and emotion */}

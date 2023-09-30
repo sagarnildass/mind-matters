@@ -101,7 +101,7 @@ const UserLocationPage = () => {
                 <div className="flex flex-1">
                     {isSidebarVisible &&   <Sidebar />  }
 
-                    <main className=" flex-1 p-4 overflow-hidden">
+                    <main className=" flex-1 p-8 overflow-hidden">
                     {/*MAIN */}
 
                     {/* Search Bar positioned above the map */}

@@ -42,9 +42,9 @@ const ChatPage = () => {
                 <div className="flex flex-1">
                     {isSidebarVisible &&   <Sidebar />  }
 
-                    <main className=" flex-1 p-4 overflow-hidden">
+                    <main className=" flex-1 p-8 overflow-hidden">
                     {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-4 mt-4 mb-8">
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-4 mt-0 mb-0">
                         <h1>Your Recent Chat History</h1>
                     </div>
 
