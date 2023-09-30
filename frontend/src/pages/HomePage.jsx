@@ -152,7 +152,7 @@ const HomePage = () => {
 
 
                         {/* START welcome and emotion */}
-                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0 mr-8">
+                        <div className="flex flex-col space-y-4 lg:mb-0 mt-2 mr-8">
 
                             <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-8 md:text-center sm:text-center">Your Recent Top Emotions</h2>
                             <div className="container mx-auto   grid grid-cols-3 ">
@@ -177,7 +177,7 @@ const HomePage = () => {
 
 
                         {/*START week summary */}
-                        <div className="flex flex-col space-y-2 mt-0 ml-4 mr-8">
+                        <div className="flex flex-col space-y-2 mt-0 ml-0 mr-8">
                             <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-8 md:text-center sm:text-center mb-0">This Week Summary</h2>
                             <div  className="  ">
                             <div className="flex space-x-2 mt-4 ">
@@ -196,7 +196,7 @@ const HomePage = () => {
 
                         {/*START Quote */}
                         <div className="2xl:w-4/12 xl:w-4/12 lg:w-4/12 md:w-12/12 sm:w-12/12 md:mr-4 sm:mr-4"   >
-                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0 ml-4 mr-4">
+                        <div className="flex flex-col space-y-4 lg:mb-0 ml-0 mt-2 mr-8">
                                 <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-8 md:text-center sm:text-center">Quote of the Day</h2>
                                 <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
                         </div>
