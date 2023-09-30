@@ -44,7 +44,7 @@ const ChatPage = () => {
 
                     <main className=" flex-1 p-8 overflow-hidden">
                     {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-0  mr-0  mt-0 mb-0">
+                     <div className="left-0 top-0 text-white text-xl 2xl:text-3xl font-bold ml-0  mr-0  mt-0 mb-0">
                         <h1>Your Recent Chat History</h1>
                     </div>
 
@@ -71,7 +71,47 @@ const ChatPage = () => {
                 </div>
 
 
-
+<div className="flex mt-0 p-0 w-full w-100">
+                  {showModal && (
+                    <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center">
+                      <div className="bg-white p-4 rounded-md shadow-lg w-1/3">
+                        <input
+                          type="file"
+                          onChange={(e) => setSelectedFile(e.target.files[0])}
+                        />
+                        <textarea
+                          className="border p-2 w-full mt-2"
+                          placeholder="Describe the image or ask a question..."
+                          onChange={(e) => setImageDescription(e.target.value)}
+                        ></textarea>
+                        <button
+                          className="bg-blue-500 text-white p-2 mt-2 rounded"
+                          onClick={handleImageUpload}
+                        >
+                          Upload and Send
+                        </button>
+                        <button
+                          className="bg-red-500 text-white p-2 mt-2 rounded ml-2"
+                          onClick={() => setShowModal(false)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <Webcam
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={{ width: 320, height: 240 }} // Adjust for a smaller resolution
+                    style={{
+                      position: "fixed",
+                      bottom: "80px",
+                      right: "20px",
+                      width: "200px",
+                      height: "150px", // Adjust the width and height to make it much smaller and in bottom right
+                    }}
+                  />
+                </div>
 
 
                      </div>

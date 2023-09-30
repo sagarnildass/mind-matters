@@ -36,62 +36,62 @@ const Sidebar = () => {
                         {/* Dashboard */}
                         <li>
                             <Link to="/" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faHome} className="h-5 w-5 ml-1 text-blue-500" />
-                                <span className="ml-3">Home</span>
+                                <FontAwesomeIcon icon={faHome} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Home</span>
                             </Link>
                         </li>
                         {/* Chat */}
                         <li>
                             <Link to="/chat" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faComment} className="h-5 w-5 ml-1 text-blue-500" />
-                                <span className="ml-3">Chat</span>
+                                <FontAwesomeIcon icon={faComment} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Chat</span>
                             </Link>
                         </li>
                         {/* AI Interactions */}
                         {/* <li>
                             <Link to="/ai-interactions" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faBrain} className="h-5 w-5 ml-1 text-blue-500" />
-                                <span className="ml-3">AI Interactions</span>
+                                <FontAwesomeIcon icon={faBrain} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">AI Interactions</span>
                             </Link>
                         </li> */}
                         {/* Feedback */}
                         {/* <li>
                             <Link to="/feedback" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faStar} className="h-5 w-5 ml-1 text-blue-500" />
-                                <span className="ml-3">Feedback</span>
+                                <FontAwesomeIcon icon={faStar} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Feedback</span>
                             </Link>
                         </li> */}
                         <li>
                             <Link to="/therapists-nearby" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faPuzzlePiece} className="h-5 w-5 ml-1 text-blue-500" />
-                                <span className="ml-3">Nearby Therapists</span>
+                                <FontAwesomeIcon icon={faPuzzlePiece} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Nearby Therapists</span>
                             </Link>
                         </li>
                         {/* Emergency Contacts */}
                         <li>
                             <Link to="/emergency-contacts" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faPhone} className="h-5 w-5 ml-1 text-blue-500" />
-                                <span className="ml-3">Emergency Contacts</span>
+                                <FontAwesomeIcon icon={faPhone} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Emergency Contacts</span>
                             </Link>
                         </li>
                         {/* Article Recommendations */}
                         {/* <li>
                             <Link to="/article-recommendations" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faBook} className="h-5 w-5 ml-1 text-blue-500" />
+                                <FontAwesomeIcon icon={faBook} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
                                 <span className="ml-3">Article Recommendations</span>
                             </Link>
                         </li> */}
                         {/* Settings */}
                         {/* <li>
                             <Link to="/settings" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faCogs} className="h-5 w-5 ml-1 text-blue-500" />
+                                <FontAwesomeIcon icon={faCogs} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
                                 <span className="ml-3">Settings</span>
                             </Link>
                         </li> */}
                         {/* Support & Help */}
                         {/* <li>
                             <Link to="/help" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
-                                <FontAwesomeIcon icon={faQuestionCircle} className="h-5 w-5 ml-1 text-blue-500" />
+                                <FontAwesomeIcon icon={faQuestionCircle} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
                                 <span className="ml-3">Support & Help</span>
                             </Link>
                         </li> */}

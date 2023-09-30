@@ -142,23 +142,23 @@ const HomePage = () => {
                 <div className="flex flex-1">
                     {isSidebarVisible &&   <Sidebar />  }
 
-                    <main className=" flex-1 p-8 overflow-hidden">
+                    <main className="  flex-1 xs:p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 xxl:p-16 2xl:p-20 3xl:p-24   flex-1  overflow-hidden">
                     {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-0  mr-0  mt-0 mb-0">
+                     <div className="left-0 top-0 text-white text-xl 2xl:text-3xl font-bold ml-0  mr-0  mt-0 mb-0">
                         <h1>Welcome, {userName}</h1>
                     </div>
 
-                     <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 lg:bottom-2 text-white w-full pl-0 "   style={{
+                     <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 lg:bottom-2 text-white w-full pl-0 "
+                     style={{
                         display: 'flex',
                         justifyContent: 'center',
-
                     }}>
 
 
                         {/* START welcome and emotion */}
-                        <div className="flex flex-col space-y-4 lg:mb-0  justify-center mt-2 mr-8">
+                        <div className="flex flex-col space-y-4 lg:mb-0  justify-center mt-0 mr-8">
 
-                            <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-8 md:text-center sm:text-center">Your Recent Top Emotions</h2>
+                            <h2 className="text-white text-l lg:text-l md:text-lg mt-4 sm:text-center">Your Recent Top Emotions</h2>
                             <div className="container mx-auto   grid grid-cols-3 ">
                                 {topEmotions.map((emotion, index) => (
                                     <div className=" mr-2 ">
@@ -182,7 +182,7 @@ const HomePage = () => {
 
                         {/*START week summary */}
                         <div className="flex flex-col space-y-2 mt-0 ml-0 mr-8">
-                            <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-8 md:text-center sm:text-center mb-0">This Week Summary</h2>
+                            <h2 className="text-white text-l lg:text-l md:text-lg mt-4 sm:text-center mb-0">This Week Summary</h2>
                             <div  className="  ">
                             <div className="flex space-x-2 mt-4 ">
                                 <Card className=" ">
@@ -201,7 +201,7 @@ const HomePage = () => {
                         {/*START Quote */}
                         <div className="2xl:w-4/12 xl:w-4/12 lg:w-4/12 md:w-12/12 sm:w-12/12 md:mr-4 sm:mr-4"   >
                         <div className="flex flex-col space-y-4 lg:mb-0 ml-0 mt-2 mr-8">
-                                <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-8 md:text-center sm:text-center">Quote of the Day</h2>
+                                <h2 className="text-white text-l lg:text-l md:text-lg mt-4 sm:text-center">Quote of the Day</h2>
                                 <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
                         </div>
                         </div>
@@ -212,7 +212,7 @@ const HomePage = () => {
                      <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4 " >
 
 
-                         <div className="2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-12/12 mt-0 mr-8" >
+                         <div className="2xl:w-5/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-12/12 mt-0 mr-8" >
 
                                 {/*START ARTICLE */}
                                <div className="d-flex flex-row   mt-2  ">
@@ -232,7 +232,7 @@ const HomePage = () => {
 
 
 
-                    <div className="2xl:w-5/12 xl:w-5/12 lg:w-5/12 md:w-5/12 sm:w-12/12  mt-0 mr-8 ">
+                    <div className="2xl:w-6/12 xl:w-5/12 lg:w-5/12 md:w-5/12 sm:w-12/12  mt-10 mr-8 ">
                         {dailyChallenge && dailyChallenge.challenge_id && (
                             <div className="w-full  mt-8 mr-8 ">
                                 <Card className="h-full">
