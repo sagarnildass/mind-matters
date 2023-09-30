@@ -7,7 +7,7 @@ import {
 } from '../utils/EmergencyContactSlice';
 import { fetchUserData } from '../utils/userSlice';
 import { fetchSimilarUsers, selectSimilarUsers } from '../utils/similarUsersSlice';  // Import the slice for fetching similar users
-import Navbar from '../components/Navbar';
+import NavbarHeader from '../components/NavbarHeader';
 import Sidebar from '../components/Sidebar';
 import signupBg from '../assets/signup-bg.png';
 import Card from '../components/Card';
@@ -25,6 +25,13 @@ const EmergencyContactPage = () => {
         email: '',
         relation: '',
     });
+
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+    const sidebarToggle = async () => {
+        setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);
+    };
+
 
     useEffect(() => {
         if (token) {
@@ -56,20 +63,25 @@ const EmergencyContactPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen overflow-x-hidden">
-            <Sidebar />
-            <div className="flex-1 relative">
-                <div
-                    className="w-full h-full"
-                    style={{
-                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${signupBg})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
-                <Navbar />
-                <div className="absolute w-full top-[100px] flex flex-col items-center">
-                    <h2 className="text-3xl text-white mt-4">Your Emergency Contacts</h2>
+             <div className="bg-app mx-auto" >
+            <div className="min-h-screen flex flex-col">
+
+                <NavbarHeader  sidebarToggle={sidebarToggle} />
+                <div className="flex flex-1">
+                    {isSidebarVisible &&   <Sidebar />  }
+
+                    <main className=" flex-1 p-4 overflow-hidden">
+                    {/*MAIN */}
+
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-4">
+                        <h1>Your Emergency Contacts</h1>
+                    </div>
+
+
+
+
+                    <div className=" w-full top-[10px] flex flex-col items-center">
+                    <h2 className="text-3xl text-white mt-4"></h2>
                     <div className="mt-6 w-3/4 flex flex-wrap justify-center">
                         {emergencyContacts.length > 0 ? (
                             emergencyContacts.map(contact => (
@@ -156,6 +168,12 @@ const EmergencyContactPage = () => {
                             </form>
                         </div>
                     )}
+                </div>
+
+
+                    {/*EOD MAIN*/}
+                    </main>
+
                 </div>
             </div>
         </div>
