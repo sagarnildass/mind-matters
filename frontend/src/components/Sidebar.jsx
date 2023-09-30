@@ -37,41 +37,41 @@ const Sidebar = () => {
                         <li>
                             <Link to="/" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faHome} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
-                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Home</span>
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-8 2xl:mr-16 ">Home</span>
                             </Link>
                         </li>
                         {/* Chat */}
                         <li>
                             <Link to="/chat" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faComment} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
-                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Chat</span>
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-8 2xl:mr-16 ">Chat</span>
                             </Link>
                         </li>
                         {/* AI Interactions */}
                         {/* <li>
                             <Link to="/ai-interactions" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faBrain} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
-                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">AI Interactions</span>
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-8 2xl:mr-16 ">AI Interactions</span>
                             </Link>
                         </li> */}
                         {/* Feedback */}
                         {/* <li>
                             <Link to="/feedback" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faStar} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
-                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Feedback</span>
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-8 2xl:mr-16 ">Feedback</span>
                             </Link>
                         </li> */}
                         <li>
                             <Link to="/therapists-nearby" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faPuzzlePiece} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
-                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Nearby Therapists</span>
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-8 2xl:mr-16 ">Nearby Therapists</span>
                             </Link>
                         </li>
                         {/* Emergency Contacts */}
                         <li>
                             <Link to="/emergency-contacts" className="flex items-center p-2 text-gray-200 rounded-lg dark:text-white hover:bg-gray-800 dark:hover:bg-gray-700">
                                 <FontAwesomeIcon icon={faPhone} className="h-6 w-6 2xl:h-8 2xl:w-8 ml-2 text-blue-400 " />
-                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-16 2xl:mr-16 ">Emergency Contacts</span>
+                                <span className="ml-4 mr-4 text-xl 2xl:text-3xl 2xl:ml-8 2xl:mr-16 ">Emergency Contacts</span>
                             </Link>
                         </li>
                         {/* Article Recommendations */}
