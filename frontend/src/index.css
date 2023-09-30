@@ -148,6 +148,18 @@ width:100%;
     }
 }
 
+@media only screen and (max-width: 600px) {
+  body {
+/*
+    background-color: lightblue;
+*/
+  }
+
+   .hide_newchat_text{
+    display: none;
+    }
+}
+
 .prompt::-webkit-scrollbar {
     width: 5px;
 }
