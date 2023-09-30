@@ -13,11 +13,7 @@ const RecentChatSummary = () => {
     });
 
     return (
-        <div className="absolute top-28 right-2 w-1/4 p-4 rounded-3xl shadow-lg" // Used absolute positioning
-            style={{
-                backgroundImage: 'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)',
-                Color: 'rgba(0, 0, 0, 0.87)'
-            }}
+        <div className="absolute top-28 right-2 w-1/4 p-4 rounded-3xl shadow-lg my-card-bg" // Used absolute positioning
         >
             <h3 className="text-xl font-bold mb-2 text-white">Recent Chat</h3>
             <div className="text-m mb-2">

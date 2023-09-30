@@ -105,14 +105,10 @@ const EmotionTimeSeriesChart = ({ data }) => {
 
     return (
         <div
-            className="container mx-auto rounded-3xl border border-gray-800 shadow-lg p-4 mt-2 mb-2 grid grid-cols-3 gap-1"
-            style={{
-                backgroundImage: 'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)'
-            }}
-        >
+            className="container mx-auto rounded-3xl border border-gray-800 shadow-lg p-4 mt-2 mb-2 grid grid-cols-1 gap-1 my-card-bg" >
             <h2 className="text-m font-bold mb-1 text-white col-span-3">Emotions Over Time</h2>
             {chartData.map(({ name, data }, index) => (
-                <div className="col-span-1" key={name}>
+                <div className="col-span-1 w-full" key={name}>
                     <div onClick={() => handleChartClick(name, data, colors[index])} className="cursor-pointer">  {/* Wrap the chart in a clickable div */}
                         <SingleEmotionChart emotionName={name} emotionData={data} color={colors[index]} />
                     </div>
