@@ -188,25 +188,42 @@ const HomePage = () => {
                         {/*END week summary */}
 
                         {/*START Quote */}
-                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0">
-                                <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">Quote of the Day</h2>
+                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0 ml-4 mr-4">
+                                <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4 ">Quote of the Day</h2>
                                 <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
                         </div>
                         {/*END Quote */}
                     </div>
 
 
+                     <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4 " >
+
+
+                     <div className="" >
+
                         {/*START ARTICLE */}
                        <div className="d-flex flex-row   mt-2  ">
-
-                        <div className="w-full lg:w-6/12 mt-4    flex    ">
-                            <RecommendedArticlesCarousel articles={recommendedArticles} />
+                            <div className="w-full lg:w-6/12 mt-4    flex    ">
+                                <RecommendedArticlesCarousel articles={recommendedArticles} />
+                            </div>
                         </div>
+                        {/*END ARTICLE */}
 
-                        <div className="w-full lg:w-6/12 mt-4    flex  ">
+                        {/*START EMOTION DATA */}
+                        <div className="w-full lg:w-6/12 mt-0 lg:mt-0 ">
+                            <EmotionTimeSeriesChart data={emotionData} />
+                        </div>
+                        {/*END EMOTION DATA */}
 
-                        {dailyChallenge && dailyChallenge.challenge_id && (
-                        <div className="w-full   ">
+                       </div>
+
+
+
+
+
+
+                    {dailyChallenge && dailyChallenge.challenge_id && (
+                        <div className="w-full mx-10   ">
                             <Card className="h-full">
                                 <div className="p-3 flex flex-col h-full">
                                     <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
@@ -223,19 +240,8 @@ const HomePage = () => {
                             </Card>
                         </div>
                     )}
-                    </div>
-                      </div>
-                        {/*END ARTICLE */}
 
-                        {/*START EMOTION DATA */}
-                        <div className="w-full lg:w-6/12 mt-0 lg:mt-0 ">
-                            <EmotionTimeSeriesChart data={emotionData} />
-                        </div>
-                        {/*END EMOTION DATA */}
-
-
-
-
+ </div>
 
                     {/*END MAIN*/}
                     </main>
