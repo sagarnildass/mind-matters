@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecentChat, selectRecentChat } from '../utils/recentChatSlice';
 
-import Navbar from '../components/Navbar';
+import NavbarHeader from '../components/NavbarHeader';
+
 import Sidebar from '../components/Sidebar';
 import signupBg from '../assets/signup-bg.png';
 import ChatCards from '../components/ChatCards';
@@ -26,25 +27,36 @@ const ChatPage = () => {
 
     const userId = useSelector(state => state.user.user_id);
 
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+
+    const sidebarToggle = async () => {
+        setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);
+        //alert("Ok");
+    };
+
     return (
-        <div className="flex min-h-screen overflow-x-hidden">
-            <Sidebar />
-            <div className="flex-1 relative">
-                <div
-                    className="w-full h-full fixed top-0 left-0 z-0"
-                    style={{
-                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${signupBg})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center'
-                    }}
-                />
-                <Navbar />
+               <div className="bg-app mx-auto" >
+            <div className="min-h-screen flex flex-col">
 
-                <div className="absolute w-full top-1/4 flex flex-col items-center">
+                <NavbarHeader  sidebarToggle={sidebarToggle} />
+                <div className="flex flex-1">
+                    {isSidebarVisible &&   <Sidebar />  }
+
+                    <main className=" flex-1 p-8 overflow-hidden">
+                    {/*MAIN */}
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-0  mr-0  mt-0 mb-0">
+                        <h1>Your Recent Chat History</h1>
+                    </div>
+
+
+
+
+                     <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4 " >
+
+
+                    <div className=" w-full top-2/4 flex flex-col items-center">
                     {/* Here's the new heading */}
-                    <h2 className="text-3xl text-white mt-4">Your Recent Chat History</h2>
-
-                    <div className="mt-6 w-3/4 flex flex-wrap justify-start">
+                    <div className="mt-4 w-3/4 flex flex-wrap justify-start">
                         {recentChats.slice(-5).map(chat => (
                             <ChatCards className="flex-grow" key={chat.session_id}>
                                 <ChatcardContent title={`Session ${chat.session_id}`} number={chat.content} userId={userId} sessionId={chat.session_id} />
@@ -56,6 +68,17 @@ const ChatPage = () => {
                             Start New Chat
                         </button>
                     </Link>
+                </div>
+
+
+
+
+
+                     </div>
+
+                    {/*END MAIN*/}
+                    </main>
+
                 </div>
             </div>
         </div>

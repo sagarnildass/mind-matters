@@ -7,6 +7,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import signupBg from '../assets/signup-bg.png';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import NavbarHeader from '../components/NavbarHeader';
 
 import { fetchUserData, selectUsername } from '../utils/userSlice';  // Import the fetchUserData action and the selectUsername selector
 
@@ -20,7 +21,12 @@ const ProfilePage = () => {
     const [profileImageUrl, setProfileImageUrl] = useState(null);
     const [showUploadCard, setShowUploadCard] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
+    const sidebarToggle = async () => {
+        setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);
+        //alert("Ok");
+    };
 
     useEffect(() => {
 
@@ -79,31 +85,28 @@ const ProfilePage = () => {
     };
 
     return (
-        <div className="flex min-h-screen overflow-x-hidden">
-            <Sidebar />
-            <div className="flex-1 relative">
-                <div className="relative h-full">
-                    <div
-                        className="w-full h-full"
-                        style={{
-                            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${signupBg})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    />
-                    <Navbar />
+                <div className="bg-app mx-auto" >
+            <div className="min-h-screen flex flex-col">
 
-                    <div className="absolute top-[30%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 text-center">
+                <NavbarHeader  sidebarToggle={sidebarToggle} />
+                <div className="flex flex-1">
+                    {isSidebarVisible &&   <Sidebar />  }
+
+                    <main className=" flex-1 p-4 overflow-hidden">
+                    {/*MAIN */}
+
+
+                     <div className="   text-center">
                         <div className="text-white">
                             {/* User Information Section */}
                             {profileImageUrl ? (
-                                <img src={profileImageUrl} alt="Profile" className="h-64 w-64 mx-auto rounded-full object-cover object-center" />
+                                <img src={profileImageUrl} alt="Profile" className="h-32 w-32 mx-auto rounded-full object-cover object-center" />
                             ) : (
-                                <div className="h-64 w-64 mx-auto bg-gray-600 rounded-full flex items-center justify-center">
+                                <div className="h-32 w-32 mx-auto bg-gray-600 rounded-full flex items-center justify-center">
                                     <FontAwesomeIcon icon={faUser} className="text-6xl text-white" />
                                 </div>
                             )}
-                            <h1 className="text-4xl font-bold mt-8">{firstName} {lastName}</h1>
+                            <h1 className="text-2xl font-bold mt-8">{firstName} {lastName}</h1>
                             <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 focus:outline-none" onClick={handleProfileImageChange}>
                                 Change Profile Picture
                             </button>
@@ -142,6 +145,10 @@ const ProfilePage = () => {
                             </div>
                         )}
                     </div>
+
+                    {/*EOD MAIN*/}
+                    </main>
+
                 </div>
             </div>
         </div>

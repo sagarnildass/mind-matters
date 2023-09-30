@@ -6,12 +6,11 @@ import signupDesign from '../assets/signup-design.png';
 
 const Login = () => {
     return (
-        <div
+        <div className="bg-app"
             style={{
-                backgroundImage: `url(${signupBg})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
-                height: '100vh',
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -57,7 +56,7 @@ const Login = () => {
                             marginBottom: '1rem',
                         }}
                     >
-                        ARTELUS INFERENCE ENGINE
+                        MIND MATTERS
                     </div>
                 </div>
                 <div

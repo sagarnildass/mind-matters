@@ -8,12 +8,18 @@ from app.core.database import get_db
 from app.core.authentication import get_current_user
 import shutil
 import boto3
+from dotenv import load_dotenv, find_dotenv
+
 
 from app.core.models import User
 
 router = APIRouter()
+load_dotenv(find_dotenv())
 
-s3 = boto3.client('s3')
+# AWS S3 credentials
+aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 BUCKET_NAME = "artelus-mental-health"
 SUB_FOLDER = "profile-pictures"
 CLOUDFRONT_URL = "https://d1xgv8sy7k5ere.cloudfront.net"

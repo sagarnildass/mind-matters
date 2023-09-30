@@ -13,10 +13,144 @@
 
 
 
+
 body {
     margin: 0;
     line-height: normal;
+   /* width: 200%;
+     height: 200%;
+   transform-origin: top left;
+    transform: scale(50%);*/
 }
+
+/**
+ * 1. Use the system font stack as a sane default.
+ * 2. Use Tailwind's default "normal" line-height so the user isn't forced
+ * to override it to ensure consistency even when using the default theme.
+  * 3. Prevent padding and border from affecting element width
+ * https://goo.gl/pYtbK7
+ * 4. Change the default font family in all browsers (opinionated)
+ * 5. Correct the line height in all browsers.
+ * 6. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+html {
+/*    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";*/ /* 1 */
+    /*    line-height: 1.5;  */
+    line-height: normal;
+
+    box-sizing: border-box; /* 3 */
+    font-family: sans-serif; /* 4 */
+    /* line-height: 1.15;*/ /* 5 */
+    -webkit-text-size-adjust: 100%; /* 6 */
+
+
+    zoom: .90;
+
+
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("assets/signup-bg.png");
+    background-size: cover;
+    background-position: center;
+}
+
+
+.bg-nav {
+  /*background-color: #00008B;*/
+-webkit-box-shadow: 8px 8px 32px 4px rgba(0,0,0,0.2);
+-moz-box-shadow: 8px 8px 32px 4px rgba(0,0,0,0.2);
+box-shadow: 8px 8px 32px 4px rgba(0,0,0,0.2);
+
+    /* box-shadow: 8px 8px 32px 4px rgba(0,0,0,12.2); */
+  /*  position: absolute;
+    width: 100%;*/
+/*-webkit-box-shadow: 8px 8px 48px 4px rgba(0,0,0,0.4);
+-moz-box-shadow: 8px 8px 48px 4px rgba(0,0,0,0.4);
+box-shadow: 8px 8px 48px 4px rgba(0,0,0,0.4);*/
+}
+
+
+.bg-app {
+
+/*  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("assets/signup-bg.png");
+        background-size: cover;
+        background-position: center;*/
+/*
+  background-image: url("assets/signup-bg.png");
+*/
+
+/*backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("assets/signup-bg.png")`;
+             backgroundSize: 'cover';
+              backgroundPosition: 'center';*/
+}
+
+.bg-card-my{
+background-color: rgba(0,0,0,0.3);
+width:100%;
+   /*   backgroundImage: 'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)';
+      Color: 'rgba(0, 0, 0, 0.87)';*/
+
+}
+
+
+
+ ._logo_15l4f_35{
+    top: 12px;
+    left: 20px;
+
+/*    position: absolute;
+    right: 20px;
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;*/
+}
+
+.text-gradient-white {
+
+/*    position: absolute;
+    top: 24px;
+    left: 44px;*/
+    letter-spacing: 0.18em;
+    line-height: 100%;
+    font-weight: 500;
+    background: linear-gradient(97.89deg, #fff, rgba(117, 122, 140, 0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+
+.bg-side-nav {
+/*  background-color: #00008B;*/
+    position: absolute;
+    height: 200%;
+    background-image: linear-gradient(rgba(23, 23, 53, 1.0), rgba(23, 23, 53, 1.0));
+    -webkit-box-shadow: 8px 8px 32px 4px rgba(133,133,133,0.2);
+    -moz-box-shadow: 8px 8px 32px 4px rgba(133,133,133,0.2);
+    box-shadow: 8px 8px 32px 4px rgba(133,133,133,0.2);
+    z-index:9999;
+}
+
+.bg-nav-item {
+  background-color: #626b7a;
+}
+
+.my-card-bg {
+background-image: linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)
+}
+
+
+.fullscreen {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  /* extra fullscreen guarantees - you might not need the rest */
+  top: 0;
+  left: 0;
+}
+
 
 * {
     font-family: 'Inter', sans-serif;
@@ -26,6 +160,18 @@ body {
     .card:nth-child(7n + 1) {
         grid-column: auto/span 2;
         grid-row: auto/span 2;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+/*
+    background-color: lightblue;
+*/
+  }
+
+   .hide_newchat_text{
+    display: none;
     }
 }
 
@@ -104,5 +250,4 @@ body {
     width: 100%;
     box-sizing: border-box;
   }
-  
   

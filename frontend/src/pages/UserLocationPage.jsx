@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";  // assuming you have Navbar in a separate file
+import NavbarHeader from '../components/NavbarHeader';
 import Sidebar from "../components/Sidebar";  // and Sidebar too
 import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
@@ -13,7 +13,12 @@ const UserLocationPage = () => {
     const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
     const [userLocation, setUserLocation] = useState(null);
     const [therapistLocations, setTherapistLocations] = useState([]);
+   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
+    const sidebarToggle = async () => {
+        setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);
+        //alert("Ok");
+    };
     useEffect(() => {
         requestUserLocation();
     }, []);
@@ -89,22 +94,18 @@ const UserLocationPage = () => {
     }, [therapistLocations]);
 
     return (
-        <div className="flex min-h-screen overflow-x-hidden">
-            <Sidebar />
-            <div className="flex-1 relative">
-                <div className="relative h-full">
-                    <div
-                        className="w-full h-full"
-                        style={{
-                            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${signupBg})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    />
-                    <Navbar />
+               <div className="bg-app mx-auto" >
+            <div className="min-h-screen flex flex-col">
+
+                <NavbarHeader  sidebarToggle={sidebarToggle} />
+                <div className="flex flex-1">
+                    {isSidebarVisible &&   <Sidebar />  }
+
+                    <main className=" flex-1 xs:p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 xxl:p-16 2xl:p-16 3xl:p-16 overflow-hidden  ">
+                    {/*MAIN */}
 
                     {/* Search Bar positioned above the map */}
-                    <div className="absolute top-40 left-1/2 transform -translate-x-1/2 w-8/12 px-4 py-2 z-10">
+                    <div className=" top-2    px-4 py-2 z-10">
                         <PlacesAutocomplete
                             value={address}
                             onChange={setAddress}
@@ -135,8 +136,13 @@ const UserLocationPage = () => {
                         </PlacesAutocomplete>
                     </div>
 
+
+
+
+
+
                     {/* Map positioned below the search bar */}
-                    <div className="absolute top-60 left-80 w-3/4 h-3/4 z-0">
+                    <div className=" top-4 ml-4 mr-4 w-100 fullscreen z-0">
                         <GoogleMapReact
                             bootstrapURLKeys={{ key: "AIzaSyBv_mtu61MCcuQeyud2XB62OMqBM8n3fKY" }}
                             defaultCenter={{ lat: userLocation?.lat || 0, lng: userLocation?.lng || 0 }}
@@ -157,6 +163,10 @@ const UserLocationPage = () => {
                             ))}
                         </GoogleMapReact>
                     </div>
+
+                    {/*EOD MAIN*/}
+                    </main>
+
                 </div>
             </div>
         </div>
