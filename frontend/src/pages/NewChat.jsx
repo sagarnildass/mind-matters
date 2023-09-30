@@ -529,7 +529,7 @@ const NewChat = () => {
                             })}
 
                         </div>
-                        <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0 ">
+                        <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0 justify-between">
 
                             <div  className="mt-2 mb-2 ">
 
