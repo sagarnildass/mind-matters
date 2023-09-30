@@ -529,7 +529,7 @@ const NewChat = () => {
                             })}
 
                         </div>
-                        <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0 justify-between">
+                        <div className="">
 
                             <div  className="mt-2 mb-2 ">
 
@@ -569,7 +569,7 @@ const NewChat = () => {
 
                             </div>
 
-                            <div  className="mt-2 mb-2">
+                            <div  className="mt-2 mb-2 flex  justify-end items-end	">
                                 <input
                                     type="text"
                                     value={currentMessage}
