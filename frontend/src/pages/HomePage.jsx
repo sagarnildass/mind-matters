@@ -156,7 +156,8 @@ const HomePage = () => {
                             <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">Your Recent Top Emotions</h2>
                             <div className="container mx-auto   grid grid-cols-3 ">
                                 {topEmotions.map((emotion, index) => (
-                                    <Card key={index} className="flex-1 md:w-11/12  "> {/* Adjust widths */}
+                                    <div className=" mr-2 ">
+                                    <Card key={index} className=" "> {/* Adjust widths */}
                                         <CardContentNum
                                             title={emotion[0]}
                                             number={
@@ -166,6 +167,7 @@ const HomePage = () => {
                                             }
                                         />
                                     </Card>
+                                    </div>
                                 ))}
                             </div>
                         </div>
