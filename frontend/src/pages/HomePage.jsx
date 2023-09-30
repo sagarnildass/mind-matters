@@ -219,7 +219,7 @@ const HomePage = () => {
                                 {/*END ARTICLE */}
 
                                 {/*START EMOTION DATA */}
-                                <div className="w-full lg:w-12/12 mt-0 lg:mt-0 ">
+                                <div className="d-flex flex-row   mt-2 ">
                                     <EmotionTimeSeriesChart data={emotionData} />
                                 </div>
                                 {/*END EMOTION DATA */}
@@ -228,25 +228,26 @@ const HomePage = () => {
 
 
 
-
-                    {dailyChallenge && dailyChallenge.challenge_id && (
-                        <div className="w-full  mt-8 mr-8 ">
-                            <Card className="h-full">
-                                <div className="p-3 flex flex-col h-full">
-                                    <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
-                                    <img
-                                        src={dailyChallenge.image_url}
-                                        alt={dailyChallenge.challenge_name}
-                                        className="flex-grow object-cover rounded"
-                                    />
-                                    <div className="mt-10 flex flex-col justify-end flex-grow mb-10">
-                                        <h3 className="text-white text-2xl text-center font-bold mb-2 mt-2">{dailyChallenge.challenge_name}</h3>
-                                        <p className="text-m text-gray-400 text-center mt-1">{dailyChallenge.challenge_description}</p>
+                    <div className="  mt-0 mr-8 ">
+                        {dailyChallenge && dailyChallenge.challenge_id && (
+                            <div className="w-full  mt-8 mr-8 ">
+                                <Card className="h-full">
+                                    <div className="p-3 flex flex-col h-full">
+                                        <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
+                                        <img
+                                            src={dailyChallenge.image_url}
+                                            alt={dailyChallenge.challenge_name}
+                                            className="flex-grow object-cover rounded"
+                                        />
+                                        <div className="mt-10 flex flex-col justify-end flex-grow mb-10">
+                                            <h3 className="text-white text-2xl text-center font-bold mb-2 mt-2">{dailyChallenge.challenge_name}</h3>
+                                            <p className="text-m text-gray-400 text-center mt-1">{dailyChallenge.challenge_description}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </Card>
-                        </div>
-                    )}
+                                </Card>
+                            </div>
+                        )}
+                    </div>
 
  </div>
 
