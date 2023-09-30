@@ -44,7 +44,9 @@ html {
     /* line-height: 1.15;*/ /* 5 */
     -webkit-text-size-adjust: 100%; /* 6 */
 
-    zoom: .65;
+
+    zoom: .90;
+
 
 
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("assets/signup-bg.png");
