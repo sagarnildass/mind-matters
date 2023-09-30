@@ -232,7 +232,7 @@ const HomePage = () => {
 
 
 
-                    <div className="2xl:w-6/12 xl:w-5/12 lg:w-5/12 md:w-5/12 sm:w-12/12  mt-10 mr-8 ">
+                    <div className="2xl:w-6/12 xl:w-5/12 lg:w-5/12 md:w-5/12 sm:w-12/12  mt-11 mr-8 ">
                         {dailyChallenge && dailyChallenge.challenge_id && (
                             <div className="w-full  mt-8 mr-8 ">
                                 <Card className="h-full">
