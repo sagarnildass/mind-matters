@@ -144,14 +144,15 @@ const HomePage = () => {
 
                     <main className=" flex-1 p-4 overflow-hidden">
                     {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-4">
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-4 mt-4 mb-8">
                         <h1>Welcome, {userName}</h1>
                     </div>
 
                      <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 text-white w-full pl-4 ">
 
+
                         {/* START welcome and emotion */}
-                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0">
+                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0 mr-8">
 
                             <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">Your Recent Top Emotions</h2>
                             <div className="container mx-auto   grid grid-cols-3 ">
@@ -176,23 +177,27 @@ const HomePage = () => {
 
 
                         {/*START week summary */}
-                        <div className="flex flex-col space-y-2 mt-4 ml-4 mr-4">
+                        <div className="flex flex-col space-y-2 mt-4 ml-4 mr-8">
                             <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-2 mb-2">This Week Summary</h2>
                             <div className="flex space-x-2 mt-4 ">
-                                <Card className="flex-shrink w-2/3 ">
+                                <Card className=" ">
                                     <CardContent title="Total Sessions" number={weeklySummary.total_sessions} />
                                 </Card>
-                                <Card className="flex-shrink w-2/3">
+                                <Card className="">
                                     <CardContent title="Total AI Interactions" number={weeklySummary.total_chat_logs} />
                                 </Card>
                             </div>
                         </div>
                         {/*END week summary */}
 
+
+
                         {/*START Quote */}
+                        <div className="2xl:w-4/12 xl:w-4/12 lg:w-4/12 md:w-4/12 sm:w-11/12 ml-0 "   >
                         <div className="flex flex-col space-y-4 mt-2 lg:mb-0 ml-4 mr-4">
                                 <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4 ">Quote of the Day</h2>
                                 <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
+                        </div>
                         </div>
                         {/*END Quote */}
                     </div>

@@ -44,7 +44,7 @@ const ChatPage = () => {
 
                     <main className=" flex-1 p-4 overflow-hidden">
                     {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-4">
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-4 mt-4 mb-8">
                         <h1>Your Recent Chat History</h1>
                     </div>
 
