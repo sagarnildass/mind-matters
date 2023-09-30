@@ -208,23 +208,23 @@ const HomePage = () => {
                      <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4 " >
 
 
-                     <div className="2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-12/12 mt-0 mr-8" >
+                         <div className="2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-12/12 mt-0 mr-8" >
 
-                        {/*START ARTICLE */}
-                       <div className="d-flex flex-row   mt-2  ">
-                            <div className="mt-4 flex">
-                                <RecommendedArticlesCarousel articles={recommendedArticles} />
-                            </div>
-                        </div>
-                        {/*END ARTICLE */}
+                                {/*START ARTICLE */}
+                               <div className="d-flex flex-row   mt-2  ">
+                                    <div className="mt-4 flex">
+                                        <RecommendedArticlesCarousel articles={recommendedArticles} />
+                                    </div>
+                                </div>
+                                {/*END ARTICLE */}
 
-                        {/*START EMOTION DATA */}
-                        <div className="w-full lg:w-12/12 mt-0 lg:mt-0 ">
-                            <EmotionTimeSeriesChart data={emotionData} />
-                        </div>
-                        {/*END EMOTION DATA */}
+                                {/*START EMOTION DATA */}
+                                <div className="w-full lg:w-12/12 mt-0 lg:mt-0 ">
+                                    <EmotionTimeSeriesChart data={emotionData} />
+                                </div>
+                                {/*END EMOTION DATA */}
 
-                       </div>
+                           </div>
 
 
 
