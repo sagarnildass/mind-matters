@@ -144,7 +144,7 @@ const HomePage = () => {
 
                     <main className=" flex-1 p-8 overflow-hidden">
                     {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-4  mr-4  mt-0 mb-0">
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-0  mr-0  mt-0 mb-0">
                         <h1>Welcome, {userName}</h1>
                     </div>
 
@@ -208,11 +208,11 @@ const HomePage = () => {
                      <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4 " >
 
 
-                     <div className="2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-11/12" >
+                     <div className="2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-12/12 mt-0 mr-8" >
 
                         {/*START ARTICLE */}
                        <div className="d-flex flex-row   mt-2  ">
-                            <div className=" mt-4    flex    ">
+                            <div className="mt-4 flex">
                                 <RecommendedArticlesCarousel articles={recommendedArticles} />
                             </div>
                         </div>
@@ -230,7 +230,7 @@ const HomePage = () => {
 
 
                     {dailyChallenge && dailyChallenge.challenge_id && (
-                        <div className="w-full mx-10   ">
+                        <div className="w-full  mt-8 mr-8 ">
                             <Card className="h-full">
                                 <div className="p-3 flex flex-col h-full">
                                     <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
