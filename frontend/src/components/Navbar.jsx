@@ -65,7 +65,10 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
                 <Link to={`/new-chat/${userId}`}>
                     <button className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:py-1 sm:px-2">
-                        <FontAwesomeIcon icon={faComments} className="mr-2 text-xl mt-[-2] " /> New Chat
+                        <div className="flex justify-content-center">
+                        <FontAwesomeIcon icon={faComments} className="p-1 text-xl   " />
+                        <div className=" hidden"> New Chat </div>
+                        </div>
                     </button>
                 </Link>
                 <FontAwesomeIcon icon={faCog} className="text-white text-3xl" />
