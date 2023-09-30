@@ -61,11 +61,11 @@ const Navbar = () => {
     // };
 
     return (
-        <nav className="fixed w-full top-0 flex justify-end items-center p-4 bg-transparent z-10 mt-10">
+        <nav className=" w-full top-0 flex justify-end items-center p-2 bg-transparent z-0 mt-2 mb-2 mr-4">
             <div className="flex items-center space-x-4">
                 <Link to={`/new-chat/${userId}`}>
                     <button className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:py-1 sm:px-2">
-                        <FontAwesomeIcon icon={faComments} className="mr-2 text-xl mt-[-2]" /> New Chat
+                        <FontAwesomeIcon icon={faComments} className="mr-2 text-xl mt-[-2] " /> New Chat
                     </button>
                 </Link>
                 <FontAwesomeIcon icon={faCog} className="text-white text-3xl" />

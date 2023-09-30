@@ -15,11 +15,14 @@ import { fetchDailyChallenge, selectDailyChallenge } from '../utils/dailyChallen
 
 import Card from '../components/Card';
 import CardContent from '../components/CardContent';
+import CardContentNum from '../components/CardContentNum';
+
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import RecommendedArticlesCarousel from '../components/articleCarousel';
 import RecentChatSummary from '../components/RecentChatSummary';
 import QuoteBox from '../components/QuoteBox';
+import NavbarHeader from '../components/NavbarHeader';
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -32,6 +35,12 @@ const HomePage = () => {
     const recentChat = useSelector(selectRecentChat);
     const randomQuote = useSelector(selectRandomQuote);
     const dailyChallenge = useSelector(selectDailyChallenge);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+    const sidebarToggle = async () => {
+        setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);
+        //alert("Ok");
+    };
 
 
 
@@ -126,27 +135,29 @@ const HomePage = () => {
 
 
     return (
-        <div className="lg:flex min-h-screen overflow-x-hidden gap-4">
-            <Sidebar />
-            <div className="flex-1 relative overflow-y-auto lg:col-span-2">
-                <div className="relative h-full">
-                    <div
-                        className="w-full h-full"
-                        style={{
-                            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${signupBg})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    />
-                    <Navbar />
-                    <div className="flex flex-col lg:flex-row justify-center space-y-4 lg:space-y-0 lg:space-x-20 lg:absolute lg:right-60 lg:top-28 text-white w-full pl-4 lg:pl-0">
+        <div className="bg-app mx-auto" >
+            <div className="min-h-screen flex flex-col">
+
+                <NavbarHeader  sidebarToggle={sidebarToggle} />
+                <div className="flex flex-1">
+                    {isSidebarVisible &&   <Sidebar />  }
+
+                    <main className=" flex-1 p-4 overflow-hidden">
+                    {/*MAIN */}
+                     <div className="left-0 top-0 text-white text-xl font-bold ml-4">
+                        <h1>Welcome, {userName}</h1>
+                    </div>
+
+                     <div className="flex flex-col lg:flex-row  lg:right-0 lg:top-2 text-white w-full pl-4 ">
+
+                        {/* START welcome and emotion */}
                         <div className="flex flex-col space-y-4 mt-2 lg:mb-0">
-                            <h1 className="text-4xl lg:text-3xl md:text-2xl sm:text-xl font-bold">Welcome, {userName}</h1>
-                            <h2 className="text-2xl lg:text-xl md:text-lg sm:text-base mt-4">Your Recent Top Emotions:</h2>
-                            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8 mt-4">
+
+                            <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">Your Recent Top Emotions</h2>
+                            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8 mt-4 mr-4">
                                 {topEmotions.map((emotion, index) => (
-                                    <Card key={index} className="flex-1 md:w-2/3 sm:w-full"> {/* Adjust widths */}
-                                        <CardContent
+                                    <Card key={index} className="flex-1 md:w-2/3 "> {/* Adjust widths */}
+                                        <CardContentNum
                                             title={emotion[0]}
                                             number={
                                                 <span style={{ fontSize: window.innerWidth > 640 ? 'inherit' : '16px' }}> {/* Adjust font size based on viewport */}
@@ -158,8 +169,13 @@ const HomePage = () => {
                                 ))}
                             </div>
                         </div>
-                        <div className="w-full sm:w-1/2 lg:w-1/3 mt-4 lg:mt-0 lg:mr-12 lg:relative lg:top-14">
-                            <h2 className="text-2xl text-white">This Week Summary</h2>
+                        {/* EOF welcome and emotion */}
+
+
+
+                        {/*START week summary */}
+                        <div className="flex flex-col space-y-4 mt-2 ">
+                            <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">This Week Summary</h2>
                             <div className="flex space-x-8 mt-4">
                                 <Card className="flex-shrink w-2/5">
                                     <CardContent title="Total Sessions" number={weeklySummary.total_sessions} />
@@ -168,23 +184,29 @@ const HomePage = () => {
                                     <CardContent title="Total AI Interactions" number={weeklySummary.total_chat_logs} />
                                 </Card>
                             </div>
-
-                            <div className="mt-0 lg:absolute lg:right-[-600px] lg:top-0">
-                                <h2 className="text-2xl text-white">Quote of the Day</h2>
-                                <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
-                            </div>
                         </div>
+                        {/*END week summary */}
+
+                        {/*START Quote */}
+                        <div className="flex flex-col space-y-4 mt-2 lg:mb-0">
+                                <h2 className="text-white text-l lg:text-l md:text-lg sm:text-base mt-4">Quote of the Day</h2>
+                                <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
+                        </div>
+                        {/*END Quote */}
                     </div>
 
 
-                    <div className="w-full lg:w-6/12 mt-4 lg:mt-0 lg:absolute lg:left-80 lg:top-[29%]">
-                        <RecommendedArticlesCarousel articles={recommendedArticles} />
-                    </div>
-                    <div className="w-full lg:w-6/12 mt-4 lg:mt-0 lg:absolute lg:left-80 lg:bottom-0 lg:mb-8">
-                        <EmotionTimeSeriesChart data={emotionData} />
-                    </div>
-                    {dailyChallenge && dailyChallenge.challenge_id && (
-                        <div className="w-full lg:w-4/12 mt-4 lg:absolute lg:right-0 lg:bottom-[2%] mb-4 lg:mb-0 lg:mr-8 h-[62vh]">
+                        {/*START ARTICLE */}
+                       <div className="d-flex flex-row   mt-2  ">
+
+                        <div className="w-full lg:w-6/12 mt-4    flex    ">
+                            <RecommendedArticlesCarousel articles={recommendedArticles} />
+                        </div>
+
+                        <div className="w-full lg:w-6/12 mt-4    flex  ">
+
+                        {dailyChallenge && dailyChallenge.challenge_id && (
+                        <div className="w-full   ">
                             <Card className="h-full">
                                 <div className="p-3 flex flex-col h-full">
                                     <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
@@ -201,6 +223,23 @@ const HomePage = () => {
                             </Card>
                         </div>
                     )}
+                    </div>
+                      </div>
+                        {/*END ARTICLE */}
+
+                        {/*START EMOTION DATA */}
+                        <div className="w-full lg:w-6/12 mt-0 lg:mt-0 ">
+                            <EmotionTimeSeriesChart data={emotionData} />
+                        </div>
+                        {/*END EMOTION DATA */}
+
+
+
+
+
+                    {/*END MAIN*/}
+                    </main>
+
                 </div>
             </div>
         </div>

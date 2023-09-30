@@ -105,7 +105,7 @@ const EmotionTimeSeriesChart = ({ data }) => {
 
     return (
         <div
-            className="container mx-auto rounded-3xl border border-gray-800 shadow-lg p-4 mt-40 mb-2 grid grid-cols-3 gap-1"
+            className="container mx-auto rounded-3xl border border-gray-800 shadow-lg p-4 mt-2 mb-2 grid grid-cols-3 gap-1"
             style={{
                 backgroundImage: 'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)'
             }}
