@@ -106,7 +106,7 @@ const EmotionTimeSeriesChart = ({ data }) => {
     return (
         <div
             className="container mx-auto rounded-3xl border border-gray-800 shadow-lg p-4 mt-2 mb-2 grid grid-cols-3 gap-1 my-card-bg" >
-            <h2 className="text-m font-bold mb-1 text-white col-span-3">Emotions Over Time</h2>
+            <h2 className="text-m font-bold mt-2 mb-2 text-white col-span-3 2xl:text-2xl ">Emotions Over Time</h2>
             {chartData.map(({ name, data }, index) => (
                 <div className="col-span-1 w-full" key={name}>
                     <div onClick={() => handleChartClick(name, data, colors[index])} className="cursor-pointer">  {/* Wrap the chart in a clickable div */}
