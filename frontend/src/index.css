@@ -58,6 +58,10 @@ html {
 -webkit-box-shadow: 8px 8px 32px 4px rgba(0,0,0,0.2);
 -moz-box-shadow: 8px 8px 32px 4px rgba(0,0,0,0.2);
 box-shadow: 8px 8px 32px 4px rgba(0,0,0,0.2);
+
+    /* box-shadow: 8px 8px 32px 4px rgba(0,0,0,12.2); */
+  /*  position: absolute;
+    width: 100%;*/
 /*-webkit-box-shadow: 8px 8px 48px 4px rgba(0,0,0,0.4);
 -moz-box-shadow: 8px 8px 48px 4px rgba(0,0,0,0.4);
 box-shadow: 8px 8px 48px 4px rgba(0,0,0,0.4);*/

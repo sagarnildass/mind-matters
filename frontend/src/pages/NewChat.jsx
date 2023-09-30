@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faPlus, faRobot, faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import Navbar from '../components/Navbar';
+import NavbarHeader from '../components/NavbarHeader';
 import TherapistCard from '../components/TherapistCard';
 import Sidebar from '../components/Sidebar';
 import signupBg from '../assets/signup-bg.png';
@@ -40,6 +40,13 @@ const NewChat = () => {
     const webcamRef = useRef(null);
     const lastTranscriptRef = useRef("");
     const transcriptTimeoutRef = useRef(null);
+
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+    const sidebarToggle = async () => {
+        setIsSidebarVisible((prevIsSidebarVisible) => !prevIsSidebarVisible);
+        //alert("Ok");
+    };
 
 
     const UserMarker = () => (
@@ -394,21 +401,53 @@ const NewChat = () => {
     }
 
     return (
-        <div className="flex min-h-screen overflow-x-hidden">
-            <Sidebar />
-            <div className="flex-1 relative">
-                <div className="relative h-full">
-                    <div
-                        className="w-full h-full"
-                        style={{
-                            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${signupBg})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    />
-                    <Navbar />
-                    <div className="absolute top-36 right-60 w-3/4 h-5/6 bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <div className="h-5/6 overflow-y-scroll mb-4 border-b-2 border-gray-600" ref={chatContainerRef}>
+                <div className="bg-app mx-auto" >
+            <div className="min-h-screen flex flex-col">
+
+                <NavbarHeader  sidebarToggle={sidebarToggle} />
+                <div className="flex flex-1">
+                    {isSidebarVisible &&   <Sidebar />  }
+
+                    <main className=" flex-1 p-4 overflow-hidden">
+                    {/*MAIN */}
+
+                     <div className="  ml-2 border-t border-gray-600 w-3/6 mb-4 justify-content-end align-items-end">
+                                <PlacesAutocomplete
+                                    value={address}
+                                    onChange={setAddress}
+                                    onSelect={handleSelectAddress}
+                                >
+                                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                        <div className="relative">
+                                            <input
+                                                {...getInputProps({
+                                                    placeholder: "Search Therapists near you ...",
+                                                    className: "w-full p-4 border rounded-md border-gray-600 bg-gray-700 text-white"
+                                                })}
+                                            />
+                                            <div className="absolute top-full left-0 mt-2 w-full bg-gray-700 border border-gray-600 z-10">
+                                                {loading && <div className="p-2 text-white">Loading...</div>}
+                                                {suggestions.map(suggestion => (
+                                                    <div
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className: "p-2 text-white hover:bg-gray-600 cursor-pointer"
+                                                        })}
+                                                    >
+                                                        {suggestion.description}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </PlacesAutocomplete>
+
+                            </div>
+
+
+
+
+ <div className=" top-2 right-2 w-full h-full bg-gray-800 p-2 rounded-lg shadow-lg">
+                        <div className="h-4/6 overflow-y-scroll mb-4 border-b-2 border-gray-600" ref={chatContainerRef}>
                             {messages.map((message, idx) => {
                                 {/* console.log(message.therapists);  // Log each message to inspect its structure */ }
 
@@ -450,90 +489,61 @@ const NewChat = () => {
                             })}
 
                         </div>
-                        <div className="flex mt-2 p-10">
-                            <button
-                                style={{ width: "60px", height: "60px" }}
-                                className="p-2 bg-blue-700 text-white rounded-l-md"
-                                onClick={() => setShowModal(true)}
-                            >
-                                <FontAwesomeIcon icon={faPlus} />
-                            </button>
-                            {browserSupportsSpeechRecognition && (
-                                <div>
+
+                        <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-0 ">
+                                <div className="flex mt-0 p-0 w-full w-100">
                                     <button
                                         style={{ width: "60px", height: "60px" }}
-                                        onClick={() => {
-                                            listening ? SpeechRecognition.stopListening() : SpeechRecognition.startListening({ continuous: true });
-                                        }}
-                                        className="p-2 bg-red-700 text-white rounded-l-md"
-                                    >
-                                        <FontAwesomeIcon icon={listening ? faMicrophoneSlash : faMicrophone} />
+                                        className="p-2 bg-blue-700 text-white rounded-md mr-2"
+                                        onClick={() => setShowModal(true)} >
+                                        <FontAwesomeIcon icon={faPlus} />
                                     </button>
-                                </div>
-                            )}
-                            <input
-                                type="text"
-                                value={currentMessage}
-                                onChange={e => setCurrentMessage(e.target.value)}
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter') {
-                                        handleSendMessage();
-                                        e.preventDefault(); // Prevent default behavior (like a newline in some browsers)
-                                    }
-                                }}
-                                className="w-2/3 p-4 border-t border-b rounded-none border-gray-600 bg-gray-700 text-white"
-                                placeholder="Type a message..."
-                            />
-                            <button style={{ width: "60px", height: "60px" }} onClick={handleSendMessage} className="p-2 bg-gray-700 text-white rounded-r-md">
-                                <FontAwesomeIcon icon={faPaperPlane} />
-                            </button>
-                            <button
+                                    {browserSupportsSpeechRecognition && (
+                                        <div>
+                                            <button
+                                                style={{ width: "60px", height: "60px" }}
+                                                onClick={() => {
+                                                    listening ? SpeechRecognition.stopListening() : SpeechRecognition.startListening({ continuous: true });
+                                                }}
+                                                className="p-2 bg-red-700 text-white rounded-l-md"
+                                            >
+                                                <FontAwesomeIcon icon={listening ? faMicrophoneSlash : faMicrophone} />
+                                            </button>
+                                        </div>
+                                    )}
+                                    <input
+                                        type="text"
+                                        value={currentMessage}
+                                        onChange={e => setCurrentMessage(e.target.value)}
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter') {
+                                                handleSendMessage();
+                                                e.preventDefault(); // Prevent default behavior (like a newline in some browsers)
+                                            }
+                                        }}
+                                        className="w-2/3 p-4 border-t border-b rounded-none border-gray-600 bg-gray-500  text-white"
+                                        placeholder="Type a message..."
+                                    />
+                                    <button style={{ width: "60px", height: "60px" }} onClick={handleSendMessage} className="p-2 bg-gray-700 text-white rounded-r-md">
+                                        <FontAwesomeIcon icon={faPaperPlane} />
+                                    </button>
+
+                                      <button
                                 onClick={() => {
                                     const newValue = !textToSpeechEnabled;
                                     console.log("Before click:", textToSpeechEnabled);
                                     console.log("Intending to set to:", newValue);
                                     setTextToSpeechEnabled(newValue);
                                 }}
-                                className="p-2 bg-green-700 text-white rounded-l-md"
-                            >
+                                className="p-2 bg-green-800 text-white rounded-md mr-0 ml-2" >
                                 {textToSpeechEnabled ? "Disable TTS" : "Enable TTS"}
                             </button>
-                            <div className="w-1/3 ml-2 border-t border-gray-600">
-                                <PlacesAutocomplete
-                                    value={address}
-                                    onChange={setAddress}
-                                    onSelect={handleSelectAddress}
-                                >
-                                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                                        <div className="relative">
-                                            <input
-                                                {...getInputProps({
-                                                    placeholder: "Search Therapists near you ...",
-                                                    className: "w-full p-4 border rounded-md border-gray-600 bg-gray-700 text-white"
-                                                })}
-                                            />
-                                            <div className="absolute top-full left-0 mt-2 w-full bg-gray-700 border border-gray-600 z-10">
-                                                {loading && <div className="p-2 text-white">Loading...</div>}
-                                                {suggestions.map(suggestion => (
-                                                    <div
-                                                        {...getSuggestionItemProps(suggestion, {
-                                                            className: "p-2 text-white hover:bg-gray-600 cursor-pointer"
-                                                        })}
-                                                    >
-                                                        {suggestion.description}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                </PlacesAutocomplete>
+                                </div>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {showModal && (
+
+                                  <div className="flex mt-0 p-0 w-full w-100">
+
+                                   {showModal && (
                 <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center">
                     <div className="bg-white p-4 rounded-md shadow-lg w-1/3">
                         <input type="file" onChange={e => setSelectedFile(e.target.files[0])} />
@@ -557,18 +567,33 @@ const NewChat = () => {
                     </div>
                 </div>
             )}
-            <Webcam 
-                ref={webcamRef} 
-                screenshotFormat="image/jpeg" 
+            <Webcam
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
                 videoConstraints={{ width: 320, height: 240 }}  // Adjust for a smaller resolution
-                style={{ 
-                    position: 'fixed', 
-                    bottom: '80px', 
-                    right: '20px', 
-                    width: '200px', 
+                style={{
+                    position: 'fixed',
+                    bottom: '80px',
+                    right: '20px',
+                    width: '200px',
                     height: '150px'  // Adjust the width and height to make it much smaller and in bottom right
                 }}
             />
+                                  </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    {/*EOD MAIN*/}
+                    </main>
+
+                </div>
+
+
+            </div>
         </div>
     );
 };
