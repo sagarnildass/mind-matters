@@ -212,7 +212,7 @@ const HomePage = () => {
                      <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4  justify-between" >
 
 
-                         <div className="2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-12/12 mt-0 mr-8" >
+                         <div className="2xl:w-7/12 xl:w-7/12 lg:w-6/12 md:w-5/12 sm:w-12/12 mt-0 mr-8" >
 
                                 {/*START ARTICLE */}
                                <div className="d-flex flex-row   mt-2  ">
@@ -232,7 +232,7 @@ const HomePage = () => {
 
 
 
-                    <div className="2xl:w-4/12 xl:w-5/12 lg:w-5/12 md:w-12/12 sm:w-12/12  mt-11 mr-8 ">
+                    <div className="2xl:w-4/12 xl:w-5/12 lg:w-6/12 md:w-7/12 sm:w-12/12  mt-11 mr-8 ">
                         {dailyChallenge && dailyChallenge.challenge_id && (
                             <div className="w-full h-full  mt-8 mr-8 mb-8 ">
                                 <Card className="h-full">
