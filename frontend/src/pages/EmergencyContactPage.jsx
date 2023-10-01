@@ -73,7 +73,7 @@ const EmergencyContactPage = () => {
                     <main className=" flex-1 p-8 overflow-hidden">
                     {/*MAIN */}
 
-                     <div className="left-0 top-0 text-white text-xl font-bold ml-0  mr-0  mt-0 mb-0">
+                     <div className="left-0 top-0 text-white text-xl 2xl:text-3xl font-bold ml-0  mr-0  mt-0 mb-0">
                         <h1>Your Emergency Contacts</h1>
                     </div>
 

@@ -125,7 +125,7 @@ width:100%;
 /*  background-color: #00008B;*/
     position: absolute;
     height: 200%;
-    background-image: linear-gradient(rgba(23, 23, 53, 1.0), rgba(23, 23, 53, 1.0));
+    background-image: linear-gradient(rgba(13, 11, 30, 1.0), rgba(23, 23, 63, 1.0));
     -webkit-box-shadow: 8px 8px 32px 4px rgba(133,133,133,0.2);
     -moz-box-shadow: 8px 8px 32px 4px rgba(133,133,133,0.2);
     box-shadow: 8px 8px 32px 4px rgba(133,133,133,0.2);

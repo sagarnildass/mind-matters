@@ -11,7 +11,7 @@ const QuoteBox = ({ quote, author, ...props }) => {
 //                 Color: 'rgba(0, 0, 0, 0.87)'
 //             }}
         >
-            <h3 className="text-large text-center font-regular mb-2 text-white">" {quote} "</h3>
+            <h3 className="text-large text-center font-regular mb-2 text-white  2xl:text-3xl">" {quote} "</h3>
             <p className="text-green-500 text-center">- {author}</p>
         </div>
     );
