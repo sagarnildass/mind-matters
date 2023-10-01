@@ -529,9 +529,9 @@ const NewChat = () => {
                             })}
 
                         </div>
-                        <div className="">
+                     <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4  justify-between" >
 
-                            <div  className="mt-2 mb-2 ">
+                            <div  className="mt-2 mb-2  2xl:w-4/12 xl:w-5/12 lg:w-5/12 md:w-12/12 sm:w-12/12">
 
                                 {browserSupportsSpeechRecognition && (
 
@@ -569,7 +569,8 @@ const NewChat = () => {
 
                             </div>
 
-                            <div  className="mt-2 mb-2 flex  justify-end items-end	">
+
+                            <div  className="mt-2 mb-2  flex justify-end items-end	2xl:w-7/12 xl:w-7/12 lg:w-7/12 md:w-7/12 sm:w-12/12">
                                 <input
                                     type="text"
                                     value={currentMessage}
@@ -582,6 +583,7 @@ const NewChat = () => {
                                     }}
                                     className="w-2/3 p-4 border-t border-b rounded-l-md  border-gray-600 bg-gray-700 text-white"
                                     placeholder="Type a message..."
+                                     style={{  height: "53px" }}
                                 />
 
                                 <button style={{ width: "60px", height: "53px" }} onClick={handleSendMessage} className="p-2 bg-gray-700 text-white rounded-r-md border-t border-b border-gray-600 bg-gray-700 ">
