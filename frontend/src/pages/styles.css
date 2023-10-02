@@ -1,0 +1,9 @@
+@media (max-width: 1024px) {
+    .week-summary-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+}
+
