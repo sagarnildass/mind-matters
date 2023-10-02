@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - env:
-        image: 163021050982.dkr.ecr.ap-south-1.amazonaws.com/mental-health:v3
+        image: 163021050982.dkr.ecr.ap-south-1.amazonaws.com/mental-health:v4
         imagePullPolicy: Always
         name: back-end
         ports:
