@@ -23,6 +23,7 @@ import RecommendedArticlesCarousel from '../components/articleCarousel';
 import RecentChatSummary from '../components/RecentChatSummary';
 import QuoteBox from '../components/QuoteBox';
 import NavbarHeader from '../components/NavbarHeader';
+import './styles.css'
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -138,84 +139,86 @@ const HomePage = () => {
         <div className="bg-app mx-auto" >
             <div className="min-h-screen flex flex-col">
 
-                <NavbarHeader  sidebarToggle={sidebarToggle} />
+                <NavbarHeader sidebarToggle={sidebarToggle} />
                 <div className="flex flex-1">
-                    {isSidebarVisible &&   <Sidebar />  }
+                    {isSidebarVisible && <Sidebar />}
 
                     <main className="  flex-1  p-4  xs:p-2sm:p-4 md:p-6 lg:p-8 xl:p-12 2xl:p-32 3xl:p-32   flex-1  overflow-hidden">
-                    {/*MAIN */}
-                     <div className="left-0 top-0 text-white text-xl 2xl:text-3xl font-bold ml-0  mr-0  mt-0 mb-4">
-                        <h1>Welcome, {userName}</h1>
-                    </div>
+                        {/*MAIN */}
+                        <div className="left-0 top-0 text-white text-xl 2xl:text-3xl font-bold ml-0  mr-0  mt-0 mb-4">
+                            <h1>Welcome, {userName}</h1>
+                        </div>
 
-                     <div className="flex flex-col lg:flex-row  text-white w-full pl-0  justify-between "
-                     style={{
-                       /*  display: 'flex',
-                        justifyContent: 'center', */
-                    }}>
+                        <div className="flex flex-col lg:flex-row items-start text-white w-full pl-0  justify-between"
+                            style={{
+                                /*  display: 'flex',
+                                 justifyContent: 'center', */
+                            }}>
 
 
-                        {/* START welcome and emotion */}
-                        <div className="flex flex-col space-y-4  justify-center mt-0 mr-8">
+                            {/* START welcome and emotion */}
+                            <div className="flex flex-col space-y-4  justify-center mt-0 mr-8">
 
-                            <h2 className="text-white text-l lg:text-l md:text-lg mt-4 text-center  2xl:text-2xl">Your Recent Top Emotions</h2>
-                            <div className="container mx-auto   grid grid-cols-3 ">
-                                {topEmotions.map((emotion, index) => (
-                                    <div className=" mr-2 ">
-                                    <Card key={index} className=" "> {/* Adjust widths */}
-                                        <CardContentNum
-                                            title={emotion[0]}
-                                            number={
-                                                <span style={{ fontSize: window.innerWidth > 640 ? 'inherit' : '18px' }}> {/* Adjust font size based on viewport */}
-                                                    {emotion[0] === "love" ? <span style={{ color: "red" }}>{emotionToEmoji[emotion[0]]}</span> : emotionToEmoji[emotion[0]]}
-                                                </span>
-                                            }
-                                        />
-                                    </Card>
+                                <h2 className="text-white text-sm lg:text-l md:text-lg mt-4 text-center  2xl:text-2xl">Your Recent Top Emotions</h2>
+                                <div className="container mx-auto grid grid-cols-3">
+                                    {topEmotions.map((emotion, index) => (
+                                        <div className="mr-2 mt-4 ">
+                                            <Card key={index} className="">
+                                                <CardContentNum
+                                                    title={emotion[0]}
+                                                    number={
+                                                        <span
+                                                            className={`${window.innerWidth <= 640 ? 'text-base' : 'inherit'} ${emotion[0] === "love" ? 'text-red-500' : ''}`}
+                                                            style={{ fontSize: window.innerWidth <= 640 ? '14px' : 'inherit' }}>
+                                                            {emotionToEmoji[emotion[0]]}
+                                                        </span>
+                                                    }
+                                                />
+                                            </Card>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            {/* EOF welcome and emotion */}
+
+
+
+                            {/*START week summary */}
+                            <div className="week-summary-container flex flex-col space-y-2 mt-0 ml-0 mr-8">
+                                <h2 className="text-white text-l lg:text-l md:text-lg mt-4 text-center 2xl:text-2xl mb-0">This Week Summary</h2>
+                                <div className="flex justify-center">
+                                    <div className="flex space-x-2 mt-4">
+                                        <Card className="">
+                                            <CardContent title="Total Sessions" number={weeklySummary.total_sessions} />
+                                        </Card>
+                                        <Card className="">
+                                            <CardContent title="Total AI Interactions" number={weeklySummary.total_chat_logs} />
+                                        </Card>
                                     </div>
-                                ))}
+                                </div>
                             </div>
-                        </div>
-                        {/* EOF welcome and emotion */}
+                            {/*END week summary */}
 
 
 
-                        {/*START week summary */}
-                        <div className="flex flex-col space-y-2 mt-0 ml-0 mr-8">
-                            <h2 className="text-white text-l lg:text-l md:text-lg mt-4 text-center  2xl:text-2xl mb-0">This Week Summary</h2>
-                            <div  className="  ">
-                            <div className="flex space-x-2 mt-4 ">
-                                <Card className=" ">
-                                    <CardContent title="Total Sessions" number={weeklySummary.total_sessions} />
-                                </Card>
-                                <Card className="">
-                                    <CardContent title="Total AI Interactions" number={weeklySummary.total_chat_logs} />
-                                </Card>
+                            {/*START Quote */}
+                            <div className="2xl:w-4/12 xl:w-4/12 lg:w-full md:w-full sm:w-full md:mr-4 sm:mr-4">
+                                <div className="flex flex-col space-y-4 lg:mb-0 ml-0 mt-2 mr-8">
+                                    <h2 className="text-white text-l lg:text-l md:text-lg mt-4 text-center  2xl:text-2xl">Quote of the Day</h2>
+                                    <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
+                                </div>
                             </div>
-                            </div>
+                            {/*END Quote */}
                         </div>
-                        {/*END week summary */}
 
 
-
-                        {/*START Quote */}
-                        <div className="2xl:w-4/12 xl:w-4/12 lg:w-4/12 md:w-12/12 sm:w-12/12 md:mr-4 sm:mr-4"   >
-                        <div className="flex flex-col space-y-4 lg:mb-0 ml-0 mt-2 mr-8">
-                                <h2 className="text-white text-l lg:text-l md:text-lg mt-4 text-center  2xl:text-2xl">Quote of the Day</h2>
-                                <QuoteBox className="mt-[15px]" quote={randomQuote.quote} author={randomQuote.author} />
-                        </div>
-                        </div>
-                        {/*END Quote */}
-                    </div>
+                        <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4  justify-between" >
 
 
-                     <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-0 mt-4  justify-between" >
-
-
-                         <div className="2xl:w-7/12 xl:w-7/12 lg:w-6/12 md:w-5/12 sm:w-12/12 mt-0 mr-8" >
+                            <div className="2xl:w-7/12 xl:w-7/12 lg:w-6/12 md:w-5/12 sm:w-12/12 mt-0 mr-8" >
 
                                 {/*START ARTICLE */}
-                               <div className="d-flex flex-row   mt-2  ">
+                                <div className="d-flex flex-row   mt-2  ">
                                     <div className="mt-4 flex">
                                         <RecommendedArticlesCarousel articles={recommendedArticles} />
                                     </div>
@@ -228,34 +231,34 @@ const HomePage = () => {
                                 </div>
                                 {/*END EMOTION DATA */}
 
-                           </div>
-
-
-
-                    <div className="2xl:w-4/12 xl:w-5/12 lg:w-6/12 md:w-7/12 sm:w-12/12  mt-11 mr-8 ">
-                        {dailyChallenge && dailyChallenge.challenge_id && (
-                            <div className="w-full h-full  mt-8 mr-8 mb-8 ">
-                                <Card className="h-full">
-                                    <div className="p-3 flex flex-col h-full">
-                                        <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
-                                        <img
-                                            src={dailyChallenge.image_url}
-                                            alt={dailyChallenge.challenge_name}
-                                            className="flex-grow object-cover rounded"
-                                        />
-                                        <div className="mt-0 flex flex-col justify-center flex-grow mb-0">
-                                            <h3 className="text-white text-2xl text-center font-bold mb-2 mt-2">{dailyChallenge.challenge_name}</h3>
-                                            <p className="text-m text-gray-400 text-center mt-1">{dailyChallenge.challenge_description}</p>
-                                        </div>
-                                    </div>
-                                </Card>
                             </div>
-                        )}
-                    </div>
 
- </div>
 
-                    {/*END MAIN*/}
+
+                            <div className="2xl:w-4/12 xl:w-5/12 lg:w-6/12 md:w-7/12 sm:w-12/12  mt-11 mr-8 ">
+                                {dailyChallenge && dailyChallenge.challenge_id && (
+                                    <div className="w-full h-full  mt-8 mr-8 mb-8 ">
+                                        <Card className="h-full">
+                                            <div className="p-3 flex flex-col h-full">
+                                                <h2 className="text-gray-200 text-3xl mb-8 text-center">Daily Challenge</h2>
+                                                <img
+                                                    src={dailyChallenge.image_url}
+                                                    alt={dailyChallenge.challenge_name}
+                                                    className="flex-grow object-cover rounded"
+                                                />
+                                                <div className="mt-0 flex flex-col justify-center flex-grow mb-0">
+                                                    <h3 className="text-white text-2xl text-center font-bold mb-2 mt-2">{dailyChallenge.challenge_name}</h3>
+                                                    <p className="text-m text-gray-400 text-center mt-1">{dailyChallenge.challenge_description}</p>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+
+                        {/*END MAIN*/}
                     </main>
 
                 </div>
