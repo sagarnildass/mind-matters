@@ -8,7 +8,8 @@ from app.core.authentication import get_current_user
 from app.core.models import ChatLog, ContentMetadata, RecentChatSummary
 import os
 from dotenv import load_dotenv, find_dotenv
-
+from sentence_transformers import SentenceTransformer
+import torch
 
 def get_env_data_as_dict(path: str) -> dict:
     with open(path, 'r') as f:
@@ -27,6 +28,8 @@ pinecone.init(
 	environment='us-west1-gcp'      
 )      
 index = pinecone.Index(index_name='openai')
+device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+retriever = SentenceTransformer('sentence-transformers/distiluse-base-multilingual-cased-v1', device=device)
 
 router = APIRouter()
 
@@ -37,10 +40,7 @@ def get_user_profile_text(user_id, db: Session, N=50):
     return profile_text
 
 def get_profile_embedding(profile_text):
-    embedded_query = openai.Embedding.create(
-        input=profile_text,
-        model='text-embedding-ada-002',
-    )["data"][0]['embedding']
+    embedded_query = retriever.encode(profile_text, convert_to_tensor=False).tolist()
     return embedded_query
 
 def query_articles_with_profile_embedding(embedded_query, db: Session, top_k=10):
