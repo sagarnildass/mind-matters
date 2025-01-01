@@ -1,0 +1,23 @@
+{
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mentalhealth-main-211152-authRole",
+      "UnauthRoleArn": "arn:aws:iam::163021050982:role/amplify-mentalhealth-main-211152-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::163021050982:role/amplify-mentalhealth-main-211152-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-mentalhealth-main-211152-deployment",
+      "UnauthRoleName": "amplify-mentalhealth-main-211152-unauthRole",
+      "StackName": "amplify-mentalhealth-main-211152",
+      "StackId": "arn:aws:cloudformation:ap-south-1:163021050982:stack/amplify-mentalhealth-main-211152/b9cbe6b0-5570-11ee-bf31-062935dd6832",
+      "AmplifyAppId": "dzye55iwoqsfx"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dzye55iwoqsfx",
+          "type": "cicd"
+        }
+      }
+    }
+  }
+}

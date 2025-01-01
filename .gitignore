@@ -1,0 +1,6 @@
+ml_models
+notebooks
+node_modules
+.env
+.env.local
+uploaded_images

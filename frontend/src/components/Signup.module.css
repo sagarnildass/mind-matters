@@ -1,0 +1,415 @@
+.inputfieldtext {
+    width: 311px;
+    border: none;
+    border-radius: 20px;
+    margin-top: 30px;
+    background: linear-gradient(123.64deg, rgba(255, 255, 255, 0) 0.01%, rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(42px);
+    padding: 10px 20px;
+    font-weight: 500;
+    color: #fff;
+}
+
+
+.backgroundChild {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 20px;
+    background: linear-gradient(127.09deg, rgba(6, 11, 40, 0.94), rgba(10, 14, 35, 0.49));
+    backdrop-filter: blur(120px);
+    width: 436px;
+    height: 713px;
+}
+
+.alreadyHaveAn1 {
+    font-weight: 500;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+    /* Increase the z-index to bring the error message to the front */
+    text-align: center;
+    padding: 10px 20px
+}
+
+.b {
+    font-family: Roboto;
+    color: #fff;
+}
+
+.alreadyHaveAnContainer {
+    position: absolute;
+    top: 658px;
+    left: 112px;
+    line-height: 140%;
+    text-align: center;
+}
+
+.div {
+    position: relative;
+    line-height: 12px;
+}
+
+.icon {
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    padding: 0px 0.5px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.text3 {
+    position: relative;
+    font-size: 10px;
+    line-height: 150%;
+    font-family: Roboto;
+    color: #fff;
+}
+
+.buttonBody {
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.heightStructure {
+    height: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.content4 {
+    position: relative;
+    background-color: #c4c4c4;
+    width: 0px;
+    height: 0px;
+}
+
+.minwidth {
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    padding: 0px 12px;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.widthStructure {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonbase {
+    position: absolute;
+    height: 6.31%;
+    width: 80.28%;
+    top: 84.49%;
+    right: 9.75%;
+    bottom: 12.2%;
+    left: 9.98%;
+    border-radius: 12px;
+    background-color: #0075ff;
+    backdrop-filter: blur(120px);
+    display: flex;
+    flex-direction: row;
+    padding: 0px 7.999999523162842px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 11px;
+    color: #000;
+    font-family: 'Font Awesome 5 Free';
+}
+
+.rememberMe1 {
+    position: absolute;
+    top: 0px;
+    left: 46px;
+    line-height: 150%;
+    font-weight: 500;
+}
+
+.switchbaseChild {
+    position: relative;
+    border-radius: 50%;
+    background-color: #fff;
+    width: 13.5px;
+    height: 13.5px;
+}
+
+.switchbase {
+    position: absolute;
+    height: 100%;
+    width: 28.12%;
+    top: 0%;
+    right: 71.88%;
+    bottom: 0%;
+    left: 0%;
+    border-radius: 97.74px;
+    background-color: #0075ff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 1.4373492002487183px 2.5px 1.4373492002487183px 1.4373492002487183px;
+    box-sizing: border-box;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.rememberMe {
+    position: absolute;
+    top: 554px;
+    left: 43.5px;
+    width: 128px;
+    height: 18.5px;
+    font-size: 12px;
+    color: #fff;
+}
+
+.yourPassword {
+    position: relative;
+    line-height: 140%;
+    font-weight: 500;
+}
+
+.passwordTextIcon3 {
+    position: relative;
+    width: 35px;
+    height: 3.5px;
+    display: none;
+}
+
+.content5 {
+    position: relative;
+    width: 0px;
+    height: 0px;
+}
+
+.minwidth1 {
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    padding: 0px 74px;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputfieldtext {
+    width: 311px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.email {
+    position: absolute;
+    height: 66.67%;
+    width: 100%;
+    top: 33.33%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    border-radius: 20px;
+    background: linear-gradient(123.64deg, rgba(255, 255, 255, 0) 0.01%, rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(42px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.password1 {
+    position: absolute;
+    top: 0px;
+    left: 4.5px;
+    line-height: 140%;
+    font-weight: 500;
+    color: #fff;
+}
+
+.password {
+    position: absolute;
+    height: 10.52%;
+    width: 80.28%;
+    top: 32%;
+    right: 9.75%;
+    bottom: 29.52%;
+    left: 9.98%;
+}
+
+.email1 {
+    position: absolute;
+    height: 10.52%;
+    width: 80.28%;
+    top: 21%;
+    right: 9.75%;
+    bottom: 43.41%;
+    left: 9.98%;
+}
+
+.name {
+    position: absolute;
+    height: 10.52%;
+    width: 80.28%;
+    top: 10%;
+    right: 9.75%;
+    bottom: 57.29%;
+    left: 9.98%;
+}
+
+.firstName {
+    position: absolute;
+    height: 10.52%;
+    width: 80.28%;
+    top: 43%;
+    right: 9.75%;
+    bottom: 57.29%;
+    left: 9.98%;
+}
+
+.lastName {
+    position: absolute;
+    height: 10.52%;
+    width: 80.28%;
+    top: 54%;
+    right: 9.75%;
+    bottom: 57.29%;
+    left: 9.98%;
+}
+
+.register {
+    position: absolute;
+    top: -120px;
+    left: 0px;
+    line-height: 130%;
+}
+
+.title {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 68px;
+    height: 23px;
+}
+
+.registerWith {
+    position: absolute;
+    top: 149px;
+    left: 184px;
+    width: 68px;
+    height: 23px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    font-family: Roboto;
+}
+
+.background {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 436px;
+    height: 713px;
+}
+
+.signUp {
+    position: relative;
+    width: 100%;
+    height: 713px;
+    text-align: left;
+    font-size: 14px;
+    color: #a0aec0;
+    font-family: 'Plus Jakarta Display';
+}
+
+.genderAgeContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 73%;
+    position: absolute;
+    top: 65%;
+    left: 9.98%;
+    gap: 10%;
+}
+
+.gender,
+.age {
+    width: 45%;
+    /* Adjusted width so they fit side by side with some space in between */
+}
+
+.gender .password1,
+.age .password1 {
+    position: absolute;
+    top: 0px;
+    left: 4.5px;
+    line-height: 140%;
+    font-weight: 500;
+    color: #fff;
+}
+
+.age .password1 {
+    left: calc(55% + 8px);
+}
+
+.gender .inputfieldtext,
+.age .inputfieldtext {
+    width: 95%;
+}
+
+/* Gender dropdown styling */
+.gender .inputfieldtext {
+    appearance: none;
+    /* This removes the default appearance of the select element */
+    -webkit-appearance: none;
+    /* For Safari */
+    -moz-appearance: none;
+    /* For Firefox */
+    background: linear-gradient(123.64deg, rgba(255, 255, 255, 0) 0.01%, rgba(255, 255, 255, 0.04));
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='5'><path fill='white' d='M0 0l5 5 5-5z'/></svg>");
+    /* This is the arrow */
+    background-repeat: no-repeat;
+    background-position-x: calc(100% - 20px);
+    /* Move arrow to the left */
+    background-position-y: center;
+}
+
+.gender .inputfieldtext option {
+    background: linear-gradient(123.64deg, rgba(255, 255, 255, 0) 0.01%, rgba(255, 255, 255, 0.04));
+    color: black;
+    /* Adjust this if needed */
+}
+
+/* Color for dropdown option when it is hovered or selected */
+.gender .inputfieldtext option:checked,
+.gender .inputfieldtext option:hover {
+    background: rgba(10, 14, 35, 0.8);
+    /* Slight shade to indicate selection or hover */
+    color: #fff;
+}
+
+.age {
+    margin-left: -30%;
+    /* Add a negative margin to move it to the left */
+}
