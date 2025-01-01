@@ -223,7 +223,9 @@ Contributions are welcome! Feel free to fork the repository, submit pull request
 **License**
 -----------
 
-This project is licensed under the MIT License.
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+
+The full text of the GNU Affero General Public License v3.0 is included in the LICENSE file in this repository. You can also read it [here](https://github.com/sagarnildass/mind-matters/blob/master/LICENSE).
 
 * * * * *
 
